@@ -1,0 +1,58 @@
+{
+ "none": {
+  "problems": 164,
+  "passed": 139,
+  "pass@1": 0.8475609756097561,
+  "same_text_as_plain": 164,
+  "gained": 0,
+  "lost": 0
+ },
+ "r1.0": {
+  "problems": 164,
+  "passed": 137,
+  "pass@1": 0.8353658536585366,
+  "same_text_as_plain": 131,
+  "gained": 0,
+  "lost": 2
+ },
+ "r0.9": {
+  "problems": 164,
+  "passed": 137,
+  "pass@1": 0.8353658536585366,
+  "same_text_as_plain": 125,
+  "gained": 0,
+  "lost": 2
+ },
+ "r0.8": {
+  "problems": 164,
+  "passed": 138,
+  "pass@1": 0.8414634146341463,
+  "same_text_as_plain": 116,
+  "gained": 0,
+  "lost": 1
+ },
+ "r0.5": {
+  "problems": 164,
+  "passed": 137,
+  "pass@1": 0.8353658536585366,
+  "same_text_as_plain": 83,
+  "gained": 2,
+  "lost": 4
+ },
+ "r0.3": {
+  "problems": 164,
+  "passed": 135,
+  "pass@1": 0.823170731707317,
+  "same_text_as_plain": 63,
+  "gained": 2,
+  "lost": 6
+ },
+ "r0.1": {
+  "problems": 164,
+  "passed": 132,
+  "pass@1": 0.8048780487804879,
+  "same_text_as_plain": 37,
+  "gained": 4,
+  "lost": 11
+ }
+}

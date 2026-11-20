@@ -1,0 +1,9 @@
+memdraft/results/plugin-9b-vk-20261119-0636: 2 turn files, load average at turn starts 0.1 to 0.1
+
+oss  (python/other-languages)
+arm             tok/s  plain  speed  95% interval     r1     r2 median  faster tok/step  step   same
+none             38.0   38.0  1.000  1.000-1.000  1.000  1.000  1.000   0/24      1.00  1.00  24/24 
+mtp-builtin-3    73.8   38.0  1.942  1.819-2.079  1.946  1.938  2.026  24/24      3.08  1.59   8/24 
+mtp-plugin-3     71.8   38.0  1.891  1.772-2.029  1.889  1.893  1.972  24/24      3.08  1.63   8/24 
+draft-builtin-3   44.4   38.0  1.170  1.098-1.253  1.174  1.166  1.229  20/24      2.77  2.37  10/24 
+draft-plugin-3   47.9   38.0  1.261  1.197-1.333  1.259  1.262  1.294  24/24      3.21  2.54  10/24 

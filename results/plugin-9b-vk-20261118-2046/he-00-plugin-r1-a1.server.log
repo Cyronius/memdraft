@@ -1,0 +1,1006 @@
+/home/cyrus/.cache/model-experiments/memdraft/llama.cpp-plugin/build-vk/bin/llama-server -m /home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-9B-Q4_K_M.gguf --host 127.0.0.1 --port 8455 -np 1 --jinja --cache-ram 0 --no-warmup -ngl 99 -c 8192
+0.00.019.082 I srv  llama_server: initializing ...
+0.00.019.093 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.019.513 W srv  server_setup: security: no API key is set and CORS allows all origins (see https://github.com/ggml-org/llama.cpp/pull/25655)
+0.00.021.297 I srv    load_model: loading model '/home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-9B-Q4_K_M.gguf'
+0.05.342.570 I cmn          init: llama threadpool init, n_threads = 16
+0.05.383.281 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 8192, kv_unified = 'false'
+0.05.383.345 W srv          init: --cache-idle-slots requires --cache-ram, disabling
+0.05.384.612 I srv  server_run_i: model loaded
+0.05.384.619 I srv  server_on_li: listening on http://127.0.0.1:8455
+0.05.978.694 I slot       select: id  0 | task -1 | selected slot by LRU, n_tokens = 0, t_last = -1
+0.05.978.819 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+0.06.271.036 I slot print_timing: id  0 | task 0 | prompt eval time =     107.43 ms /    15 tokens (    7.16 ms per token,   139.63 tokens per second)
+0.06.271.040 I slot print_timing: id  0 | task 0 |        eval time =     184.73 ms /     8 tokens (   26.39 ms per token,    37.89 tokens per second)
+0.06.271.040 I slot print_timing: id  0 | task 0 |       total time =     292.16 ms /    23 tokens
+0.06.271.046 I slot print_timing: id  0 | task 0 |    graphs reused =          6
+0.06.271.046 I slot print_timing: id  0 | task 0 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.06.271.078 I slot      release: id  0 | task 0 | stop processing: n_tokens = 22, truncated = 0
+0.06.273.107 I slot       select: id  0 | task -1 | selected slot by LRU, n_tokens = 22, t_last = 131499310754
+0.06.273.209 I slot launch_slot_: id  0 | task 10 | processing task, is_child = 0
+0.09.491.821 I slot print_timing: id  0 | task 10 | n_gen =    116, tg =  38.14 t/s, tg_3s =  38.47 t/s
+0.12.029.593 I slot print_timing: id  0 | task 10 | prompt eval time =     203.40 ms /   165 tokens (    1.23 ms per token,   811.19 tokens per second)
+0.12.029.596 I slot print_timing: id  0 | task 10 |        eval time =    5552.95 ms /   212 tokens (   26.32 ms per token,    38.00 tokens per second)
+0.12.029.597 I slot print_timing: id  0 | task 10 |       total time =    5756.35 ms /   377 tokens
+0.12.029.599 I slot print_timing: id  0 | task 10 |    graphs reused =        215
+0.12.029.599 I slot print_timing: id  0 | task 10 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.12.029.624 I slot      release: id  0 | task 10 | stop processing: n_tokens = 376, truncated = 0
+0.12.033.045 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.242 (> 0.100 thold), f_keep = 0.101
+0.12.033.168 I slot launch_slot_: id  0 | task 224 | processing task, is_child = 0
+0.15.233.947 I slot print_timing: id  0 | task 224 | n_gen =    116, tg =  38.08 t/s, tg_3s =  38.41 t/s
+0.18.239.027 I slot print_timing: id  0 | task 224 | n_gen =    230, tg =  38.01 t/s, tg_3s =  37.94 t/s
+0.21.250.224 I slot print_timing: id  0 | task 224 | n_gen =    345, tg =  38.07 t/s, tg_3s =  38.19 t/s
+0.21.811.226 I slot print_timing: id  0 | task 224 | prompt eval time =     180.41 ms /   157 tokens (    1.15 ms per token,   870.22 tokens per second)
+0.21.811.230 I slot print_timing: id  0 | task 224 |        eval time =    9597.60 ms /   366 tokens (   26.29 ms per token,    38.03 tokens per second)
+0.21.811.231 I slot print_timing: id  0 | task 224 |       total time =    9778.02 ms /   523 tokens
+0.21.811.232 I slot print_timing: id  0 | task 224 |    graphs reused =        577
+0.21.811.232 I slot print_timing: id  0 | task 224 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.21.811.260 I slot      release: id  0 | task 224 | stop processing: n_tokens = 522, truncated = 0
+0.21.813.631 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.246 (> 0.100 thold), f_keep = 0.059
+0.21.813.717 I slot launch_slot_: id  0 | task 592 | processing task, is_child = 0
+0.24.450.018 I slot print_timing: id  0 | task 592 | prompt eval time =     135.29 ms /   126 tokens (    1.07 ms per token,   931.31 tokens per second)
+0.24.450.022 I slot print_timing: id  0 | task 592 |        eval time =    2500.98 ms /    97 tokens (   26.05 ms per token,    38.38 tokens per second)
+0.24.450.023 I slot print_timing: id  0 | task 592 |       total time =    2636.27 ms /   223 tokens
+0.24.450.024 I slot print_timing: id  0 | task 592 |    graphs reused =        672
+0.24.450.025 I slot print_timing: id  0 | task 592 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.24.450.050 I slot      release: id  0 | task 592 | stop processing: n_tokens = 222, truncated = 0
+0.24.452.670 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.194 (> 0.100 thold), f_keep = 0.140
+0.24.452.762 I slot launch_slot_: id  0 | task 691 | processing task, is_child = 0
+0.27.639.870 I slot print_timing: id  0 | task 691 | n_gen =    115, tg =  37.93 t/s, tg_3s =  38.26 t/s
+0.28.729.267 I slot print_timing: id  0 | task 691 | prompt eval time =     181.41 ms /   160 tokens (    1.13 ms per token,   881.98 tokens per second)
+0.28.729.271 I slot print_timing: id  0 | task 691 |        eval time =    4095.06 ms /   157 tokens (   26.25 ms per token,    38.09 tokens per second)
+0.28.729.272 I slot print_timing: id  0 | task 691 |       total time =    4276.47 ms /   317 tokens
+0.28.729.273 I slot print_timing: id  0 | task 691 |    graphs reused =        826
+0.28.729.274 I slot print_timing: id  0 | task 691 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.28.729.299 I slot      release: id  0 | task 691 | stop processing: n_tokens = 316, truncated = 0
+0.28.731.933 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.239 (> 0.100 thold), f_keep = 0.120
+0.28.732.028 I slot launch_slot_: id  0 | task 850 | processing task, is_child = 0
+0.31.932.979 I slot print_timing: id  0 | task 850 | n_gen =    116, tg =  38.08 t/s, tg_3s =  38.42 t/s
+0.33.505.999 I slot print_timing: id  0 | task 850 | prompt eval time =     181.35 ms /   159 tokens (    1.14 ms per token,   876.74 tokens per second)
+0.33.506.003 I slot print_timing: id  0 | task 850 |        eval time =    4592.59 ms /   176 tokens (   26.24 ms per token,    38.10 tokens per second)
+0.33.506.003 I slot print_timing: id  0 | task 850 |       total time =    4773.94 ms /   335 tokens
+0.33.506.005 I slot print_timing: id  0 | task 850 |    graphs reused =        999
+0.33.506.005 I slot print_timing: id  0 | task 850 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.33.506.030 I slot      release: id  0 | task 850 | stop processing: n_tokens = 334, truncated = 0
+0.33.508.700 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.281 (> 0.100 thold), f_keep = 0.114
+0.33.508.794 I slot launch_slot_: id  0 | task 1028 | processing task, is_child = 0
+0.36.711.913 I slot print_timing: id  0 | task 1028 | n_gen =    115, tg =  37.68 t/s, tg_3s =  38.01 t/s
+0.37.619.463 I slot print_timing: id  0 | task 1028 | prompt eval time =     177.84 ms /   135 tokens (    1.32 ms per token,   759.12 tokens per second)
+0.37.619.467 I slot print_timing: id  0 | task 1028 |        eval time =    3932.81 ms /   149 tokens (   26.57 ms per token,    37.63 tokens per second)
+0.37.619.467 I slot print_timing: id  0 | task 1028 |       total time =    4110.65 ms /   284 tokens
+0.37.619.469 I slot print_timing: id  0 | task 1028 |    graphs reused =       1145
+0.37.619.469 I slot print_timing: id  0 | task 1028 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.37.619.491 I slot      release: id  0 | task 1028 | stop processing: n_tokens = 283, truncated = 0
+0.37.622.043 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.245 (> 0.100 thold), f_keep = 0.134
+0.37.622.118 I slot launch_slot_: id  0 | task 1179 | processing task, is_child = 0
+0.40.813.758 I slot print_timing: id  0 | task 1179 | n_gen =    115, tg =  37.87 t/s, tg_3s =  38.20 t/s
+0.43.403.909 I slot print_timing: id  0 | task 1179 | prompt eval time =     181.50 ms /   155 tokens (    1.17 ms per token,   854.00 tokens per second)
+0.43.403.912 I slot print_timing: id  0 | task 1179 |        eval time =    5600.26 ms /   214 tokens (   26.29 ms per token,    38.03 tokens per second)
+0.43.403.913 I slot print_timing: id  0 | task 1179 |       total time =    5781.76 ms /   369 tokens
+0.43.403.914 I slot print_timing: id  0 | task 1179 |    graphs reused =       1356
+0.43.403.915 I slot print_timing: id  0 | task 1179 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.43.403.942 I slot      release: id  0 | task 1179 | stop processing: n_tokens = 368, truncated = 0
+0.43.406.695 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.281 (> 0.100 thold), f_keep = 0.103
+0.43.406.821 I slot launch_slot_: id  0 | task 1395 | processing task, is_child = 0
+0.46.503.391 I slot print_timing: id  0 | task 1395 | prompt eval time =     178.22 ms /   135 tokens (    1.32 ms per token,   757.47 tokens per second)
+0.46.503.394 I slot print_timing: id  0 | task 1395 |        eval time =    2918.32 ms /   112 tokens (   26.29 ms per token,    38.04 tokens per second)
+0.46.503.395 I slot print_timing: id  0 | task 1395 |       total time =    3096.54 ms /   247 tokens
+0.46.503.396 I slot print_timing: id  0 | task 1395 |    graphs reused =       1466
+0.46.503.397 I slot print_timing: id  0 | task 1395 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.46.503.418 I slot      release: id  0 | task 1395 | stop processing: n_tokens = 246, truncated = 0
+0.46.505.835 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.229 (> 0.100 thold), f_keep = 0.146
+0.46.505.923 I slot launch_slot_: id  0 | task 1509 | processing task, is_child = 0
+0.49.710.214 I slot print_timing: id  0 | task 1509 | n_gen =    115, tg =  37.70 t/s, tg_3s =  38.03 t/s
+0.50.972.961 I slot print_timing: id  0 | task 1509 | prompt eval time =     180.74 ms /   157 tokens (    1.15 ms per token,   868.68 tokens per second)
+0.50.972.964 I slot print_timing: id  0 | task 1509 |        eval time =    4286.27 ms /   163 tokens (   26.46 ms per token,    37.80 tokens per second)
+0.50.972.965 I slot print_timing: id  0 | task 1509 |       total time =    4467.01 ms /   320 tokens
+0.50.972.966 I slot print_timing: id  0 | task 1509 |    graphs reused =       1626
+0.50.972.967 I slot print_timing: id  0 | task 1509 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.50.972.992 I slot      release: id  0 | task 1509 | stop processing: n_tokens = 319, truncated = 0
+0.50.975.313 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.284 (> 0.100 thold), f_keep = 0.125
+0.50.975.424 I slot launch_slot_: id  0 | task 1674 | processing task, is_child = 0
+0.54.178.347 I slot print_timing: id  0 | task 1674 | n_gen =    117, tg =  38.36 t/s, tg_3s =  38.69 t/s
+0.55.565.494 I slot print_timing: id  0 | task 1674 | prompt eval time =     179.03 ms /   141 tokens (    1.27 ms per token,   787.56 tokens per second)
+0.55.565.497 I slot print_timing: id  0 | task 1674 |        eval time =    4411.00 ms /   170 tokens (   26.10 ms per token,    38.31 tokens per second)
+0.55.565.498 I slot print_timing: id  0 | task 1674 |       total time =    4590.04 ms /   311 tokens
+0.55.565.499 I slot print_timing: id  0 | task 1674 |    graphs reused =       1793
+0.55.565.500 I slot print_timing: id  0 | task 1674 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.55.565.525 I slot      release: id  0 | task 1674 | stop processing: n_tokens = 310, truncated = 0
+0.55.568.752 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.162 (> 0.100 thold), f_keep = 0.100
+0.55.568.879 I slot launch_slot_: id  0 | task 1846 | processing task, is_child = 0
+0.58.759.765 I slot print_timing: id  0 | task 1846 | n_gen =    114, tg =  37.67 t/s, tg_3s =  38.00 t/s
+1.01.765.825 I slot print_timing: id  0 | task 1846 | n_gen =    228, tg =  37.79 t/s, tg_3s =  37.92 t/s
+1.02.527.710 I slot print_timing: id  0 | task 1846 | prompt eval time =     190.78 ms /   191 tokens (    1.00 ms per token,  1001.17 tokens per second)
+1.02.527.714 I slot print_timing: id  0 | task 1846 |        eval time =    6768.03 ms /   257 tokens (   26.44 ms per token,    37.82 tokens per second)
+1.02.527.714 I slot print_timing: id  0 | task 1846 |       total time =    6958.81 ms /   448 tokens
+1.02.527.716 I slot print_timing: id  0 | task 1846 |    graphs reused =       2047
+1.02.527.716 I slot print_timing: id  0 | task 1846 |   graph reallocs =          0    /     0        (same size) / (changed size)
+1.02.527.739 I slot      release: id  0 | task 1846 | stop processing: n_tokens = 447, truncated = 0
+1.02.530.129 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.250 (> 0.100 thold), f_keep = 0.069
+1.02.530.223 I slot launch_slot_: id  0 | task 2105 | processing task, is_child = 0
+1.05.664.971 I slot print_timing: id  0 | task 2105 | n_gen =    115, tg =  37.96 t/s, tg_3s =  38.30 t/s
+1.06.976.818 I slot print_timing: id  0 | task 2105 | prompt eval time =     131.76 ms /   124 tokens (    1.06 ms per token,   941.12 tokens per second)
+1.06.976.822 I slot print_timing: id  0 | task 2105 |        eval time =    4314.81 ms /   165 tokens (   26.31 ms per token,    38.01 tokens per second)
+1.06.976.823 I slot print_timing: id  0 | task 2105 |       total time =    4446.57 ms /   289 tokens
+1.06.976.824 I slot print_timing: id  0 | task 2105 |    graphs reused =       2209
+1.06.976.825 I slot print_timing: id  0 | task 2105 |   graph reallocs =          0    /     0        (same size) / (changed size)
+1.06.976.849 I slot      release: id  0 | task 2105 | stop processing: n_tokens = 288, truncated = 0
+1.06.977.806 I srv    operator(): operator(): cleaning up before exit...
+/home/cyrus/.cache/model-experiments/memdraft/llama.cpp-plugin/build-vk/bin/llama-server -m /home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-9B-Q4_K_M.gguf --host 127.0.0.1 --port 8455 -np 1 --jinja --cache-ram 0 --no-warmup -ngl 99 -c 8192 --spec-type ngram-simple,plugin --spec-plugin-n-max 3 --spec-plugin /home/cyrus/code/model-experiments/memdraft/plugin/libmemdraft.so --spec-plugin-args table=/home/cyrus/code/model-experiments/target/memdraft/code/9b-code-pod-c3.mdt,reranker=/home/cyrus/code/model-experiments/target/memdraft/code/9b-code-pod-c3.mdr,pad=1,vocab_hash=c52114e74bc3a20f
+0.00.020.820 I srv  llama_server: initializing ...
+0.00.020.827 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.021.112 W srv  server_setup: security: no API key is set and CORS allows all origins (see https://github.com/ggml-org/llama.cpp/pull/25655)
+0.00.022.910 I srv    load_model: loading model '/home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-9B-Q4_K_M.gguf'
+0.00.751.781 I cmn          init: llama threadpool init, n_threads = 16
+0.00.751.859 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 8192, kv_unified = 'false'
+memdraft: 14775396 table entries, contexts up to 6 tokens, reranker yes, n_max 3, pad 1, tau 0.30, vocab c52114e74bc3a20f
+0.00.962.848 I spec common_specu: loaded speculative plugin /home/cyrus/code/model-experiments/memdraft/plugin/libmemdraft.so, n_max = 3, n_prefix = 0
+0.00.962.970 W srv          init: --cache-idle-slots requires --cache-ram, disabling
+0.00.964.382 I srv  server_run_i: model loaded
+0.00.964.389 I srv  server_on_li: listening on http://127.0.0.1:8455
+0.00.996.884 I slot       select: id  0 | task -1 | selected slot by LRU, n_tokens = 0, t_last = -1
+0.00.996.951 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+0.01.220.693 I slot print_timing: id  0 | task 0 | prompt eval time =     100.49 ms /    15 tokens (    6.70 ms per token,   149.27 tokens per second)
+0.01.220.696 I slot print_timing: id  0 | task 0 |        eval time =     123.21 ms /     8 tokens (   17.60 ms per token,    56.81 tokens per second)
+0.01.220.697 I slot print_timing: id  0 | task 0 |       total time =     223.70 ms /    23 tokens
+0.01.220.702 I slot print_timing: id  0 | task 0 |    graphs reused =          2
+0.01.220.702 I slot print_timing: id  0 | task 0 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.01.220.712 I slot print_timing: id  0 | task 0 | draft acceptance = 0.33333 (    3 accepted /     9 generated), mean len =  2.00
+0.01.220.764 I slot      release: id  0 | task 0 | stop processing: n_tokens = 22, truncated = 0
+0.01.223.121 I slot       select: id  0 | task -1 | selected slot by LRU, n_tokens = 22, t_last = 131571343791
+0.01.223.206 I slot launch_slot_: id  0 | task 7 | processing task, is_child = 0
+0.03.357.262 I slot print_timing: id  0 | task 7 | prompt eval time =     194.09 ms /   165 tokens (    1.18 ms per token,   850.12 tokens per second)
+0.03.357.266 I slot print_timing: id  0 | task 7 |        eval time =    1939.93 ms /   212 tokens (    9.19 ms per token,   108.77 tokens per second)
+0.03.357.266 I slot print_timing: id  0 | task 7 |       total time =    2134.02 ms /   377 tokens
+0.03.357.268 I slot print_timing: id  0 | task 7 |    graphs reused =         51
+0.03.357.268 I slot print_timing: id  0 | task 7 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.03.357.278 I slot print_timing: id  0 | task 7 | draft acceptance = 0.45322 (  155 accepted /   342 generated), mean len =  3.87
+0.03.357.324 I slot      release: id  0 | task 7 | stop processing: n_tokens = 376, truncated = 0
+0.03.359.503 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.242 (> 0.100 thold), f_keep = 0.101
+0.03.359.554 I slot launch_slot_: id  0 | task 66 | processing task, is_child = 0
+0.06.224.342 I slot print_timing: id  0 | task 66 | prompt eval time =     184.59 ms /   157 tokens (    1.18 ms per token,   850.51 tokens per second)
+0.06.224.345 I slot print_timing: id  0 | task 66 |        eval time =    2680.15 ms /   261 tokens (   10.31 ms per token,    97.01 tokens per second)
+0.06.224.346 I slot print_timing: id  0 | task 66 |       total time =    2864.74 ms /   418 tokens
+0.06.224.347 I slot print_timing: id  0 | task 66 |    graphs reused =        129
+0.06.224.348 I slot print_timing: id  0 | task 66 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.06.224.358 I slot print_timing: id  0 | task 66 | draft acceptance = 0.46457 (  177 accepted /   381 generated), mean len =  3.16
+0.06.224.408 I slot      release: id  0 | task 66 | stop processing: n_tokens = 417, truncated = 0
+0.06.226.576 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.246 (> 0.100 thold), f_keep = 0.074
+0.06.226.626 I slot launch_slot_: id  0 | task 152 | processing task, is_child = 0
+0.06.890.762 I slot print_timing: id  0 | task 152 | prompt eval time =     136.32 ms /   126 tokens (    1.08 ms per token,   924.32 tokens per second)
+0.06.890.766 I slot print_timing: id  0 | task 152 |        eval time =     527.78 ms /    97 tokens (    5.50 ms per token,   181.89 tokens per second)
+0.06.890.766 I slot print_timing: id  0 | task 152 |       total time =     664.10 ms /   223 tokens
+0.06.890.768 I slot print_timing: id  0 | task 152 |    graphs reused =        138
+0.06.890.768 I slot print_timing: id  0 | task 152 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.06.890.777 I slot print_timing: id  0 | task 152 | draft acceptance = 0.65873 (   83 accepted /   126 generated), mean len =  7.92
+0.06.890.822 I slot      release: id  0 | task 152 | stop processing: n_tokens = 222, truncated = 0
+0.06.892.679 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.194 (> 0.100 thold), f_keep = 0.140
+0.06.892.729 I slot launch_slot_: id  0 | task 168 | processing task, is_child = 0
+0.07.920.682 I slot print_timing: id  0 | task 168 | prompt eval time =     183.34 ms /   160 tokens (    1.15 ms per token,   872.72 tokens per second)
+0.07.920.685 I slot print_timing: id  0 | task 168 |        eval time =     844.59 ms /   157 tokens (    5.41 ms per token,   184.70 tokens per second)
+0.07.920.685 I slot print_timing: id  0 | task 168 |       total time =    1027.93 ms /   317 tokens
+0.07.920.687 I slot print_timing: id  0 | task 168 |    graphs reused =        155
+0.07.920.687 I slot print_timing: id  0 | task 168 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.07.920.696 I slot print_timing: id  0 | task 168 | draft acceptance = 0.67677 (  134 accepted /   198 generated), mean len =  7.38
+0.07.920.738 I slot      release: id  0 | task 168 | stop processing: n_tokens = 316, truncated = 0
+0.07.922.820 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.239 (> 0.100 thold), f_keep = 0.120
+0.07.922.864 I slot launch_slot_: id  0 | task 193 | processing task, is_child = 0
+0.09.438.921 I slot print_timing: id  0 | task 193 | prompt eval time =     184.75 ms /   159 tokens (    1.16 ms per token,   860.63 tokens per second)
+0.09.438.923 I slot print_timing: id  0 | task 193 |        eval time =    1331.27 ms /   176 tokens (    7.61 ms per token,   131.45 tokens per second)
+0.09.438.924 I slot print_timing: id  0 | task 193 |       total time =    1516.02 ms /   335 tokens
+0.09.438.925 I slot print_timing: id  0 | task 193 |    graphs reused =        187
+0.09.438.925 I slot print_timing: id  0 | task 193 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.09.438.935 I slot print_timing: id  0 | task 193 | draft acceptance = 0.56790 (  138 accepted /   243 generated), mean len =  4.83
+0.09.438.985 I slot      release: id  0 | task 193 | stop processing: n_tokens = 334, truncated = 0
+0.09.441.234 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.281 (> 0.100 thold), f_keep = 0.114
+0.09.441.285 I slot launch_slot_: id  0 | task 233 | processing task, is_child = 0
+0.10.720.104 I slot print_timing: id  0 | task 233 | prompt eval time =     181.56 ms /   135 tokens (    1.34 ms per token,   743.57 tokens per second)
+0.10.720.107 I slot print_timing: id  0 | task 233 |        eval time =    1097.22 ms /   149 tokens (    7.41 ms per token,   134.89 tokens per second)
+0.10.720.107 I slot print_timing: id  0 | task 233 |       total time =    1278.77 ms /   284 tokens
+0.10.720.109 I slot print_timing: id  0 | task 233 |    graphs reused =        213
+0.10.720.109 I slot print_timing: id  0 | task 233 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.10.720.118 I slot print_timing: id  0 | task 233 | draft acceptance = 0.65000 (  117 accepted /   180 generated), mean len =  4.90
+0.10.720.162 I slot      release: id  0 | task 233 | stop processing: n_tokens = 283, truncated = 0
+0.10.722.489 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.245 (> 0.100 thold), f_keep = 0.134
+0.10.722.525 I slot launch_slot_: id  0 | task 267 | processing task, is_child = 0
+0.12.776.362 I slot print_timing: id  0 | task 267 | prompt eval time =     182.81 ms /   155 tokens (    1.18 ms per token,   847.89 tokens per second)
+0.12.776.382 I slot print_timing: id  0 | task 267 |        eval time =    1870.99 ms /   214 tokens (    8.78 ms per token,   113.84 tokens per second)
+0.12.776.382 I slot print_timing: id  0 | task 267 |       total time =    2053.80 ms /   369 tokens
+0.12.776.383 I slot print_timing: id  0 | task 267 |    graphs reused =        264
+0.12.776.384 I slot print_timing: id  0 | task 267 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.12.776.393 I slot print_timing: id  0 | task 267 | draft acceptance = 0.52333 (  157 accepted /   300 generated), mean len =  3.85
+0.12.776.440 I slot      release: id  0 | task 267 | stop processing: n_tokens = 368, truncated = 0
+0.12.778.484 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.281 (> 0.100 thold), f_keep = 0.103
+0.12.778.536 I slot launch_slot_: id  0 | task 326 | processing task, is_child = 0
+0.13.501.847 I slot print_timing: id  0 | task 326 | prompt eval time =     182.12 ms /   135 tokens (    1.35 ms per token,   741.27 tokens per second)
+0.13.501.851 I slot print_timing: id  0 | task 326 |        eval time =     541.15 ms /   112 tokens (    4.88 ms per token,   205.12 tokens per second)
+0.13.501.851 I slot print_timing: id  0 | task 326 |       total time =     723.27 ms /   247 tokens
+0.13.501.852 I slot print_timing: id  0 | task 326 |    graphs reused =        273
+0.13.501.853 I slot print_timing: id  0 | task 326 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.13.501.862 I slot print_timing: id  0 | task 326 | draft acceptance = 0.77778 (   98 accepted /   126 generated), mean len =  9.17
+0.13.501.908 I slot      release: id  0 | task 326 | stop processing: n_tokens = 246, truncated = 0
+0.13.504.103 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.229 (> 0.100 thold), f_keep = 0.146
+0.13.504.155 I slot launch_slot_: id  0 | task 342 | processing task, is_child = 0
+0.14.903.514 I slot print_timing: id  0 | task 342 | prompt eval time =     183.38 ms /   157 tokens (    1.17 ms per token,   856.16 tokens per second)
+0.14.903.516 I slot print_timing: id  0 | task 342 |        eval time =    1215.96 ms /   163 tokens (    7.51 ms per token,   133.23 tokens per second)
+0.14.903.517 I slot print_timing: id  0 | task 342 |       total time =    1399.34 ms /   320 tokens
+0.14.903.518 I slot print_timing: id  0 | task 342 |    graphs reused =        302
+0.14.903.519 I slot print_timing: id  0 | task 342 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.14.903.527 I slot print_timing: id  0 | task 342 | draft acceptance = 0.54701 (  128 accepted /   234 generated), mean len =  4.88
+0.14.903.568 I slot      release: id  0 | task 342 | stop processing: n_tokens = 319, truncated = 0
+0.14.905.712 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.284 (> 0.100 thold), f_keep = 0.125
+0.14.905.763 I slot launch_slot_: id  0 | task 379 | processing task, is_child = 0
+0.16.355.796 I slot print_timing: id  0 | task 379 | prompt eval time =     183.34 ms /   141 tokens (    1.30 ms per token,   769.08 tokens per second)
+0.16.355.800 I slot print_timing: id  0 | task 379 |        eval time =    1266.66 ms /   170 tokens (    7.50 ms per token,   133.42 tokens per second)
+0.16.355.800 I slot print_timing: id  0 | task 379 |       total time =    1450.00 ms /   311 tokens
+0.16.355.802 I slot print_timing: id  0 | task 379 |    graphs reused =        334
+0.16.355.802 I slot print_timing: id  0 | task 379 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.16.355.812 I slot print_timing: id  0 | task 379 | draft acceptance = 0.66667 (  132 accepted /   198 generated), mean len =  4.67
+0.16.355.857 I slot      release: id  0 | task 379 | stop processing: n_tokens = 310, truncated = 0
+0.16.358.232 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.162 (> 0.100 thold), f_keep = 0.100
+0.16.358.289 I slot launch_slot_: id  0 | task 419 | processing task, is_child = 0
+0.18.623.206 I slot print_timing: id  0 | task 419 | prompt eval time =     194.00 ms /   191 tokens (    1.02 ms per token,   984.53 tokens per second)
+0.18.623.208 I slot print_timing: id  0 | task 419 |        eval time =    2070.87 ms /   257 tokens (    8.09 ms per token,   123.62 tokens per second)
+0.18.623.209 I slot print_timing: id  0 | task 419 |       total time =    2264.87 ms /   448 tokens
+0.18.623.210 I slot print_timing: id  0 | task 419 |    graphs reused =        391
+0.18.623.210 I slot print_timing: id  0 | task 419 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.18.623.220 I slot print_timing: id  0 | task 419 | draft acceptance = 0.61006 (  194 accepted /   318 generated), mean len =  4.18
+0.18.623.265 I slot      release: id  0 | task 419 | stop processing: n_tokens = 447, truncated = 0
+0.18.625.434 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.250 (> 0.100 thold), f_keep = 0.069
+0.18.625.490 I slot launch_slot_: id  0 | task 484 | processing task, is_child = 0
+0.20.365.759 I slot print_timing: id  0 | task 484 | prompt eval time =     136.21 ms /   124 tokens (    1.10 ms per token,   910.37 tokens per second)
+0.20.365.763 I slot print_timing: id  0 | task 484 |        eval time =    1604.02 ms /   165 tokens (    9.78 ms per token,   102.24 tokens per second)
+0.20.365.763 I slot print_timing: id  0 | task 484 |       total time =    1740.23 ms /   289 tokens
+0.20.365.765 I slot print_timing: id  0 | task 484 |    graphs reused =        434
+0.20.365.765 I slot print_timing: id  0 | task 484 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.20.365.776 I slot print_timing: id  0 | task 484 | draft acceptance = 0.50216 (  116 accepted /   231 generated), mean len =  3.47
+0.20.365.822 I slot      release: id  0 | task 484 | stop processing: n_tokens = 288, truncated = 0
+0.20.366.615 I srv    operator(): operator(): cleaning up before exit...
+/home/cyrus/.cache/model-experiments/memdraft/llama.cpp-plugin/build-vk/bin/llama-server -m /home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-9B-Q4_K_M.gguf --host 127.0.0.1 --port 8455 -np 1 --jinja --cache-ram 0 --no-warmup -ngl 99 -c 8192 --spec-type ngram-simple,draft-mtp,plugin --spec-draft-model /home/cyrus/.cache/model-experiments/memdraft/mtp-head/Qwen3.5-9B-q4_k_m-out-q4k.gguf --spec-draft-p-min 0 --spec-plugin-prefix 1 --spec-plugin-n-max 4 --spec-plugin /home/cyrus/code/model-experiments/memdraft/plugin/libmemdraft.so --spec-plugin-args table=/home/cyrus/code/model-experiments/target/memdraft/code/9b-code-pod-c3.mdt,reranker=/home/cyrus/code/model-experiments/target/memdraft/code/9b-code-pod-c3.mdr,pad=1,vocab_hash=c52114e74bc3a20f
+0.00.019.131 I srv  llama_server: initializing ...
+0.00.019.141 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.019.483 W srv  server_setup: security: no API key is set and CORS allows all origins (see https://github.com/ggml-org/llama.cpp/pull/25655)
+0.00.021.154 I srv    load_model: loading model '/home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-9B-Q4_K_M.gguf'
+0.00.907.989 I cmn          init: llama threadpool init, n_threads = 16
+0.00.908.080 I common_speculative_init_result: loading draft model '/home/cyrus/.cache/model-experiments/memdraft/mtp-head/Qwen3.5-9B-q4_k_m-out-q4k.gguf'
+0.02.093.765 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 8192, kv_unified = 'false'
+memdraft: 14775396 table entries, contexts up to 6 tokens, reranker yes, n_max 3, pad 1, tau 0.30, vocab c52114e74bc3a20f
+0.02.140.084 I spec common_specu: loaded speculative plugin /home/cyrus/code/model-experiments/memdraft/plugin/libmemdraft.so, n_max = 4, n_prefix = 1
+0.02.155.918 W srv          init: --cache-idle-slots requires --cache-ram, disabling
+0.02.157.248 I srv  server_run_i: model loaded
+0.02.157.255 I srv  server_on_li: listening on http://127.0.0.1:8455
+0.02.998.948 I slot       select: id  0 | task -1 | selected slot by LRU, n_tokens = 0, t_last = -1
+0.02.999.004 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+0.03.190.598 I slot print_timing: id  0 | task 0 | prompt eval time =     110.89 ms /    15 tokens (    7.39 ms per token,   135.27 tokens per second)
+0.03.190.604 I slot print_timing: id  0 | task 0 |        eval time =      80.66 ms /     8 tokens (   11.52 ms per token,    86.79 tokens per second)
+0.03.190.605 I slot print_timing: id  0 | task 0 |       total time =     191.54 ms /    23 tokens
+0.03.190.610 I slot print_timing: id  0 | task 0 |    graphs reused =          1
+0.03.190.611 I slot print_timing: id  0 | task 0 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.03.190.629 I slot print_timing: id  0 | task 0 | draft acceptance = 0.62500 (    5 accepted /     8 generated), mean len =  3.50
+0.03.190.705 I slot      release: id  0 | task 0 | stop processing: n_tokens = 22, truncated = 0
+0.03.192.939 I slot       select: id  0 | task -1 | selected slot by LRU, n_tokens = 22, t_last = 131603785792
+0.03.192.995 I slot launch_slot_: id  0 | task 5 | processing task, is_child = 0
+0.04.984.352 I slot print_timing: id  0 | task 5 | prompt eval time =     203.83 ms /   165 tokens (    1.24 ms per token,   809.49 tokens per second)
+0.04.984.357 I slot print_timing: id  0 | task 5 |        eval time =    1587.50 ms /   212 tokens (    7.52 ms per token,   132.91 tokens per second)
+0.04.984.357 I slot print_timing: id  0 | task 5 |       total time =    1791.34 ms /   377 tokens
+0.04.984.358 I slot print_timing: id  0 | task 5 |    graphs reused =         34
+0.04.984.359 I slot print_timing: id  0 | task 5 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.04.984.368 I slot print_timing: id  0 | task 5 | draft acceptance = 0.61786 (  173 accepted /   280 generated), mean len =  5.68
+0.04.984.411 I slot      release: id  0 | task 5 | stop processing: n_tokens = 376, truncated = 0
+0.04.986.560 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.242 (> 0.100 thold), f_keep = 0.101
+0.04.986.607 I slot launch_slot_: id  0 | task 46 | processing task, is_child = 0
+0.08.197.745 I slot print_timing: id  0 | task 46 | n_gen =    325, tg = 107.39 t/s, tg_3s = 107.72 t/s
+0.09.593.738 I slot print_timing: id  0 | task 46 | prompt eval time =     194.11 ms /   157 tokens (    1.24 ms per token,   808.82 tokens per second)
+0.09.593.741 I slot print_timing: id  0 | task 46 |        eval time =    4412.99 ms /   414 tokens (   10.69 ms per token,    93.59 tokens per second)
+0.09.593.742 I slot print_timing: id  0 | task 46 |       total time =    4607.10 ms /   571 tokens
+0.09.593.744 I slot print_timing: id  0 | task 46 |    graphs reused =        143
+0.09.593.744 I slot print_timing: id  0 | task 46 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.09.593.754 I slot print_timing: id  0 | task 46 | draft acceptance = 0.50680 (  298 accepted /   588 generated), mean len =  3.61
+0.09.593.802 I slot      release: id  0 | task 46 | stop processing: n_tokens = 570, truncated = 0
+0.09.596.115 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.246 (> 0.100 thold), f_keep = 0.054
+0.09.596.178 I slot launch_slot_: id  0 | task 164 | processing task, is_child = 0
+0.10.275.863 I slot print_timing: id  0 | task 164 | prompt eval time =     143.18 ms /   126 tokens (    1.14 ms per token,   879.99 tokens per second)
+0.10.275.869 I slot print_timing: id  0 | task 164 |        eval time =     536.45 ms /    97 tokens (    5.59 ms per token,   178.95 tokens per second)
+0.10.275.870 I slot print_timing: id  0 | task 164 |       total time =     679.63 ms /   223 tokens
+0.10.275.872 I slot print_timing: id  0 | task 164 |    graphs reused =        150
+0.10.275.873 I slot print_timing: id  0 | task 164 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.10.275.891 I slot print_timing: id  0 | task 164 | draft acceptance = 0.66406 (   85 accepted /   128 generated), mean len =  9.50
+0.10.275.977 I slot      release: id  0 | task 164 | stop processing: n_tokens = 222, truncated = 0
+0.10.278.352 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.194 (> 0.100 thold), f_keep = 0.140
+0.10.278.386 I slot launch_slot_: id  0 | task 178 | processing task, is_child = 0
+0.11.204.137 I slot print_timing: id  0 | task 178 | prompt eval time =     195.41 ms /   160 tokens (    1.22 ms per token,   818.77 tokens per second)
+0.11.204.143 I slot print_timing: id  0 | task 178 |        eval time =     730.30 ms /   157 tokens (    4.68 ms per token,   213.61 tokens per second)
+0.11.204.144 I slot print_timing: id  0 | task 178 |       total time =     925.71 ms /   317 tokens
+0.11.204.145 I slot print_timing: id  0 | task 178 |    graphs reused =        160
+0.11.204.146 I slot print_timing: id  0 | task 178 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.11.204.166 I slot print_timing: id  0 | task 178 | draft acceptance = 0.75000 (  141 accepted /   188 generated), mean len = 11.07
+0.11.204.238 I slot      release: id  0 | task 178 | stop processing: n_tokens = 316, truncated = 0
+0.11.207.361 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.239 (> 0.100 thold), f_keep = 0.120
+0.11.207.444 I slot launch_slot_: id  0 | task 196 | processing task, is_child = 0
+0.12.529.633 I slot print_timing: id  0 | task 196 | prompt eval time =     195.27 ms /   159 tokens (    1.23 ms per token,   814.27 tokens per second)
+0.12.529.640 I slot print_timing: id  0 | task 196 |        eval time =    1126.87 ms /   176 tokens (    6.44 ms per token,   155.30 tokens per second)
+0.12.529.640 I slot print_timing: id  0 | task 196 |       total time =    1322.14 ms /   335 tokens
+0.12.529.642 I slot print_timing: id  0 | task 196 |    graphs reused =        181
+0.12.529.643 I slot print_timing: id  0 | task 196 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.12.529.657 I slot print_timing: id  0 | task 196 | draft acceptance = 0.64224 (  149 accepted /   232 generated), mean len =  6.96
+0.12.529.729 I slot      release: id  0 | task 196 | stop processing: n_tokens = 334, truncated = 0
+0.12.531.626 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.281 (> 0.100 thold), f_keep = 0.114
+0.12.531.679 I slot launch_slot_: id  0 | task 225 | processing task, is_child = 0
+0.13.673.208 I slot print_timing: id  0 | task 225 | prompt eval time =     193.76 ms /   135 tokens (    1.44 ms per token,   696.74 tokens per second)
+0.13.673.213 I slot print_timing: id  0 | task 225 |        eval time =     947.71 ms /   149 tokens (    6.40 ms per token,   156.17 tokens per second)
+0.13.673.215 I slot print_timing: id  0 | task 225 |       total time =    1141.47 ms /   284 tokens
+0.13.673.217 I slot print_timing: id  0 | task 225 |    graphs reused =        198
+0.13.673.218 I slot print_timing: id  0 | task 225 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.13.673.233 I slot print_timing: id  0 | task 225 | draft acceptance = 0.73256 (  126 accepted /   172 generated), mean len =  7.00
+0.13.673.308 I slot      release: id  0 | task 225 | stop processing: n_tokens = 283, truncated = 0
+0.13.675.877 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.245 (> 0.100 thold), f_keep = 0.134
+0.13.675.945 I slot launch_slot_: id  0 | task 250 | processing task, is_child = 0
+0.15.439.527 I slot print_timing: id  0 | task 250 | prompt eval time =     194.23 ms /   155 tokens (    1.25 ms per token,   798.01 tokens per second)
+0.15.439.532 I slot print_timing: id  0 | task 250 |        eval time =    1569.31 ms /   214 tokens (    7.37 ms per token,   135.73 tokens per second)
+0.15.439.533 I slot print_timing: id  0 | task 250 |       total time =    1763.54 ms /   369 tokens
+0.15.439.534 I slot print_timing: id  0 | task 250 |    graphs reused =        231
+0.15.439.535 I slot print_timing: id  0 | task 250 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.15.439.548 I slot print_timing: id  0 | task 250 | draft acceptance = 0.62500 (  175 accepted /   280 generated), mean len =  5.73
+0.15.439.606 I slot      release: id  0 | task 250 | stop processing: n_tokens = 368, truncated = 0
+0.15.441.746 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.281 (> 0.100 thold), f_keep = 0.103
+0.15.441.774 I slot launch_slot_: id  0 | task 291 | processing task, is_child = 0
+0.16.145.147 I slot print_timing: id  0 | task 291 | prompt eval time =     193.06 ms /   135 tokens (    1.43 ms per token,   699.26 tokens per second)
+0.16.145.150 I slot print_timing: id  0 | task 291 |        eval time =     510.27 ms /   112 tokens (    4.60 ms per token,   217.53 tokens per second)
+0.16.145.151 I slot print_timing: id  0 | task 291 |       total time =     703.34 ms /   247 tokens
+0.16.145.152 I slot print_timing: id  0 | task 291 |    graphs reused =        237
+0.16.145.152 I slot print_timing: id  0 | task 291 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.16.145.165 I slot print_timing: id  0 | task 291 | draft acceptance = 0.81452 (  101 accepted /   124 generated), mean len = 12.22
+0.16.145.223 I slot      release: id  0 | task 291 | stop processing: n_tokens = 246, truncated = 0
+0.16.147.386 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.229 (> 0.100 thold), f_keep = 0.146
+0.16.147.438 I slot launch_slot_: id  0 | task 304 | processing task, is_child = 0
+0.17.440.743 I slot print_timing: id  0 | task 304 | prompt eval time =     194.35 ms /   157 tokens (    1.24 ms per token,   807.80 tokens per second)
+0.17.440.748 I slot print_timing: id  0 | task 304 |        eval time =    1098.92 ms /   163 tokens (    6.78 ms per token,   147.42 tokens per second)
+0.17.440.749 I slot print_timing: id  0 | task 304 |       total time =    1293.28 ms /   320 tokens
+0.17.440.751 I slot print_timing: id  0 | task 304 |    graphs reused =        257
+0.17.440.752 I slot print_timing: id  0 | task 304 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.17.440.762 I slot print_timing: id  0 | task 304 | draft acceptance = 0.60088 (  137 accepted /   228 generated), mean len =  6.71
+0.17.440.832 I slot      release: id  0 | task 304 | stop processing: n_tokens = 319, truncated = 0
+0.17.442.567 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.284 (> 0.100 thold), f_keep = 0.125
+0.17.442.590 I slot launch_slot_: id  0 | task 332 | processing task, is_child = 0
+0.18.732.022 I slot print_timing: id  0 | task 332 | prompt eval time =     191.06 ms /   141 tokens (    1.35 ms per token,   738.01 tokens per second)
+0.18.732.025 I slot print_timing: id  0 | task 332 |        eval time =    1098.35 ms /   170 tokens (    6.50 ms per token,   153.87 tokens per second)
+0.18.732.026 I slot print_timing: id  0 | task 332 |       total time =    1289.40 ms /   311 tokens
+0.18.732.027 I slot print_timing: id  0 | task 332 |    graphs reused =        278
+0.18.732.028 I slot print_timing: id  0 | task 332 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.18.732.037 I slot print_timing: id  0 | task 332 | draft acceptance = 0.76064 (  143 accepted /   188 generated), mean len =  6.72
+0.18.732.098 I slot      release: id  0 | task 332 | stop processing: n_tokens = 310, truncated = 0
+0.18.734.386 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.162 (> 0.100 thold), f_keep = 0.100
+0.18.734.462 I slot launch_slot_: id  0 | task 361 | processing task, is_child = 0
+0.20.792.530 I slot print_timing: id  0 | task 361 | prompt eval time =     205.18 ms /   191 tokens (    1.07 ms per token,   930.88 tokens per second)
+0.20.792.534 I slot print_timing: id  0 | task 361 |        eval time =    1852.83 ms /   258 tokens (    7.21 ms per token,   138.71 tokens per second)
+0.20.792.535 I slot print_timing: id  0 | task 361 |       total time =    2058.01 ms /   449 tokens
+0.20.792.536 I slot print_timing: id  0 | task 361 |    graphs reused =        319
+0.20.792.537 I slot print_timing: id  0 | task 361 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.20.792.549 I slot print_timing: id  0 | task 361 | draft acceptance = 0.68831 (  212 accepted /   308 generated), mean len =  5.82
+0.20.792.607 I slot      release: id  0 | task 361 | stop processing: n_tokens = 448, truncated = 0
+0.20.794.850 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.250 (> 0.100 thold), f_keep = 0.069
+0.20.794.925 I slot launch_slot_: id  0 | task 409 | processing task, is_child = 0
+0.22.247.748 I slot print_timing: id  0 | task 409 | prompt eval time =     141.38 ms /   124 tokens (    1.14 ms per token,   877.10 tokens per second)
+0.22.247.752 I slot print_timing: id  0 | task 409 |        eval time =    1311.41 ms /   165 tokens (    8.00 ms per token,   125.06 tokens per second)
+0.22.247.753 I slot print_timing: id  0 | task 409 |       total time =    1452.79 ms /   289 tokens
+0.22.247.754 I slot print_timing: id  0 | task 409 |    graphs reused =        346
+0.22.247.755 I slot print_timing: id  0 | task 409 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.22.247.768 I slot print_timing: id  0 | task 409 | draft acceptance = 0.62264 (  132 accepted /   212 generated), mean len =  5.26
+0.22.247.822 I slot      release: id  0 | task 409 | stop processing: n_tokens = 288, truncated = 0
+0.22.248.698 I srv    operator(): operator(): cleaning up before exit...
+/home/cyrus/.cache/model-experiments/memdraft/llama.cpp-plugin/build-vk/bin/llama-server -m /home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-9B-Q4_K_M.gguf --host 127.0.0.1 --port 8455 -np 1 --jinja --cache-ram 0 --no-warmup -ngl 99 -c 8192 --spec-type draft-mtp --spec-draft-model /home/cyrus/.cache/model-experiments/memdraft/mtp-head/Qwen3.5-9B-q4_k_m-out-q4k.gguf --spec-draft-p-min 0 --spec-draft-n-max 3
+0.00.018.752 I srv  llama_server: initializing ...
+0.00.018.768 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.019.067 W srv  server_setup: security: no API key is set and CORS allows all origins (see https://github.com/ggml-org/llama.cpp/pull/25655)
+0.00.020.682 I srv    load_model: loading model '/home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-9B-Q4_K_M.gguf'
+0.00.892.223 I cmn          init: llama threadpool init, n_threads = 16
+0.00.892.306 I common_speculative_init_result: loading draft model '/home/cyrus/.cache/model-experiments/memdraft/mtp-head/Qwen3.5-9B-q4_k_m-out-q4k.gguf'
+0.01.129.507 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 8192, kv_unified = 'false'
+0.01.139.237 W srv          init: --cache-idle-slots requires --cache-ram, disabling
+0.01.140.504 I srv  server_run_i: model loaded
+0.01.140.512 I srv  server_on_li: listening on http://127.0.0.1:8455
+0.02.001.914 I slot       select: id  0 | task -1 | selected slot by LRU, n_tokens = 0, t_last = -1
+0.02.002.039 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+0.02.201.843 I slot print_timing: id  0 | task 0 | prompt eval time =     110.33 ms /    15 tokens (    7.36 ms per token,   135.96 tokens per second)
+0.02.201.847 I slot print_timing: id  0 | task 0 |        eval time =      89.42 ms /     8 tokens (   12.77 ms per token,    78.28 tokens per second)
+0.02.201.847 I slot print_timing: id  0 | task 0 |       total time =     199.75 ms /    23 tokens
+0.02.201.852 I slot print_timing: id  0 | task 0 |    graphs reused =          0
+0.02.201.853 I slot print_timing: id  0 | task 0 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.02.201.856 I slot print_timing: id  0 | task 0 | draft acceptance = 1.00000 (    5 accepted /     5 generated), mean len =  3.50
+0.02.201.919 I slot      release: id  0 | task 0 | stop processing: n_tokens = 22, truncated = 0
+0.02.204.420 I slot       select: id  0 | task -1 | selected slot by LRU, n_tokens = 22, t_last = 131635201990
+0.02.204.505 I slot launch_slot_: id  0 | task 5 | processing task, is_child = 0
+0.04.783.149 I slot print_timing: id  0 | task 5 | prompt eval time =     203.71 ms /   165 tokens (    1.23 ms per token,   809.99 tokens per second)
+0.04.783.154 I slot print_timing: id  0 | task 5 |        eval time =    2374.89 ms /   212 tokens (   11.26 ms per token,    88.85 tokens per second)
+0.04.783.155 I slot print_timing: id  0 | task 5 |       total time =    2578.59 ms /   377 tokens
+0.04.783.157 I slot print_timing: id  0 | task 5 |    graphs reused =         55
+0.04.783.158 I slot print_timing: id  0 | task 5 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.04.783.162 I slot print_timing: id  0 | task 5 | draft acceptance = 0.90058 (  154 accepted /   171 generated), mean len =  3.70
+0.04.783.213 I slot      release: id  0 | task 5 | stop processing: n_tokens = 376, truncated = 0
+0.04.785.698 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.242 (> 0.100 thold), f_keep = 0.101
+0.04.785.784 I slot launch_slot_: id  0 | task 65 | processing task, is_child = 0
+0.07.982.520 I slot print_timing: id  0 | task 65 | n_gen =    249, tg =  82.58 t/s, tg_3s =  82.91 t/s
+0.09.610.698 I slot print_timing: id  0 | task 65 | prompt eval time =     193.50 ms /   157 tokens (    1.23 ms per token,   811.36 tokens per second)
+0.09.610.703 I slot print_timing: id  0 | task 65 |        eval time =    4631.38 ms /   366 tokens (   12.69 ms per token,    78.81 tokens per second)
+0.09.610.704 I slot print_timing: id  0 | task 65 |       total time =    4824.88 ms /   523 tokens
+0.09.610.706 I slot print_timing: id  0 | task 65 |    graphs reused =        163
+0.09.610.707 I slot print_timing: id  0 | task 65 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.09.610.711 I slot print_timing: id  0 | task 65 | draft acceptance = 0.76276 (  254 accepted /   333 generated), mean len =  3.29
+0.09.610.785 I slot      release: id  0 | task 65 | stop processing: n_tokens = 522, truncated = 0
+0.09.613.061 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.246 (> 0.100 thold), f_keep = 0.059
+0.09.613.127 I slot launch_slot_: id  0 | task 179 | processing task, is_child = 0
+0.10.814.573 I slot print_timing: id  0 | task 179 | prompt eval time =     142.50 ms /   126 tokens (    1.13 ms per token,   884.23 tokens per second)
+0.10.814.579 I slot print_timing: id  0 | task 179 |        eval time =    1058.91 ms /    97 tokens (   11.03 ms per token,    90.66 tokens per second)
+0.10.814.580 I slot print_timing: id  0 | task 179 |       total time =    1201.40 ms /   223 tokens
+0.10.814.582 I slot print_timing: id  0 | task 179 |    graphs reused =        187
+0.10.814.582 I slot print_timing: id  0 | task 179 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.10.814.585 I slot print_timing: id  0 | task 179 | draft acceptance = 0.94667 (   71 accepted /    75 generated), mean len =  3.84
+0.10.814.624 I slot      release: id  0 | task 179 | stop processing: n_tokens = 222, truncated = 0
+0.10.816.673 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.194 (> 0.100 thold), f_keep = 0.140
+0.10.816.753 I slot launch_slot_: id  0 | task 207 | processing task, is_child = 0
+0.12.718.705 I slot print_timing: id  0 | task 207 | prompt eval time =     194.84 ms /   160 tokens (    1.22 ms per token,   821.20 tokens per second)
+0.12.718.709 I slot print_timing: id  0 | task 207 |        eval time =    1707.06 ms /   157 tokens (   10.94 ms per token,    91.39 tokens per second)
+0.12.718.710 I slot print_timing: id  0 | task 207 |       total time =    1901.90 ms /   317 tokens
+0.12.718.712 I slot print_timing: id  0 | task 207 |    graphs reused =        225
+0.12.718.713 I slot print_timing: id  0 | task 207 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.12.718.716 I slot print_timing: id  0 | task 207 | draft acceptance = 0.96667 (  116 accepted /   120 generated), mean len =  3.90
+0.12.718.779 I slot      release: id  0 | task 207 | stop processing: n_tokens = 316, truncated = 0
+0.12.721.217 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.239 (> 0.100 thold), f_keep = 0.120
+0.12.721.278 I slot launch_slot_: id  0 | task 250 | processing task, is_child = 0
+0.14.847.533 I slot print_timing: id  0 | task 250 | prompt eval time =     193.59 ms /   159 tokens (    1.22 ms per token,   821.33 tokens per second)
+0.14.847.538 I slot print_timing: id  0 | task 250 |        eval time =    1932.63 ms /   176 tokens (   11.04 ms per token,    90.55 tokens per second)
+0.14.847.538 I slot print_timing: id  0 | task 250 |       total time =    2126.22 ms /   335 tokens
+0.14.847.540 I slot print_timing: id  0 | task 250 |    graphs reused =        269
+0.14.847.540 I slot print_timing: id  0 | task 250 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.14.847.544 I slot print_timing: id  0 | task 250 | draft acceptance = 0.93478 (  129 accepted /   138 generated), mean len =  3.80
+0.14.847.592 I slot      release: id  0 | task 250 | stop processing: n_tokens = 334, truncated = 0
+0.14.849.625 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.281 (> 0.100 thold), f_keep = 0.114
+0.14.849.711 I slot launch_slot_: id  0 | task 299 | processing task, is_child = 0
+0.16.660.592 I slot print_timing: id  0 | task 299 | prompt eval time =     191.42 ms /   135 tokens (    1.42 ms per token,   705.26 tokens per second)
+0.16.660.598 I slot print_timing: id  0 | task 299 |        eval time =    1619.40 ms /   149 tokens (   10.94 ms per token,    91.39 tokens per second)
+0.16.660.599 I slot print_timing: id  0 | task 299 |       total time =    1810.82 ms /   284 tokens
+0.16.660.601 I slot print_timing: id  0 | task 299 |    graphs reused =        305
+0.16.660.601 I slot print_timing: id  0 | task 299 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.16.660.606 I slot print_timing: id  0 | task 299 | draft acceptance = 0.96491 (  110 accepted /   114 generated), mean len =  3.89
+0.16.660.674 I slot      release: id  0 | task 299 | stop processing: n_tokens = 283, truncated = 0
+0.16.662.909 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.245 (> 0.100 thold), f_keep = 0.134
+0.16.662.998 I slot launch_slot_: id  0 | task 340 | processing task, is_child = 0
+0.19.241.702 I slot print_timing: id  0 | task 340 | prompt eval time =     194.27 ms /   155 tokens (    1.25 ms per token,   797.88 tokens per second)
+0.19.241.706 I slot print_timing: id  0 | task 340 |        eval time =    2384.40 ms /   214 tokens (   11.19 ms per token,    89.33 tokens per second)
+0.19.241.707 I slot print_timing: id  0 | task 340 |       total time =    2578.66 ms /   369 tokens
+0.19.241.708 I slot print_timing: id  0 | task 340 |    graphs reused =        359
+0.19.241.708 I slot print_timing: id  0 | task 340 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.19.241.711 I slot print_timing: id  0 | task 340 | draft acceptance = 0.93452 (  157 accepted /   168 generated), mean len =  3.80
+0.19.241.750 I slot      release: id  0 | task 340 | stop processing: n_tokens = 368, truncated = 0
+0.19.243.819 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.281 (> 0.100 thold), f_keep = 0.103
+0.19.243.905 I slot launch_slot_: id  0 | task 399 | processing task, is_child = 0
+0.20.659.373 I slot print_timing: id  0 | task 399 | prompt eval time =     190.49 ms /   135 tokens (    1.41 ms per token,   708.70 tokens per second)
+0.20.659.378 I slot print_timing: id  0 | task 399 |        eval time =    1224.93 ms /   112 tokens (   11.04 ms per token,    90.62 tokens per second)
+0.20.659.379 I slot print_timing: id  0 | task 399 |       total time =    1415.42 ms /   247 tokens
+0.20.659.380 I slot print_timing: id  0 | task 399 |    graphs reused =        387
+0.20.659.381 I slot print_timing: id  0 | task 399 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.20.659.385 I slot print_timing: id  0 | task 399 | draft acceptance = 0.94253 (   82 accepted /    87 generated), mean len =  3.83
+0.20.659.432 I slot      release: id  0 | task 399 | stop processing: n_tokens = 246, truncated = 0
+0.20.661.674 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.229 (> 0.100 thold), f_keep = 0.146
+0.20.661.752 I slot launch_slot_: id  0 | task 431 | processing task, is_child = 0
+0.22.726.654 I slot print_timing: id  0 | task 431 | prompt eval time =     193.90 ms /   157 tokens (    1.24 ms per token,   809.69 tokens per second)
+0.22.726.657 I slot print_timing: id  0 | task 431 |        eval time =    1870.95 ms /   163 tokens (   11.55 ms per token,    86.59 tokens per second)
+0.22.726.658 I slot print_timing: id  0 | task 431 |       total time =    2064.86 ms /   320 tokens
+0.22.726.659 I slot print_timing: id  0 | task 431 |    graphs reused =        429
+0.22.726.659 I slot print_timing: id  0 | task 431 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.22.726.662 I slot print_timing: id  0 | task 431 | draft acceptance = 0.89394 (  118 accepted /   132 generated), mean len =  3.68
+0.22.726.701 I slot      release: id  0 | task 431 | stop processing: n_tokens = 319, truncated = 0
+0.22.728.691 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.284 (> 0.100 thold), f_keep = 0.125
+0.22.728.768 I slot launch_slot_: id  0 | task 478 | processing task, is_child = 0
+0.24.796.260 I slot print_timing: id  0 | task 478 | prompt eval time =     192.24 ms /   141 tokens (    1.36 ms per token,   733.47 tokens per second)
+0.24.796.266 I slot print_timing: id  0 | task 478 |        eval time =    1875.20 ms /   170 tokens (   11.10 ms per token,    90.12 tokens per second)
+0.24.796.267 I slot print_timing: id  0 | task 478 |       total time =    2067.44 ms /   311 tokens
+0.24.796.269 I slot print_timing: id  0 | task 478 |    graphs reused =        471
+0.24.796.270 I slot print_timing: id  0 | task 478 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.24.796.273 I slot print_timing: id  0 | task 478 | draft acceptance = 0.94697 (  125 accepted /   132 generated), mean len =  3.84
+0.24.796.324 I slot      release: id  0 | task 478 | stop processing: n_tokens = 310, truncated = 0
+0.24.798.585 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.162 (> 0.100 thold), f_keep = 0.100
+0.24.798.652 I slot launch_slot_: id  0 | task 525 | processing task, is_child = 0
+0.27.947.543 I slot print_timing: id  0 | task 525 | prompt eval time =     205.43 ms /   191 tokens (    1.08 ms per token,   929.76 tokens per second)
+0.27.947.546 I slot print_timing: id  0 | task 525 |        eval time =    2943.42 ms /   258 tokens (   11.45 ms per token,    87.31 tokens per second)
+0.27.947.547 I slot print_timing: id  0 | task 525 |       total time =    3148.85 ms /   449 tokens
+0.27.947.548 I slot print_timing: id  0 | task 525 |    graphs reused =        539
+0.27.947.549 I slot print_timing: id  0 | task 525 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.27.947.551 I slot print_timing: id  0 | task 525 | draft acceptance = 0.89048 (  187 accepted /   210 generated), mean len =  3.67
+0.27.947.593 I slot      release: id  0 | task 525 | stop processing: n_tokens = 448, truncated = 0
+0.27.949.949 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.250 (> 0.100 thold), f_keep = 0.069
+0.27.950.032 I slot launch_slot_: id  0 | task 598 | processing task, is_child = 0
+0.29.904.412 I slot print_timing: id  0 | task 598 | prompt eval time =     142.06 ms /   124 tokens (    1.15 ms per token,   872.88 tokens per second)
+0.29.904.417 I slot print_timing: id  0 | task 598 |        eval time =    1812.29 ms /   165 tokens (   11.05 ms per token,    90.49 tokens per second)
+0.29.904.418 I slot print_timing: id  0 | task 598 |       total time =    1954.35 ms /   289 tokens
+0.29.904.419 I slot print_timing: id  0 | task 598 |    graphs reused =        580
+0.29.904.420 I slot print_timing: id  0 | task 598 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.29.904.424 I slot print_timing: id  0 | task 598 | draft acceptance = 0.93798 (  121 accepted /   129 generated), mean len =  3.81
+0.29.904.490 I slot      release: id  0 | task 598 | stop processing: n_tokens = 288, truncated = 0
+0.29.905.529 I srv    operator(): operator(): cleaning up before exit...
+/home/cyrus/.cache/model-experiments/memdraft/llama.cpp-plugin/build-vk/bin/llama-server -m /home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-9B-Q4_K_M.gguf --host 127.0.0.1 --port 8455 -np 1 --jinja --cache-ram 0 --no-warmup -ngl 99 -c 8192 --spec-type plugin --spec-plugin /home/cyrus/code/model-experiments/memdraft/plugin/examples/libmtp.so --spec-plugin-n-max 3 --spec-plugin-args model=/home/cyrus/.cache/model-experiments/memdraft/mtp-head/Qwen3.5-9B-q4_k_m-out-q4k.gguf
+0.00.018.091 I srv  llama_server: initializing ...
+0.00.018.104 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.018.414 W srv  server_setup: security: no API key is set and CORS allows all origins (see https://github.com/ggml-org/llama.cpp/pull/25655)
+0.00.020.061 I srv    load_model: loading model '/home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-9B-Q4_K_M.gguf'
+0.00.784.359 I cmn          init: llama threadpool init, n_threads = 16
+0.00.784.436 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 8192, kv_unified = 'false'
+mtp plugin: /home/cyrus/.cache/model-experiments/memdraft/mtp-head/Qwen3.5-9B-q4_k_m-out-q4k.gguf, hidden rows on the device, context shared with the target: no
+0.01.036.834 I spec common_specu: loaded speculative plugin /home/cyrus/code/model-experiments/memdraft/plugin/examples/libmtp.so, n_max = 3, n_prefix = 0
+0.01.036.910 W srv          init: --cache-idle-slots requires --cache-ram, disabling
+0.01.038.265 I srv  server_run_i: model loaded
+0.01.038.273 I srv  server_on_li: listening on http://127.0.0.1:8455
+0.02.000.686 I slot       select: id  0 | task -1 | selected slot by LRU, n_tokens = 0, t_last = -1
+0.02.000.804 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+0.02.203.664 I slot print_timing: id  0 | task 0 | prompt eval time =     113.42 ms /    15 tokens (    7.56 ms per token,   132.25 tokens per second)
+0.02.203.670 I slot print_timing: id  0 | task 0 |        eval time =      89.39 ms /     8 tokens (   12.77 ms per token,    78.31 tokens per second)
+0.02.203.671 I slot print_timing: id  0 | task 0 |       total time =     202.81 ms /    23 tokens
+0.02.203.677 I slot print_timing: id  0 | task 0 |    graphs reused =          0
+0.02.203.678 I slot print_timing: id  0 | task 0 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.02.203.682 I slot print_timing: id  0 | task 0 | draft acceptance = 1.00000 (    5 accepted /     5 generated), mean len =  3.50
+0.02.203.744 I slot      release: id  0 | task 0 | stop processing: n_tokens = 22, truncated = 0
+0.02.206.222 I slot       select: id  0 | task -1 | selected slot by LRU, n_tokens = 22, t_last = 131675215316
+0.02.206.272 I slot launch_slot_: id  0 | task 5 | processing task, is_child = 0
+0.02.498.986 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 172
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 172
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.02.498.989 E decode: failed to initialize batch
+0.02.742.899 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 192
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 192
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.02.742.902 E decode: failed to initialize batch
+0.03.851.779 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 292
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 292
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.03.851.782 E decode: failed to initialize batch
+0.04.101.904 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 312
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 312
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.04.101.907 E decode: failed to initialize batch
+0.04.265.837 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 324
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 323
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.04.265.840 E decode: failed to initialize batch
+0.04.343.878 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 327
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 327
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.04.343.881 E decode: failed to initialize batch
+0.04.419.359 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 331
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 329
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.04.419.362 E decode: failed to initialize batch
+0.04.668.211 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 349
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 349
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.04.668.214 E decode: failed to initialize batch
+0.05.009.055 I slot print_timing: id  0 | task 5 | prompt eval time =     204.83 ms /   165 tokens (    1.24 ms per token,   805.56 tokens per second)
+0.05.009.059 I slot print_timing: id  0 | task 5 |        eval time =    2597.92 ms /   212 tokens (   12.31 ms per token,    81.22 tokens per second)
+0.05.009.060 I slot print_timing: id  0 | task 5 |       total time =    2802.75 ms /   377 tokens
+0.05.009.061 I slot print_timing: id  0 | task 5 |    graphs reused =         44
+0.05.009.062 I slot print_timing: id  0 | task 5 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.05.009.065 I slot print_timing: id  0 | task 5 | draft acceptance = 0.91975 (  149 accepted /   162 generated), mean len =  3.76
+0.05.009.125 I slot      release: id  0 | task 5 | stop processing: n_tokens = 376, truncated = 0
+0.05.011.365 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.242 (> 0.100 thold), f_keep = 0.101
+0.05.011.452 I slot launch_slot_: id  0 | task 70 | processing task, is_child = 0
+0.05.299.254 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 164
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 164
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.05.299.257 E decode: failed to initialize batch
+0.05.548.754 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 184
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 182
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.05.548.758 E decode: failed to initialize batch
+0.06.416.720 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 258
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 257
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.06.416.723 E decode: failed to initialize batch
+0.06.713.056 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 281
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 280
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.06.713.060 E decode: failed to initialize batch
+0.06.878.470 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 292
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 292
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.06.878.473 E decode: failed to initialize batch
+0.06.998.749 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 300
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 299
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.06.998.751 E decode: failed to initialize batch
+0.07.163.701 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 311
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 310
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.07.163.704 E decode: failed to initialize batch
+0.07.283.612 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 318
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 317
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.07.283.617 E decode: failed to initialize batch
+0.07.930.213 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 373
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 373
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.07.930.216 E decode: failed to initialize batch
+0.08.006.107 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 377
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 375
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.08.006.111 E decode: failed to initialize batch
+0.08.126.264 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 383
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 383
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.08.126.267 E decode: failed to initialize batch
+0.08.246.104 I slot print_timing: id  0 | task 70 | n_gen =    236, tg =  77.34 t/s, tg_3s =  77.67 t/s
+0.08.463.075 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 411
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 409
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.08.463.080 E decode: failed to initialize batch
+0.08.539.746 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 413
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 412
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.08.539.749 E decode: failed to initialize batch
+0.08.615.555 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 416
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 415
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.08.615.558 E decode: failed to initialize batch
+0.08.735.051 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 423
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 422
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.08.735.054 E decode: failed to initialize batch
+0.08.898.684 I slot print_timing: id  0 | task 70 | prompt eval time =     196.06 ms /   157 tokens (    1.25 ms per token,   800.76 tokens per second)
+0.08.898.687 I slot print_timing: id  0 | task 70 |        eval time =    3691.13 ms /   278 tokens (   13.33 ms per token,    75.04 tokens per second)
+0.08.898.688 I slot print_timing: id  0 | task 70 |       total time =    3887.20 ms /   435 tokens
+0.08.898.689 I slot print_timing: id  0 | task 70 |    graphs reused =        100
+0.08.898.690 I slot print_timing: id  0 | task 70 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.08.898.692 I slot print_timing: id  0 | task 70 | draft acceptance = 0.86758 (  190 accepted /   219 generated), mean len =  3.60
+0.08.898.733 I slot      release: id  0 | task 70 | stop processing: n_tokens = 435, truncated = 0
+0.08.901.087 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.246 (> 0.100 thold), f_keep = 0.071
+0.08.901.171 I slot launch_slot_: id  0 | task 161 | processing task, is_child = 0
+0.10.048.302 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 217
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 217
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.10.048.305 E decode: failed to initialize batch
+0.10.122.009 I slot print_timing: id  0 | task 161 | prompt eval time =     142.56 ms /   126 tokens (    1.13 ms per token,   883.83 tokens per second)
+0.10.122.013 I slot print_timing: id  0 | task 161 |        eval time =    1078.24 ms /    97 tokens (   11.23 ms per token,    89.03 tokens per second)
+0.10.122.013 I slot print_timing: id  0 | task 161 |       total time =    1220.80 ms /   223 tokens
+0.10.122.015 I slot print_timing: id  0 | task 161 |    graphs reused =        122
+0.10.122.015 I slot print_timing: id  0 | task 161 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.10.122.018 I slot print_timing: id  0 | task 161 | draft acceptance = 0.98611 (   71 accepted /    72 generated), mean len =  3.96
+0.10.122.055 I slot      release: id  0 | task 161 | stop processing: n_tokens = 222, truncated = 0
+0.10.124.377 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.194 (> 0.100 thold), f_keep = 0.140
+0.10.124.467 I slot launch_slot_: id  0 | task 189 | processing task, is_child = 0
+0.10.406.311 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 167
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 167
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.10.406.314 E decode: failed to initialize batch
+0.10.611.205 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 183
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 183
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.10.611.208 E decode: failed to initialize batch
+0.11.855.525 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 295
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 295
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.11.855.529 E decode: failed to initialize batch
+0.12.102.100 I slot print_timing: id  0 | task 189 | prompt eval time =     193.08 ms /   160 tokens (    1.21 ms per token,   828.68 tokens per second)
+0.12.102.103 I slot print_timing: id  0 | task 189 |        eval time =    1784.53 ms /   157 tokens (   11.44 ms per token,    87.42 tokens per second)
+0.12.102.104 I slot print_timing: id  0 | task 189 |       total time =    1977.61 ms /   317 tokens
+0.12.102.105 I slot print_timing: id  0 | task 189 |    graphs reused =        156
+0.12.102.105 I slot print_timing: id  0 | task 189 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.12.102.108 I slot print_timing: id  0 | task 189 | draft acceptance = 0.97436 (  114 accepted /   117 generated), mean len =  3.92
+0.12.102.144 I slot      release: id  0 | task 189 | stop processing: n_tokens = 316, truncated = 0
+0.12.104.680 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.239 (> 0.100 thold), f_keep = 0.120
+0.12.104.759 I slot launch_slot_: id  0 | task 234 | processing task, is_child = 0
+0.12.387.789 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 166
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 166
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.12.387.791 E decode: failed to initialize batch
+0.13.845.907 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 298
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 298
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.13.845.911 E decode: failed to initialize batch
+0.13.965.048 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 306
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 304
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.13.965.052 E decode: failed to initialize batch
+0.14.040.060 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 308
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 308
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.14.040.063 E decode: failed to initialize batch
+0.14.240.688 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 324
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 323
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.14.240.692 E decode: failed to initialize batch
+0.14.355.770 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 331
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 330
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.14.355.775 E decode: failed to initialize batch
+0.14.428.945 I slot print_timing: id  0 | task 234 | prompt eval time =     194.63 ms /   159 tokens (    1.22 ms per token,   816.91 tokens per second)
+0.14.428.948 I slot print_timing: id  0 | task 234 |        eval time =    2129.53 ms /   176 tokens (   12.17 ms per token,    82.18 tokens per second)
+0.14.428.948 I slot print_timing: id  0 | task 234 |       total time =    2324.16 ms /   335 tokens
+0.14.428.950 I slot print_timing: id  0 | task 234 |    graphs reused =        193
+0.14.428.950 I slot print_timing: id  0 | task 234 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.14.428.953 I slot print_timing: id  0 | task 234 | draft acceptance = 0.92593 (  125 accepted /   135 generated), mean len =  3.78
+0.14.428.991 I slot      release: id  0 | task 234 | stop processing: n_tokens = 335, truncated = 0
+0.14.431.310 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.281 (> 0.100 thold), f_keep = 0.113
+0.14.431.373 I slot launch_slot_: id  0 | task 288 | processing task, is_child = 0
+0.14.709.440 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 142
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 142
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.14.709.443 E decode: failed to initialize batch
+0.15.856.843 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 246
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 245
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.15.856.846 E decode: failed to initialize batch
+0.15.976.457 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 253
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 253
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.15.976.460 E decode: failed to initialize batch
+0.16.272.381 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 277
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 277
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.16.272.383 E decode: failed to initialize batch
+0.16.389.344 I slot print_timing: id  0 | task 288 | prompt eval time =     191.19 ms /   135 tokens (    1.42 ms per token,   706.09 tokens per second)
+0.16.389.350 I slot print_timing: id  0 | task 288 |        eval time =    1766.72 ms /   149 tokens (   11.94 ms per token,    83.77 tokens per second)
+0.16.389.351 I slot print_timing: id  0 | task 288 |       total time =    1957.92 ms /   284 tokens
+0.16.389.353 I slot print_timing: id  0 | task 288 |    graphs reused =        226
+0.16.389.354 I slot print_timing: id  0 | task 288 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.16.389.359 I slot print_timing: id  0 | task 288 | draft acceptance = 0.92982 (  106 accepted /   114 generated), mean len =  3.79
+0.16.389.418 I slot      release: id  0 | task 288 | stop processing: n_tokens = 283, truncated = 0
+0.16.391.792 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.245 (> 0.100 thold), f_keep = 0.134
+0.16.391.874 I slot launch_slot_: id  0 | task 333 | processing task, is_child = 0
+0.16.677.246 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 162
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 162
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.16.677.250 E decode: failed to initialize batch
+0.16.930.263 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 182
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 181
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.16.930.266 E decode: failed to initialize batch
+0.17.703.806 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 249
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 249
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.17.703.809 E decode: failed to initialize batch
+0.18.083.400 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 281
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 280
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.18.083.404 E decode: failed to initialize batch
+0.18.160.381 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 284
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 283
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.18.160.384 E decode: failed to initialize batch
+0.18.674.338 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 327
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 327
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.18.674.341 E decode: failed to initialize batch
+0.18.926.526 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 347
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 346
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.18.926.530 E decode: failed to initialize batch
+0.19.088.571 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 358
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 357
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.19.088.573 E decode: failed to initialize batch
+0.19.252.967 I slot print_timing: id  0 | task 333 | prompt eval time =     195.21 ms /   155 tokens (    1.26 ms per token,   794.00 tokens per second)
+0.19.252.972 I slot print_timing: id  0 | task 333 |        eval time =    2665.84 ms /   214 tokens (   12.52 ms per token,    79.90 tokens per second)
+0.19.252.972 I slot print_timing: id  0 | task 333 |       total time =    2861.05 ms /   369 tokens
+0.19.252.974 I slot print_timing: id  0 | task 333 |    graphs reused =        271
+0.19.252.974 I slot print_timing: id  0 | task 333 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.19.252.978 I slot print_timing: id  0 | task 333 | draft acceptance = 0.90909 (  150 accepted /   165 generated), mean len =  3.73
+0.19.253.028 I slot      release: id  0 | task 333 | stop processing: n_tokens = 368, truncated = 0
+0.19.255.253 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.281 (> 0.100 thold), f_keep = 0.103
+0.19.255.334 I slot launch_slot_: id  0 | task 399 | processing task, is_child = 0
+0.19.537.558 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 142
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 142
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.19.537.560 E decode: failed to initialize batch
+0.20.698.164 I slot print_timing: id  0 | task 399 | prompt eval time =     190.81 ms /   135 tokens (    1.41 ms per token,   707.52 tokens per second)
+0.20.698.168 I slot print_timing: id  0 | task 399 |        eval time =    1252.00 ms /   112 tokens (   11.28 ms per token,    88.66 tokens per second)
+0.20.698.168 I slot print_timing: id  0 | task 399 |       total time =    1442.81 ms /   247 tokens
+0.20.698.169 I slot print_timing: id  0 | task 399 |    graphs reused =        297
+0.20.698.170 I slot print_timing: id  0 | task 399 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.20.698.173 I slot print_timing: id  0 | task 399 | draft acceptance = 0.98810 (   83 accepted /    84 generated), mean len =  3.96
+0.20.698.209 I slot      release: id  0 | task 399 | stop processing: n_tokens = 247, truncated = 0
+0.20.700.311 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.229 (> 0.100 thold), f_keep = 0.146
+0.20.700.380 I slot launch_slot_: id  0 | task 431 | processing task, is_child = 0
+0.21.024.514 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 168
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 166
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.21.024.517 E decode: failed to initialize batch
+0.22.269.704 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 278
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 277
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.22.269.707 E decode: failed to initialize batch
+0.22.387.946 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 285
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 283
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.22.387.951 E decode: failed to initialize batch
+0.22.676.732 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 307
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 307
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.22.676.734 E decode: failed to initialize batch
+0.22.751.343 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 311
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 310
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.22.751.346 E decode: failed to initialize batch
+0.22.869.272 I slot print_timing: id  0 | task 431 | prompt eval time =     192.36 ms /   157 tokens (    1.23 ms per token,   816.18 tokens per second)
+0.22.869.275 I slot print_timing: id  0 | task 431 |        eval time =    1976.51 ms /   163 tokens (   12.20 ms per token,    81.96 tokens per second)
+0.22.869.276 I slot print_timing: id  0 | task 431 |       total time =    2168.87 ms /   320 tokens
+0.22.869.277 I slot print_timing: id  0 | task 431 |    graphs reused =        332
+0.22.869.278 I slot print_timing: id  0 | task 431 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.22.869.280 I slot print_timing: id  0 | task 431 | draft acceptance = 0.91270 (  115 accepted /   126 generated), mean len =  3.74
+0.22.869.315 I slot      release: id  0 | task 431 | stop processing: n_tokens = 319, truncated = 0
+0.22.871.317 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.284 (> 0.100 thold), f_keep = 0.125
+0.22.871.353 I slot launch_slot_: id  0 | task 481 | processing task, is_child = 0
+0.24.294.031 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 252
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 252
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.24.294.034 E decode: failed to initialize batch
+0.24.979.688 I slot print_timing: id  0 | task 481 | prompt eval time =     192.93 ms /   141 tokens (    1.37 ms per token,   730.82 tokens per second)
+0.24.979.692 I slot print_timing: id  0 | task 481 |        eval time =    1915.35 ms /   170 tokens (   11.33 ms per token,    88.23 tokens per second)
+0.24.979.692 I slot print_timing: id  0 | task 481 |       total time =    2108.29 ms /   311 tokens
+0.24.979.694 I slot print_timing: id  0 | task 481 |    graphs reused =        373
+0.24.979.695 I slot print_timing: id  0 | task 481 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.24.979.699 I slot print_timing: id  0 | task 481 | draft acceptance = 0.96899 (  125 accepted /   129 generated), mean len =  3.91
+0.24.979.764 I slot      release: id  0 | task 481 | stop processing: n_tokens = 310, truncated = 0
+0.24.982.272 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.162 (> 0.100 thold), f_keep = 0.100
+0.24.982.336 I slot launch_slot_: id  0 | task 528 | processing task, is_child = 0
+0.26.978.176 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 354
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 352
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.26.978.178 E decode: failed to initialize batch
+0.27.095.036 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 360
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 358
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.27.095.039 E decode: failed to initialize batch
+0.27.213.342 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 366
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 365
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.27.213.345 E decode: failed to initialize batch
+0.27.591.648 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 397
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 396
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.27.591.654 E decode: failed to initialize batch
+0.27.667.750 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 400
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 400
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.27.667.753 E decode: failed to initialize batch
+0.27.828.866 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 412
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 411
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.27.828.869 E decode: failed to initialize batch
+0.27.946.768 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 419
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 418
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.27.946.771 E decode: failed to initialize batch
+0.28.019.877 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 422
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 422
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.28.019.878 E decode: failed to initialize batch
+0.28.182.878 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 434
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 433
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.28.182.883 E decode: failed to initialize batch
+0.28.211.261 I slot print_timing: id  0 | task 528 | n_gen =    244, tg =  80.38 t/s, tg_3s =  80.71 t/s
+0.28.301.218 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 441
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 441
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.28.301.221 E decode: failed to initialize batch
+0.28.420.728 I slot print_timing: id  0 | task 528 | prompt eval time =     205.84 ms /   191 tokens (    1.08 ms per token,   927.89 tokens per second)
+0.28.420.733 I slot print_timing: id  0 | task 528 |        eval time =    3232.50 ms /   257 tokens (   12.63 ms per token,    79.20 tokens per second)
+0.28.420.734 I slot print_timing: id  0 | task 528 |       total time =    3438.34 ms /   448 tokens
+0.28.420.736 I slot print_timing: id  0 | task 528 |    graphs reused =        428
+0.28.420.736 I slot print_timing: id  0 | task 528 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.28.420.740 I slot print_timing: id  0 | task 528 | draft acceptance = 0.89055 (  179 accepted /   201 generated), mean len =  3.67
+0.28.420.810 I slot      release: id  0 | task 528 | stop processing: n_tokens = 447, truncated = 0
+0.28.423.304 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.250 (> 0.100 thold), f_keep = 0.069
+0.28.423.374 I slot launch_slot_: id  0 | task 608 | processing task, is_child = 0
+0.28.655.127 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 131
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 131
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.28.655.130 E decode: failed to initialize batch
+0.30.300.157 E init: the tokens of sequence 0 in the input batch have inconsistent sequence positions:
+ - the last position stored in the memory module of the context (i.e. the KV cache) for sequence 0 is X = 279
+ - the tokens for sequence 0 in the input batch have a starting position of Y = 279
+ for M-RoPE, it is required that the position satisfies: X < Y
+0.30.300.161 E decode: failed to initialize batch
+0.30.417.960 I slot print_timing: id  0 | task 608 | prompt eval time =     141.31 ms /   124 tokens (    1.14 ms per token,   877.52 tokens per second)
+0.30.417.964 I slot print_timing: id  0 | task 608 |        eval time =    1853.24 ms /   165 tokens (   11.30 ms per token,    88.49 tokens per second)
+0.30.417.964 I slot print_timing: id  0 | task 608 |       total time =    1994.55 ms /   289 tokens
+0.30.417.966 I slot print_timing: id  0 | task 608 |    graphs reused =        465
+0.30.417.966 I slot print_timing: id  0 | task 608 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.30.417.969 I slot print_timing: id  0 | task 608 | draft acceptance = 0.98374 (  121 accepted /   123 generated), mean len =  3.95
+0.30.418.007 I slot      release: id  0 | task 608 | stop processing: n_tokens = 288, truncated = 0
+0.30.418.776 I srv    operator(): operator(): cleaning up before exit...
+/home/cyrus/.cache/model-experiments/memdraft/llama.cpp-plugin/build-vk/bin/llama-server -m /home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-9B-Q4_K_M.gguf --host 127.0.0.1 --port 8455 -np 1 --jinja --cache-ram 0 --no-warmup -ngl 99 -c 8192 --spec-type draft-simple -md /home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-2B-Q4_K_M.gguf --spec-draft-n-max 3
+0.00.021.060 I srv  llama_server: initializing ...
+0.00.021.072 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.021.384 W srv  server_setup: security: no API key is set and CORS allows all origins (see https://github.com/ggml-org/llama.cpp/pull/25655)
+0.00.023.025 I srv    load_model: loading model '/home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-9B-Q4_K_M.gguf'
+0.00.905.739 I cmn          init: llama threadpool init, n_threads = 16
+0.00.905.817 I common_speculative_init_result: loading draft model '/home/cyrus/.cache/model-experiments/memdraft/models/Qwen3.5-2B-Q4_K_M.gguf'
+0.02.306.455 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 8192, kv_unified = 'false'
+0.02.326.219 W srv          init: --cache-idle-slots requires --cache-ram, disabling
+0.02.327.517 I srv  server_run_i: model loaded
+0.02.327.524 I srv  server_on_li: listening on http://127.0.0.1:8455
+0.03.003.044 I slot       select: id  0 | task -1 | selected slot by LRU, n_tokens = 0, t_last = -1
+0.03.003.177 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+0.03.324.057 I slot print_timing: id  0 | task 0 | prompt eval time =     114.53 ms /    15 tokens (    7.64 ms per token,   130.97 tokens per second)
+0.03.324.062 I slot print_timing: id  0 | task 0 |        eval time =     206.28 ms /     8 tokens (   29.47 ms per token,    33.93 tokens per second)
+0.03.324.063 I slot print_timing: id  0 | task 0 |       total time =     320.81 ms /    23 tokens
+0.03.324.071 I slot print_timing: id  0 | task 0 |    graphs reused =          0
+0.03.324.072 I slot print_timing: id  0 | task 0 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.03.324.076 I slot print_timing: id  0 | task 0 | draft acceptance = 0.60000 (    3 accepted /     5 generated), mean len =  2.50
+0.03.324.174 I slot      release: id  0 | task 0 | stop processing: n_tokens = 22, truncated = 0
+0.03.327.473 I slot       select: id  0 | task -1 | selected slot by LRU, n_tokens = 22, t_last = 131716909800
+0.03.327.604 I slot launch_slot_: id  0 | task 7 | processing task, is_child = 0
+0.06.649.060 I slot print_timing: id  0 | task 7 | n_gen =    164, tg =  52.79 t/s, tg_3s =  53.12 t/s
+0.07.671.631 I slot print_timing: id  0 | task 7 | prompt eval time =     233.96 ms /   165 tokens (    1.42 ms per token,   705.24 tokens per second)
+0.07.671.634 I slot print_timing: id  0 | task 7 |        eval time =    4110.02 ms /   212 tokens (   19.48 ms per token,    51.34 tokens per second)
+0.07.671.635 I slot print_timing: id  0 | task 7 |       total time =    4343.99 ms /   377 tokens
+0.07.671.636 I slot print_timing: id  0 | task 7 |    graphs reused =         51
+0.07.671.637 I slot print_timing: id  0 | task 7 |   graph reallocs =          0    /     0        (same size) / (changed size)
+0.07.671.640 I slot print_timing: id  0 | task 7 | draft acceptance = 0.89697 (  148 accepted /   165 generated), mean len =  3.69
+0.07.671.678 I slot      release: id  0 | task 7 | stop processing: n_tokens = 376, truncated = 0
+0.07.674.705 I slot       select: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 0.242 (> 0.100 thold), f_keep = 0.101
+0.07.674.825 I slot launch_slot_: id  0 | task 73 | processing task, is_child = 0
+20.07.778.363 I srv    operator(): operator(): cleaning up before exit...
+20.07.834.586 W srv          stop: cancel task, id_task = 73

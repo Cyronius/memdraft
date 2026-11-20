@@ -1,0 +1,627 @@
+A drafter-plugin hook for llama.cpp: --spec-type plugin loads a drafter from a shared library
+(common/speculative-plugin.h), so MemDraft ships as memdraft/plugin/libmemdraft.so instead of a patch
+to llama.cpp's drafter code. Made against llama.cpp master edec462 (2026-11-18).
+
+    cd llama.cpp && git apply /path/to/memdraft/llama-plugin-hook.patch
+
+New options: --spec-plugin FNAME, --spec-plugin-args KEY=VALUE,..., --spec-plugin-n-max N,
+--spec-plugin-prefix N (the draft model, e.g. draft-mtp, drafts the first N tokens and the plugin continues).
+Example plugins (n-gram drafters, a draft model, an MTP head) are in memdraft/plugin/examples.
+
+diff --git a/common/CMakeLists.txt b/common/CMakeLists.txt
+index e38485c..e945afe 100644
+--- a/common/CMakeLists.txt
++++ b/common/CMakeLists.txt
+@@ -111,6 +111,7 @@ add_library(${TARGET}
+     sampling.h
+     speculative.cpp
+     speculative.h
++    speculative-plugin.h
+     subproc.cpp
+     subproc.h
+     trie.cpp
+@@ -188,6 +189,7 @@ if (LLAMA_LLGUIDANCE)
+ endif()
+ 
+ target_link_libraries(${TARGET} PUBLIC llama Threads::Threads)
++target_link_libraries(${TARGET} PRIVATE ${CMAKE_DL_LIBS})
+ 
+ if (CMAKE_SYSTEM_NAME MATCHES "AIX")
+     # AIX's flock() function comes from libbsd.a
+diff --git a/common/arg.cpp b/common/arg.cpp
+index 192f706..aee7580 100644
+--- a/common/arg.cpp
++++ b/common/arg.cpp
+@@ -4345,6 +4345,46 @@ common_params_context common_params_parser_init(common_params & params, llama_ex
+             params.speculative.ngram_mod.n_min = value;
+         }
+     ).set_spec().set_examples({LLAMA_EXAMPLE_SPECULATIVE, LLAMA_EXAMPLE_SERVER, LLAMA_EXAMPLE_CLI}));
++    add_opt(common_arg(
++        {"--spec-plugin"}, "FNAME",
++        "shared library with a drafter for --spec-type plugin (see common/speculative-plugin.h)",
++        [](common_params & params, const std::string & value) {
++            params.speculative.plugin.path = value;
++        }
++    ).set_spec().set_examples({LLAMA_EXAMPLE_SPECULATIVE, LLAMA_EXAMPLE_SERVER, LLAMA_EXAMPLE_CLI}).set_env("LLAMA_ARG_SPEC_PLUGIN"));
++    add_opt(common_arg(
++        {"--spec-plugin-args"}, "KEY=VALUE,...",
++        "comma-separated settings passed to the plugin",
++        [](common_params & params, const std::string & value) {
++            for (const auto & kv : string_split<std::string>(value, ',')) {
++                const auto pos = kv.find('=');
++                if (pos == std::string::npos || pos == 0) {
++                    throw std::invalid_argument("plugin setting must be KEY=VALUE: " + kv);
++                }
++                params.speculative.plugin.args.emplace_back(kv.substr(0, pos), kv.substr(pos + 1));
++            }
++        }
++    ).set_spec().set_examples({LLAMA_EXAMPLE_SPECULATIVE, LLAMA_EXAMPLE_SERVER, LLAMA_EXAMPLE_CLI}).set_env("LLAMA_ARG_SPEC_PLUGIN_ARGS"));
++    add_opt(common_arg(
++        {"--spec-plugin-n-max"}, "N",
++        string_format("longest plugin draft, prefix included (default: %d)", params.speculative.plugin.n_max),
++        [](common_params & params, int value) {
++            if (value < 1 || value > 1024) {
++                throw std::invalid_argument("plugin n-max must be between 1 and 1024 inclusive");
++            }
++            params.speculative.plugin.n_max = value;
++        }
++    ).set_spec().set_examples({LLAMA_EXAMPLE_SPECULATIVE, LLAMA_EXAMPLE_SERVER, LLAMA_EXAMPLE_CLI}));
++    add_opt(common_arg(
++        {"--spec-plugin-prefix"}, "N",
++        string_format("the draft model (draft-simple or draft-mtp in --spec-type) drafts the first N tokens and the plugin continues from them (default: %d)", params.speculative.plugin.n_prefix),
++        [](common_params & params, int value) {
++            if (value < 0 || value > 64) {
++                throw std::invalid_argument("plugin prefix must be between 0 and 64 inclusive");
++            }
++            params.speculative.plugin.n_prefix = value;
++        }
++    ).set_spec().set_examples({LLAMA_EXAMPLE_SPECULATIVE, LLAMA_EXAMPLE_SERVER, LLAMA_EXAMPLE_CLI}));
+     add_opt(common_arg(
+         {"--spec-ngram-mod-n-max"}, "N",
+         string_format("maximum number of ngram tokens to use for ngram-based speculative decoding (default: %d)", params.speculative.ngram_mod.n_max),
+diff --git a/common/common.h b/common/common.h
+index e16bee7..0d2699b 100644
+--- a/common/common.h
++++ b/common/common.h
+@@ -187,6 +187,7 @@ enum common_speculative_type {
+     COMMON_SPECULATIVE_TYPE_NGRAM_MAP_K4V,  // self-speculative decoding with n-gram keys and 4 m-gram values
+     COMMON_SPECULATIVE_TYPE_NGRAM_MOD,
+     COMMON_SPECULATIVE_TYPE_NGRAM_CACHE,    // self-speculative decoding with 3-level n-gram cache
++    COMMON_SPECULATIVE_TYPE_PLUGIN,         // drafter loaded from a shared library (speculative-plugin.h)
+     COMMON_SPECULATIVE_TYPE_COUNT           // number of types, unknown type
+ };
+ 
+@@ -390,6 +391,17 @@ struct common_params_speculative_ngram_cache {
+     std::string lookup_cache_dynamic; // path of dynamic ngram cache file for lookup decoding
+ };
+ 
++// drafter loaded from a shared library, see speculative-plugin.h
++struct common_params_speculative_plugin {
++    std::string path;
++    std::vector<std::pair<std::string, std::string>> args; // KEY=VALUE pairs passed to the plugin
++
++    int32_t n_max    = 8; // longest draft, prefix included
++    int32_t n_prefix = 0; // tokens the draft model drafts before the plugin continues
++
++    llama_context * ctx_tgt = nullptr; // set by the caller: the target context, for the vocabulary and for plugins that read the target's results
++};
++
+ struct common_params_speculative {
+     std::vector<enum common_speculative_type> types = { COMMON_SPECULATIVE_TYPE_NONE };
+ 
+@@ -406,6 +418,8 @@ struct common_params_speculative {
+ 
+     common_params_speculative_ngram_cache ngram_cache;
+ 
++    common_params_speculative_plugin plugin;
++
+     bool has_dft() const {
+         return !draft.mparams.empty();
+     }
+@@ -424,7 +438,13 @@ struct common_params_speculative {
+                    t == COMMON_SPECULATIVE_TYPE_DRAFT_LILICORR;
+         });
+ 
+-        return needs_rs_seq ? draft.n_max : 0u;
++        const bool has_plugin = std::find(types.begin(), types.end(), COMMON_SPECULATIVE_TYPE_PLUGIN) != types.end();
++
++        // plugin drafts are short, so per-token snapshots are cheaper than a checkpoint and a second decode
++        const uint32_t n_draft  = needs_rs_seq ? draft.n_max : 0u;
++        const uint32_t n_plugin = has_plugin ? (uint32_t) std::max(0, plugin.n_max) : 0u;
++
++        return std::max(n_draft, n_plugin);
+     }
+ };
+ 
+diff --git a/common/speculative-plugin.h b/common/speculative-plugin.h
+new file mode 100644
+index 0000000..5ff320e
+--- /dev/null
++++ b/common/speculative-plugin.h
+@@ -0,0 +1,93 @@
++#pragma once
++
++// C interface for a drafter loaded from a shared library: --spec-type plugin --spec-plugin FNAME
++//
++// The library exports one function, `llama_spec_plugin_get`, which returns a pointer to a static
++// `llama_spec_plugin` table. Token ids are llama_token values. A drafter only proposes tokens: the
++// target model verifies every draft, so a bad plugin can make decoding slower but not change the output.
++// The host calls a plugin from one thread at a time.
++//
++// A drafter that needs only the tokens implements init, free, begin, draft and accept. A drafter that
++// reads the target's results (e.g. an MTP head reading the target's hidden states through
++// llama_get_embeddings_nextn_ith(ctx_tgt, i)) also implements process, and get_state/set_state if it
++// keeps per-sequence state that must follow the server's context checkpoints. A plugin that runs its own
++// llama_context rolls it back itself: the host removes rejected draft tokens only from its own contexts.
++
++#include <stddef.h>
++#include <stdint.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#define LLAMA_SPEC_PLUGIN_API_VERSION 1
++#define LLAMA_SPEC_PLUGIN_ENTRY       "llama_spec_plugin_get"
++
++struct llama_spec_plugin_init_params {
++    uint32_t n_seq;      // sequences (server slots); seq_id is in [0, n_seq)
++    int32_t  n_max;      // longest draft the host takes, prefix tokens included (--spec-plugin-n-max)
++    int32_t  n_prefix;   // tokens the draft model drafts before the plugin (--spec-plugin-prefix)
++
++    int32_t  n_vocab;    // 0 when the host does not know the vocabulary
++    uint64_t vocab_hash; // FNV-1a 64 over the text of every token, each followed by a 0 byte; 0 when unknown
++
++    struct llama_context * ctx_tgt; // the target context, or NULL (e.g. in tests)
++
++    size_t               n_args; // --spec-plugin-args KEY=VALUE,...
++    const char * const * keys;
++    const char * const * values;
++};
++
++// a batch the target has just decoded; entry i is row i of the target's outputs
++struct llama_spec_plugin_batch {
++    int32_t         n_tokens;
++    const int32_t * tokens; // -1 for an entry given as an embedding (e.g. an image)
++    const int32_t * pos;    // first position of each entry
++    const int32_t * seq_id;
++    const int8_t  * output; // whether the batch asked for the entry's output
++};
++
++// one sequence to draft for
++struct llama_spec_plugin_draft {
++    int32_t         seq_id;
++    int32_t         pos;         // position of tokens[n_committed - 1] in the target context
++    const int32_t * tokens;      // [0, n_committed): the request so far, the last sampled token at the end
++    size_t          n_tokens;    // [n_committed, n_tokens): prefix tokens from the draft model, not verified yet
++    size_t          n_committed;
++    int32_t *       out;         // the plugin writes the tokens that follow tokens[n_tokens - 1] here
++    int32_t         n_out_max;
++    int32_t         n_out;       // set by the plugin; 0 means no draft
++};
++
++struct llama_spec_plugin {
++    int32_t api_version; // LLAMA_SPEC_PLUGIN_API_VERSION
++
++    // returns the plugin state, or NULL with a message in err
++    void * (*init)(const struct llama_spec_plugin_init_params * params, char * err, size_t err_size);
++
++    void (*free)(void * state);
++
++    // a new request starts in seq_id
++    void (*begin)(void * state, int32_t seq_id, const int32_t * prompt, size_t n_prompt);
++
++    // draft for every sequence in drafts at once, so a plugin that runs a model can batch them
++    void (*draft)(void * state, struct llama_spec_plugin_draft * drafts, size_t n_drafts);
++
++    // the target accepted n_accepted tokens of the last draft; is_own is 0 when another drafter made it
++    void (*accept)(void * state, int32_t seq_id, int32_t n_accepted, int32_t is_own);
++
++    // optional (may be NULL): called after every target decode, prompt chunks included, while the target's
++    // results for the batch can still be read; returns 0 on success
++    int32_t (*process)(void * state, const struct llama_spec_plugin_batch * batch);
++
++    // optional (may be NULL): per-sequence state saved with the server's context checkpoints. get_state
++    // returns the size and writes it to dst when it fits in size; set_state restores it
++    size_t (*get_state)(void * state, int32_t seq_id, uint8_t * dst, size_t size);
++    void   (*set_state)(void * state, int32_t seq_id, const uint8_t * src, size_t size);
++};
++
++typedef const struct llama_spec_plugin * (*llama_spec_plugin_get_fn)(void);
++
++#ifdef __cplusplus
++}
++#endif
+diff --git a/common/speculative.cpp b/common/speculative.cpp
+index b40eb55..b673d0b 100644
+--- a/common/speculative.cpp
++++ b/common/speculative.cpp
+@@ -9,6 +9,7 @@
+ #include "ngram-map.h"
+ #include "ngram-mod.h"
+ #include "sampling.h"
++#include "speculative-plugin.h"
+ 
+ #include <algorithm>
+ #include <cassert>
+@@ -20,6 +21,16 @@
+ #include <random>
+ #include <cinttypes>
+ 
++#ifdef _WIN32
++#    define WIN32_LEAN_AND_MEAN
++#    ifndef NOMINMAX
++#        define NOMINMAX
++#    endif
++#    include <windows.h>
++#else
++#    include <dlfcn.h>
++#endif
++
+ #define SPC_DBG(fmt, ...) LOG_DBG("spec %12.*s: " fmt, 12, __func__, __VA_ARGS__)
+ #define SPC_TRC(fmt, ...) LOG_TRC("spec %12.*s: " fmt, 12, __func__, __VA_ARGS__)
+ #define SPC_INF(fmt, ...) LOG_INF("spec %12.*s: " fmt, 12, __func__, __VA_ARGS__)
+@@ -82,7 +93,8 @@ const std::map<std::string, common_speculative_type> common_speculative_type_fro
+     {"ngram-map-k",    COMMON_SPECULATIVE_TYPE_NGRAM_MAP_K},
+     {"ngram-map-k4v",  COMMON_SPECULATIVE_TYPE_NGRAM_MAP_K4V},
+     {"ngram-mod",      COMMON_SPECULATIVE_TYPE_NGRAM_MOD},
+-    {"ngram-cache",    COMMON_SPECULATIVE_TYPE_NGRAM_CACHE}
++    {"ngram-cache",    COMMON_SPECULATIVE_TYPE_NGRAM_CACHE},
++    {"plugin",         COMMON_SPECULATIVE_TYPE_PLUGIN}
+ };
+ 
+ static std::string common_speculative_get_devices_str(const std::vector<ggml_backend_dev_t> & devices) {
+@@ -2745,6 +2757,212 @@ struct common_speculative_impl_ngram_cache : public common_speculative_impl {
+     }
+ };
+ 
++// drafter loaded from a shared library, see speculative-plugin.h
++struct common_speculative_impl_plugin : public common_speculative_impl {
++    common_params_speculative_plugin params;
++
++    void * lib = nullptr;
++    const llama_spec_plugin * api = nullptr;
++    void * state = nullptr;
++
++    int32_t n_vocab = 0;
++
++    struct request {
++        llama_tokens tokens;
++        llama_tokens out;
++    };
++    std::vector<request> reqs; // per sequence
++    std::vector<llama_spec_plugin_draft> calls;
++    const llama_tokens no_prefix;
++
++    common_speculative_impl_plugin(const common_params_speculative & params, uint32_t n_seq)
++        : common_speculative_impl(COMMON_SPECULATIVE_TYPE_PLUGIN, n_seq, params.plugin.n_max)
++        , params(params.plugin) {
++        const auto & path = this->params.path;
++        if (path.empty()) {
++            throw std::runtime_error("--spec-type plugin needs --spec-plugin FNAME");
++        }
++
++#ifdef _WIN32
++        lib = (void *) LoadLibraryA(path.c_str());
++#else
++        lib = dlopen(path.c_str(), RTLD_NOW | RTLD_LOCAL);
++#endif
++        if (!lib) {
++            throw std::runtime_error("cannot load speculative plugin: " + path);
++        }
++
++        auto get = (llama_spec_plugin_get_fn) sym(LLAMA_SPEC_PLUGIN_ENTRY);
++        api = get ? get() : nullptr;
++        if (!api || api->api_version != LLAMA_SPEC_PLUGIN_API_VERSION ||
++            !api->init || !api->free || !api->begin || !api->draft || !api->accept) {
++            close();
++            throw std::runtime_error("not a speculative plugin of API version " + std::to_string(LLAMA_SPEC_PLUGIN_API_VERSION) + ": " + path);
++        }
++
++        uint64_t vocab_hash = 0;
++        if (this->params.ctx_tgt) {
++            const llama_vocab * vocab = llama_model_get_vocab(llama_get_model(this->params.ctx_tgt));
++            n_vocab = llama_vocab_n_tokens(vocab);
++            vocab_hash = 0xcbf29ce484222325ULL;
++            for (llama_token id = 0; id < n_vocab; ++id) {
++                const char * text = llama_vocab_get_text(vocab, id);
++                for (size_t i = 0; i < strlen(text) + 1; ++i) { // the 0 byte separates tokens
++                    vocab_hash = (vocab_hash ^ (uint8_t) text[i]) * 0x100000001b3ULL;
++                }
++            }
++        }
++
++        std::vector<const char *> keys;
++        std::vector<const char *> values;
++        for (const auto & kv : this->params.args) {
++            keys.push_back(kv.first.c_str());
++            values.push_back(kv.second.c_str());
++        }
++
++        const llama_spec_plugin_init_params iparams = {
++            /* .n_seq      = */ n_seq,
++            /* .n_max      = */ this->params.n_max,
++            /* .n_prefix   = */ this->params.n_prefix,
++            /* .n_vocab    = */ n_vocab,
++            /* .vocab_hash = */ vocab_hash,
++            /* .ctx_tgt    = */ this->params.ctx_tgt,
++            /* .n_args     = */ keys.size(),
++            /* .keys       = */ keys.data(),
++            /* .values     = */ values.data(),
++        };
++
++        char err[512] = {0};
++        state = api->init(&iparams, err, sizeof(err) - 1);
++        if (!state) {
++            close();
++            throw std::runtime_error("speculative plugin " + path + " failed: " + err);
++        }
++
++        reqs.resize(n_seq);
++
++        SPC_INF("loaded speculative plugin %s, n_max = %d, n_prefix = %d\n", path.c_str(), this->params.n_max, this->params.n_prefix);
++    }
++
++    ~common_speculative_impl_plugin() override {
++        if (state) {
++            api->free(state);
++        }
++        close();
++    }
++
++    void * sym(const char * name) const {
++#ifdef _WIN32
++        return (void *) GetProcAddress((HMODULE) lib, name);
++#else
++        return dlsym(lib, name);
++#endif
++    }
++
++    void close() {
++        if (lib) {
++#ifdef _WIN32
++            FreeLibrary((HMODULE) lib);
++#else
++            dlclose(lib);
++#endif
++            lib = nullptr;
++        }
++    }
++
++    void begin(llama_seq_id seq_id, const llama_tokens & prompt) override {
++        api->begin(state, seq_id, prompt.data(), prompt.size());
++    }
++
++    std::vector<int32_t> b_tokens, b_pos, b_seq;
++    std::vector<int8_t>  b_output;
++
++    bool process(const common_batch & batch) override {
++        if (!api->process || batch.size() <= 0) {
++            return true;
++        }
++        const int32_t n = batch.size();
++        b_tokens.resize(n);
++        b_pos.resize(n);
++        b_seq.resize(n);
++        b_output.resize(n);
++        for (int32_t i = 0; i < n; ++i) {
++            const auto & t = batch.tokens[i];
++            b_tokens[i] = t.id;
++            b_pos[i]    = t.pos[0];
++            b_seq[i]    = t.seq_id;
++            b_output[i] = t.output ? 1 : 0;
++        }
++        const llama_spec_plugin_batch b = { n, b_tokens.data(), b_pos.data(), b_seq.data(), b_output.data() };
++        return api->process(state, &b) == 0;
++    }
++
++    bool get_state(llama_seq_id seq_id, std::vector<uint8_t> & data) const override {
++        if (!api->get_state) {
++            return false;
++        }
++        data.resize(api->get_state(state, seq_id, nullptr, 0));
++        return api->get_state(state, seq_id, data.data(), data.size()) == data.size();
++    }
++
++    void set_state(llama_seq_id seq_id, const std::vector<uint8_t> & data) override {
++        if (api->set_state) {
++            api->set_state(state, seq_id, data.data(), data.size());
++        }
++    }
++
++    // prefixes[seq_id]: tokens from the draft model that the plugin continues (--spec-plugin-prefix)
++    void draft_with(common_speculative_draft_params_vec & dparams, const std::vector<llama_tokens> * prefixes) {
++        calls.clear();
++        for (llama_seq_id seq_id = 0; seq_id < (llama_seq_id) n_seq; ++seq_id) {
++            auto & dp = dparams[seq_id];
++            if (!dp.drafting) {
++                continue;
++            }
++            const llama_tokens & prefix = prefixes ? (*prefixes)[seq_id] : no_prefix;
++            auto & r = reqs[seq_id];
++
++            r.tokens.assign(dp.prompt->begin(), dp.prompt->end());
++            r.tokens.push_back(dp.id_last);
++            const size_t n_committed = r.tokens.size();
++            r.tokens.insert(r.tokens.end(), prefix.begin(), prefix.end());
++
++            const int32_t n_cap     = dp.n_max > 0 ? std::min(params.n_max, dp.n_max) : params.n_max;
++            const int32_t n_out_max = std::max(0, n_cap - (int32_t) prefix.size());
++            r.out.resize(n_out_max);
++
++            *dp.result = prefix;
++            if (n_out_max > 0) {
++                calls.push_back({ seq_id, dp.pos0, r.tokens.data(), r.tokens.size(), n_committed, r.out.data(), n_out_max, 0 });
++            }
++        }
++
++        if (calls.empty()) {
++            return;
++        }
++        api->draft(state, calls.data(), calls.size());
++
++        for (const auto & c : calls) {
++            auto & result = *dparams[c.seq_id].result;
++            const int32_t n_out = std::clamp(c.n_out, 0, c.n_out_max);
++            for (int32_t i = 0; i < n_out; ++i) {
++                if (c.out[i] < 0 || (n_vocab > 0 && c.out[i] >= n_vocab)) {
++                    break;
++                }
++                result.push_back(c.out[i]);
++            }
++        }
++    }
++
++    void draft(common_speculative_draft_params_vec & dparams) override {
++        draft_with(dparams, nullptr);
++    }
++
++    void accept(llama_seq_id seq_id, uint16_t n_accepted, bool is_other) override {
++        api->accept(state, seq_id, n_accepted, is_other ? 0 : 1);
++    }
++};
++
+ struct common_speculative {
+     common_speculative_draft_params_vec dparams;
+ 
+@@ -2815,6 +3033,7 @@ std::string common_speculative_type_to_str(common_speculative_type type) {
+         case COMMON_SPECULATIVE_TYPE_NGRAM_MAP_K4V:  return "ngram-map-k4v";
+         case COMMON_SPECULATIVE_TYPE_NGRAM_MOD:      return "ngram-mod";
+         case COMMON_SPECULATIVE_TYPE_NGRAM_CACHE:    return "ngram-cache";
++        case COMMON_SPECULATIVE_TYPE_PLUGIN:         return "plugin";
+         default:                                     return "unknown";
+     }
+ }
+@@ -2918,6 +3137,9 @@ int32_t common_speculative_n_max(const common_params_speculative * spec) {
+             case COMMON_SPECULATIVE_TYPE_NGRAM_CACHE:
+                 n_max = std::max(n_max, (int32_t) 8);
+                 break;
++            case COMMON_SPECULATIVE_TYPE_PLUGIN:
++                n_max = std::max(n_max, std::max(0, spec->plugin.n_max));
++                break;
+             case COMMON_SPECULATIVE_TYPE_NONE:
+             case COMMON_SPECULATIVE_TYPE_COUNT:
+                 break;
+@@ -3206,7 +3428,7 @@ common_speculative * common_speculative_init(common_params_speculative & params,
+         };
+ 
+         // when adding a new type - update here the logic above
+-        static_assert(COMMON_SPECULATIVE_TYPE_COUNT == 13);
++        static_assert(COMMON_SPECULATIVE_TYPE_COUNT == 14);
+ 
+         // this list here defines the priority of the speculators
+         // the one with highest priority are listed first
+@@ -3214,6 +3436,8 @@ common_speculative * common_speculative_init(common_params_speculative & params,
+         add_config_if_enabled(COMMON_SPECULATIVE_TYPE_NGRAM_MAP_K);
+         add_config_if_enabled(COMMON_SPECULATIVE_TYPE_NGRAM_MAP_K4V);
+         add_config_if_enabled(COMMON_SPECULATIVE_TYPE_NGRAM_MOD);
++        // after the drafters that draft only on a long exact repeat, before the draft models
++        add_config_if_enabled(COMMON_SPECULATIVE_TYPE_PLUGIN);
+         add_config_if_enabled(COMMON_SPECULATIVE_TYPE_NGRAM_CACHE);
+ 
+         add_config_if_enabled(COMMON_SPECULATIVE_TYPE_DRAFT_SIMPLE);
+@@ -3227,6 +3451,17 @@ common_speculative * common_speculative_init(common_params_speculative & params,
+ 
+     std::vector<std::unique_ptr<common_speculative_impl>> impls = {};
+ 
++    // with --spec-plugin-prefix the draft model drafts only the prefix
++    const bool has_plugin = std::any_of(configs.begin(), configs.end(), [](const common_speculative_config & c) {
++        return c.type == COMMON_SPECULATIVE_TYPE_PLUGIN;
++    });
++    if (has_plugin && params.plugin.n_prefix > 0) {
++        for (auto & config : configs) {
++            config.params.draft.n_max = params.plugin.n_prefix;
++            config.params.draft.n_min = 0;
++        }
++    }
++
+     for (const common_speculative_config & config : configs) {
+         switch (config.type) {
+             case COMMON_SPECULATIVE_TYPE_NONE:
+@@ -3321,6 +3556,10 @@ common_speculative * common_speculative_init(common_params_speculative & params,
+                 impls.push_back(create_state_ngram_cache(config, n_seq));
+                 break;
+             }
++            case COMMON_SPECULATIVE_TYPE_PLUGIN: {
++                impls.push_back(std::make_unique<common_speculative_impl_plugin>(config.params, n_seq));
++                break;
++            }
+             default:
+                 break;
+         }
+@@ -3340,6 +3579,7 @@ common_speculative * common_speculative_init(common_params_speculative & params,
+             case COMMON_SPECULATIVE_TYPE_NGRAM_MAP_K4V:
+             case COMMON_SPECULATIVE_TYPE_NGRAM_MOD:
+             case COMMON_SPECULATIVE_TYPE_NGRAM_CACHE:
++            case COMMON_SPECULATIVE_TYPE_PLUGIN:
+                 return false;
+             default:
+                 return true;
+@@ -3452,8 +3692,49 @@ void common_speculative_draft(common_speculative * spec) {
+         }
+     }
+ 
++    // --spec-plugin-prefix: in the plugin's turn the draft model drafts first and the plugin continues
++    common_speculative_impl_plugin * plugin = nullptr;
++    common_speculative_impl        * head   = nullptr;
+     for (auto & impl : spec->impls) {
+-        {
++        if (impl->type == COMMON_SPECULATIVE_TYPE_PLUGIN) {
++            auto * p = static_cast<common_speculative_impl_plugin *>(impl.get());
++            plugin = p->params.n_prefix > 0 ? p : nullptr;
++        } else if (!head && (impl->type == COMMON_SPECULATIVE_TYPE_DRAFT_SIMPLE || impl->type == COMMON_SPECULATIVE_TYPE_DRAFT_MTP)) {
++            head = impl.get();
++        }
++    }
++    if (!plugin || !head) {
++        plugin = nullptr;
++        head   = nullptr;
++    }
++
++    for (auto & impl : spec->impls) {
++        if (impl.get() == head) {
++            continue;
++        }
++        if (impl.get() == plugin) {
++            {
++                common_time_meas tm(head->t_draft_us, !head->gen_perf);
++                head->draft(dparams);
++                head->n_call_draft++;
++            }
++            common_time_meas tm(impl->t_draft_us, !impl->gen_perf);
++            std::vector<llama_tokens> prefixes(dparams.size());
++            for (llama_seq_id seq_id = 0; seq_id < (llama_seq_id) dparams.size(); ++seq_id) {
++                auto & dp = dparams[seq_id];
++                if (!dp.drafting) {
++                    continue;
++                }
++                prefixes[seq_id].swap(*dp.result);
++                dp.result->clear();
++                if ((int32_t) prefixes[seq_id].size() > plugin->params.n_prefix) {
++                    prefixes[seq_id].resize(plugin->params.n_prefix);
++                }
++                dp.result_q = nullptr; // plugin tokens have no candidates, so verify by sample-and-match
++            }
++            plugin->draft_with(dparams, &prefixes);
++            impl->n_call_draft++;
++        } else {
+             common_time_meas tm(impl->t_draft_us, !impl->gen_perf);
+             impl->draft(dparams);
+             impl->n_call_draft++;
+diff --git a/tools/server/server-context.cpp b/tools/server/server-context.cpp
+index 0b479fc..c436743 100644
+--- a/tools/server/server-context.cpp
++++ b/tools/server/server-context.cpp
+@@ -1512,10 +1512,11 @@ private:
+         // try speculative decoding
+         if (ctx_tgt_seq_rm_type != COMMON_CONTEXT_SEQ_RM_TYPE_NO) {
+             try {
++                params_base.speculative.plugin.ctx_tgt = ctx_tgt;
+                 spec.reset(common_speculative_init(params_base.speculative, params_base.n_parallel));
+             } catch (const std::exception & e) {
+                 SRV_ERR("failed to initialize speculative decoding context: %s\n", e.what());
+-                if (params_base.speculative.has_synth()) {
++                if (params_base.speculative.has_synth() || !params_base.speculative.plugin.path.empty()) {
+                     return false;
+                 }
+             }

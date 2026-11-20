@@ -1,0 +1,12 @@
+arbiter: session s_85e0dce637de
+arbiter: waiting: gpu held by memdraft-01a1/MemDraft MTP readback isolation on coding and HumanEval until ~10:31; Waiting behind an older request
+arbiter: waiting: gpu held by manifold-compression-e4d6/heal_pieces: joint-ahead8-12-19-lr1e-5 until ~11:08; Waiting behind an older request
+arbiter: waiting: gpu held by memdraft-01a1/MemDraft MTP final top-k on coding and HumanEval until ~10:34
+ggml_vulkan: Found 1 Vulkan devices:
+ggml_vulkan: 0 = AMD Radeon 8060S Graphics (RADV STRIX_HALO) (radv) | uma: 1 | rebar: 1 | fp16: dot2 | bf16: 0 | fp4: 0 | warp size: 64 | shared memory: 65536 | int dot: 1 | matrix cores: KHR_coopmat
+argmax 0.679 ms per call
+top-k(10) 0.039 ms per call
+argmax 0.694 ms per call
+top-k(10) 0.041 ms per call
+argmax 0.693 ms per call
+top-k(10) 0.040 ms per call

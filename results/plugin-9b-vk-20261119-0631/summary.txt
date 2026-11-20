@@ -1,0 +1,8 @@
+memdraft/results/plugin-9b-vk-20261119-0631: 1 turn files, load average at turn starts 0.2 to 0.2
+
+humaneval  (humaneval)
+arm             tok/s  plain  speed  95% interval     r1     r2 median  faster tok/step  step   same
+none             38.1   38.1  1.000  1.000-1.000  1.000    nan  1.000   0/12      1.00  1.00  12/12 
+mtp-builtin-3    87.6   38.1  2.302  2.213-2.386  2.302    nan  2.371  12/12      3.64  1.58  10/12 
+mtp-plugin-3     84.9   38.1  2.231  2.143-2.313  2.231    nan  2.298  12/12      3.64  1.63  10/12 
+draft-plugin-3   54.4   38.1  1.429  1.373-1.494  1.429    nan  1.488  12/12      3.63  2.54  11/12 

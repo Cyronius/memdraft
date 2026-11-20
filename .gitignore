@@ -1,0 +1,5 @@
+__pycache__/
+data
+*.so
+plugin/examples/test_plugin_equiv
+plugin/examples/test_plugin_replay

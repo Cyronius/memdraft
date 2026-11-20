@@ -1,0 +1,21 @@
+memdraft/results/headfirst-9b-vk-20261118-1245: 3 turn files, load average at turn starts 0.1 to 0.2
+
+oss  (python/other-languages)
+arm             tok/s  plain  speed  95% interval     r1     r2 median  faster tok/step  step   same
+none             38.1   38.1  1.000  1.000-1.000  1.000    nan  1.000   0/12      1.00  1.00  12/12 
+table-3          68.3   38.1  1.793  1.649-1.950  1.793    nan  1.852  12/12      2.08  1.16   8/12 
+head+table-3     72.3   38.1  1.897  1.773-2.033  1.897    nan  1.963  12/12      2.71  1.43   8/12 
+copy+table-3     69.9   38.1  1.833  1.670-2.033  1.833    nan  1.905  12/12      2.19  1.19   8/12 
+copy+head+table-3   74.7   38.1  1.961  1.798-2.173  1.961    nan  1.933  12/12      2.89  1.47   8/12 
+head+table-4     75.2   38.1  1.973  1.801-2.161  1.973    nan  1.979  12/12      2.97  1.50   7/12 
+copy+head+table-4   77.1   38.1  2.023  1.849-2.225  2.023    nan  2.006  12/12      3.12  1.54   8/12 
+
+humaneval  (humaneval)
+arm             tok/s  plain  speed  95% interval     r1     r2 median  faster tok/step  step   same
+none             38.0   38.0  1.000  1.000-1.000  1.000    nan  1.000   0/24      1.00  1.00  24/24 
+table-3          89.0   38.0  2.344  2.222-2.468  2.344    nan  2.437  24/24      2.71  1.16  21/24 
+head+table-3     86.9   38.0  2.290  2.236-2.346  2.290    nan  2.331  24/24      3.25  1.42  21/24 
+copy+table-3    120.0   38.0  3.162  2.883-3.483  3.162    nan  3.378  24/24      4.09  1.29  21/24 
+copy+head+table-3  121.8   38.0  3.210  2.933-3.525  3.210    nan  3.347  24/24      5.06  1.58  20/24 
+head+table-4     94.2   38.0  2.482  2.378-2.587  2.482    nan  2.540  24/24      3.70  1.49  20/24 
+copy+head+table-4  128.8   38.0  3.394  3.144-3.697  3.394    nan  3.460  24/24      5.62  1.65  20/24 
