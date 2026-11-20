@@ -14,9 +14,9 @@
 #   setsid nohup ./run_headfirst_live.sh > data/code/headfirst.log 2>&1 < /dev/null &
 #   cancel: pkill -f '[r]un_headfirst_live.sh'; pkill -f '[l]ive_bench.py.*headfirst-9b'
 set -u
-cd "$(dirname "$0")/.."
-PY=${PY:-/mnt/fedora/home/cyrus/code/model-experiments/target/manifold-audit/env/bin/python}
-S=$HOME/.cache/model-experiments/memdraft
+cd "$(dirname "$0")"
+PY=${PY:-python3}
+S=${MEMDRAFT_CACHE:-$HOME/.cache/model-experiments/memdraft}
 NEW=$PWD/data/code/9b-code-pod-c3
 STAMP=$(date +%Y%m%d-%H%M)
 OUT=results/headfirst-9b-vk-$STAMP

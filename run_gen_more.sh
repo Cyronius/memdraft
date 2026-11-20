@@ -9,11 +9,12 @@
 #   cancel: pkill -f '[g]en_code.py'     (rows already written stay; starting again continues, once
 #           `pgrep -f '[g]en_code.py'` shows nothing: the old one needs up to 20 s to end its server)
 set -u
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")"
+PY=${PY:-python3}
 UPTO=${1:?answer the prompts from place 2000 up to this place in the order}
 mkdir -p data/code
 arbiter run --cpu 8 port-8455 --label "MemDraft: the 9B writes more code for the reranker (8 CPU threads, low priority)" --eta "${ETA:-55h}" -- \
-  nice -n 10 target/manifold-audit/env/bin/python gen_code.py --skip 2000 --count "$UPTO" --parallel 16 \
+  nice -n 10 $PY gen_code.py --skip 2000 --count "$UPTO" --parallel 16 \
   --out data/code/rows-9b-more.jsonl -- -ngl 0 -t "${THREADS:-8}"
 rc=$?
 echo "$(date +%T) exit $rc"

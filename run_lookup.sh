@@ -18,10 +18,10 @@
 #   setsid nohup ./run_lookup.sh vk > data/lookup-vk.log 2>&1 < /dev/null &
 #   cancel: pkill -f '[r]un_lookup.sh'; pkill -f '[l]ive_bench.py.*lookup'
 set -u
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")"
 BACKEND=${1:?vk, cpu or cpu-turns}
-PY=target/manifold-audit/env/bin/python
-S=$HOME/.cache/model-experiments/memdraft
+PY=${PY:-python3}
+S=${MEMDRAFT_CACHE:-$HOME/.cache/model-experiments/memdraft}
 T=$PWD/data/9b-all-c3.mdt
 OUT=results/lookup-9b-$BACKEND-$(date +%Y%m%d-%H%M)
 TABLE="--spec-table-file $T"

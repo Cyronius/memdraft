@@ -11,7 +11,7 @@
                               write  a long program from a short request
                               Each edit row names its file and the file's sha256.
 
-Run from the repo root: target/manifold-audit/env/bin/python make_prompts.py
+Run from the repo root: python3 make_prompts.py
 """
 import glob
 import hashlib
@@ -25,9 +25,9 @@ sys.path.insert(0, str(HERE))
 import code_study as cs   # noqa: E402
 import gen_code           # noqa: E402
 
-DATASET = os.path.expanduser('~/.cache/model-experiments/memdraft/code-prompts-src/data-oss_instruct-decontaminated.jsonl')
+DATASET = os.path.join(gen_code.CACHE, 'code-prompts-src/data-oss_instruct-decontaminated.jsonl')
 CRATES = (glob.glob(os.path.expanduser('~/.cargo/registry/src/*/')) or [''])[0]
-LLAMA = os.path.expanduser('~/.cache/model-experiments/memdraft/llama.cpp')
+LLAMA = os.path.join(gen_code.CACHE, 'llama.cpp')
 
 EDITS = [
     ('python', '/usr/lib64/python3.14/bisect.py',

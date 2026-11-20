@@ -1,0 +1,553 @@
+{
+ "most confident (the drafter now)": {
+  "first_guess_right": 0.4713403880070547,
+  "pad 1": {
+   "tokens_per_step": 1.4223262423203913,
+   "acceptance": 0.4223262423203912,
+   "speedup": 1.3244830786603503
+  },
+  "pad 2": {
+   "tokens_per_step": 1.615109023180772,
+   "acceptance": 0.3079307764487891,
+   "speedup": 1.412219603965675
+  },
+  "pad 3": {
+   "tokens_per_step": 1.7153223977624914,
+   "acceptance": 0.23902299382845982,
+   "speedup": 1.41638983752151
+  },
+  "pad 4": {
+   "tokens_per_step": 1.7684434746467166,
+   "acceptance": 0.1928233875435909,
+   "speedup": 1.384630801492313
+  },
+  "pad 5": {
+   "tokens_per_step": 1.801217092207964,
+   "acceptance": 0.16103335318642048,
+   "speedup": 1.3414465525757608
+  },
+  "pad 6": {
+   "tokens_per_step": 1.823538865377404,
+   "acceptance": 0.138105440939329,
+   "speedup": 1.2952283297484668
+  },
+  "gain_pad3": 0.0001580857870442376,
+  "gain_95": [
+   0.0,
+   0.0
+  ],
+  "best_rule": "pad 3"
+ },
+ "own code, 0.0625 of it (34 answers)": {
+  "first_guess_right": 0.49087301587301585,
+  "pad 1": {
+   "tokens_per_step": 1.4437324959687685,
+   "acceptance": 0.44373249596876857,
+   "speedup": 1.3438541542020406
+  },
+  "pad 2": {
+   "tokens_per_step": 1.654478265097734,
+   "acceptance": 0.3276613354755471,
+   "speedup": 1.4455468111335483
+  },
+  "pad 3": {
+   "tokens_per_step": 1.767708252162394,
+   "acceptance": 0.25654468439691686,
+   "speedup": 1.4582812945869426
+  },
+  "pad 4": {
+   "tokens_per_step": 1.8259108225572784,
+   "acceptance": 0.20727568979679778,
+   "speedup": 1.4282416588496252
+  },
+  "pad 5": {
+   "tokens_per_step": 1.8630913272010512,
+   "acceptance": 0.1734950499953224,
+   "speedup": 1.3861507379198048
+  },
+  "pad 6": {
+   "tokens_per_step": 1.888167568317381,
+   "acceptance": 0.14897300114472914,
+   "speedup": 1.3398369599593702
+  },
+  "rows": 54586,
+  "epochs": 14,
+  "validation_loss": 0.3127166808939067,
+  "weights": 66305,
+  "gain_pad3": 0.04204954285247675,
+  "gain_95": [
+   0.037288468178251044,
+   0.04623130295225053
+  ],
+  "best_rule": "pad 3"
+ },
+ "own code, 0.125 of it (68 answers)": {
+  "first_guess_right": 0.49238683127572014,
+  "pad 1": {
+   "tokens_per_step": 1.44558682952735,
+   "acceptance": 0.44558682952734996,
+   "speedup": 1.3455314262882252
+  },
+  "pad 2": {
+   "tokens_per_step": 1.6570329429524482,
+   "acceptance": 0.3289329335186133,
+   "speedup": 1.4477283199195385
+  },
+  "pad 3": {
+   "tokens_per_step": 1.7716115261472785,
+   "acceptance": 0.2578504201388285,
+   "speedup": 1.4614113746762016
+  },
+  "pad 4": {
+   "tokens_per_step": 1.8309794743496624,
+   "acceptance": 0.20854853192365597,
+   "speedup": 1.432076317087614
+  },
+  "pad 5": {
+   "tokens_per_step": 1.867881548974943,
+   "acceptance": 0.17446402365688687,
+   "speedup": 1.3896103615032767
+  },
+  "pad 6": {
+   "tokens_per_step": 1.8927171102027196,
+   "acceptance": 0.1497439198455123,
+   "speedup": 1.3429670859413698
+  },
+  "rows": 104034,
+  "epochs": 13,
+  "validation_loss": 0.3072016062322428,
+  "weights": 66305,
+  "gain_pad3": 0.04517962294173583,
+  "gain_95": [
+   0.040149162998465826,
+   0.049714874916486185
+  ],
+  "best_rule": "pad 3"
+ },
+ "own code, 0.25 of it (136 answers)": {
+  "first_guess_right": 0.49722222222222223,
+  "pad 1": {
+   "tokens_per_step": 1.450892190930991,
+   "acceptance": 0.4508921909309911,
+   "speedup": 1.350329531834043
+  },
+  "pad 2": {
+   "tokens_per_step": 1.667793786141331,
+   "acceptance": 0.3343269667194151,
+   "speedup": 1.4568265162031229
+  },
+  "pad 3": {
+   "tokens_per_step": 1.7833058240980901,
+   "acceptance": 0.2617832219877593,
+   "speedup": 1.4707057060343487
+  },
+  "pad 4": {
+   "tokens_per_step": 1.8445197127760466,
+   "acceptance": 0.21197282242761828,
+   "speedup": 1.4423194476538599
+  },
+  "pad 5": {
+   "tokens_per_step": 1.8840820393589637,
+   "acceptance": 0.1777502003383492,
+   "speedup": 1.4013034901597186
+  },
+  "pad 6": {
+   "tokens_per_step": 1.909373948165601,
+   "acceptance": 0.1525651040441211,
+   "speedup": 1.3544652435002114
+  },
+  "rows": 206546,
+  "epochs": 21,
+  "validation_loss": 0.30151871798447394,
+  "weights": 66305,
+  "gain_pad3": 0.05447395429988289,
+  "gain_95": [
+   0.04936095117849937,
+   0.05911309467882386
+  ],
+  "best_rule": "pad 3"
+ },
+ "own code, 0.5 of it (273 answers)": {
+  "first_guess_right": 0.4983098177542622,
+  "pad 1": {
+   "tokens_per_step": 1.4537745118981502,
+   "acceptance": 0.4537745118981501,
+   "speedup": 1.3529358511162648
+  },
+  "pad 2": {
+   "tokens_per_step": 1.6689306819017729,
+   "acceptance": 0.3348964535176342,
+   "speedup": 1.4577884840663937
+  },
+  "pad 3": {
+   "tokens_per_step": 1.7865711210856499,
+   "acceptance": 0.2628619549294292,
+   "speedup": 1.4733357359668415
+  },
+  "pad 4": {
+   "tokens_per_step": 1.84729157620495,
+   "acceptance": 0.2126524857475633,
+   "speedup": 1.4444293121729004
+  },
+  "pad 5": {
+   "tokens_per_step": 1.886480793747575,
+   "acceptance": 0.1782257660097287,
+   "speedup": 1.4030186832875366
+  },
+  "pad 6": {
+   "tokens_per_step": 1.9131534569983137,
+   "acceptance": 0.15319546213257138,
+   "speedup": 1.3570547108159672
+  },
+  "rows": 392610,
+  "epochs": 24,
+  "validation_loss": 0.2977654715304963,
+  "weights": 66305,
+  "gain_pad3": 0.057103984232375726,
+  "gain_95": [
+   0.05181025196453626,
+   0.06178580381850862
+  ],
+  "best_rule": "pad 3"
+ },
+ "own code, all (546 answers)": {
+  "first_guess_right": 0.5016460905349794,
+  "pad 1": {
+   "tokens_per_step": 1.4574775662304842,
+   "acceptance": 0.45747756623048424,
+   "speedup": 1.3562838818114609
+  },
+  "pad 2": {
+   "tokens_per_step": 1.67538893265065,
+   "acceptance": 0.3381356141085997,
+   "speedup": 1.4632427890451118
+  },
+  "pad 3": {
+   "tokens_per_step": 1.7957573678794754,
+   "acceptance": 0.26593071341027924,
+   "speedup": 1.4806767023860712
+  },
+  "pad 4": {
+   "tokens_per_step": 1.8577472092578946,
+   "acceptance": 0.21527996602320834,
+   "speedup": 1.4523519070904458
+  },
+  "pad 5": {
+   "tokens_per_step": 1.8984714939194467,
+   "acceptance": 0.18063647834010935,
+   "speedup": 1.4116811973206929
+  },
+  "pad 6": {
+   "tokens_per_step": 1.924181602306779,
+   "acceptance": 0.15504273017860362,
+   "speedup": 1.3646637810762199
+  },
+  "rows": 759802,
+  "epochs": 19,
+  "validation_loss": 0.29320258131215027,
+  "weights": 66305,
+  "gain_pad3": 0.06444495065160538,
+  "gain_95": [
+   0.05863615842562209,
+   0.06977999060727091
+  ],
+  "best_rule": "pad 3"
+ },
+ "gpt-3.5 code only": {
+  "first_guess_right": 0.49385655496766606,
+  "pad 1": {
+   "tokens_per_step": 1.4471608665150195,
+   "acceptance": 0.44716086651501946,
+   "speedup": 1.346955071856797
+  },
+  "pad 2": {
+   "tokens_per_step": 1.6599205091316964,
+   "acceptance": 0.330367060948963,
+   "speedup": 1.4502011471064447
+  },
+  "pad 3": {
+   "tokens_per_step": 1.773179497864361,
+   "acceptance": 0.25837024917102547,
+   "speedup": 1.4626661045418163
+  },
+  "pad 4": {
+   "tokens_per_step": 1.833292942348601,
+   "acceptance": 0.20912709407543065,
+   "speedup": 1.433809403909477
+  },
+  "pad 5": {
+   "tokens_per_step": 1.870381054424572,
+   "acceptance": 0.1749674155565865,
+   "speedup": 1.391414506509952
+  },
+  "pad 6": {
+   "tokens_per_step": 1.8955647743408415,
+   "acceptance": 0.15022277019643007,
+   "speedup": 1.3449396829626152
+  },
+  "rows": 4847369,
+  "epochs": 8,
+  "validation_loss": 0.3112331644208638,
+  "weights": 66305,
+  "gain_pad3": 0.04643435280735053,
+  "gain_95": [
+   0.04148822202109814,
+   0.05096739297009201
+  ],
+  "best_rule": "pad 3"
+ },
+ "chat only": {
+  "first_guess_right": 0.48677248677248675,
+  "pad 1": {
+   "tokens_per_step": 1.4428519939788411,
+   "acceptance": 0.4428519939788411,
+   "speedup": 1.3430576853883376
+  },
+  "pad 2": {
+   "tokens_per_step": 1.6523501990871128,
+   "acceptance": 0.3265993265993266,
+   "speedup": 1.443735869204747
+  },
+  "pad 3": {
+   "tokens_per_step": 1.7644405268070102,
+   "acceptance": 0.2554758439037915,
+   "speedup": 1.4556292930669543
+  },
+  "pad 4": {
+   "tokens_per_step": 1.8220270921454196,
+   "acceptance": 0.20631870346977718,
+   "speedup": 1.4252637230007703
+  },
+  "pad 5": {
+   "tokens_per_step": 1.8575288626873003,
+   "acceptance": 0.172391278106379,
+   "speedup": 1.3821525756071456
+  },
+  "pad 6": {
+   "tokens_per_step": 1.881565852040252,
+   "acceptance": 0.14787677553689269,
+   "speedup": 1.335292442386035
+  },
+  "rows": 5328766,
+  "epochs": 3,
+  "validation_loss": 0.3259463223784715,
+  "weights": 66305,
+  "gain_pad3": 0.03939754133248852,
+  "gain_95": [
+   0.03357663174350489,
+   0.04470743482071793
+  ],
+  "best_rule": "pad 3"
+ },
+ "own + gpt-3.5 code": {
+  "first_guess_right": 0.49692827748383306,
+  "pad 1": {
+   "tokens_per_step": 1.45144782293488,
+   "acceptance": 0.45144782293487995,
+   "speedup": 1.3508319821209935
+  },
+  "pad 2": {
+   "tokens_per_step": 1.6669686803633958,
+   "acceptance": 0.33391361914452794,
+   "speedup": 1.4561284356873863
+  },
+  "pad 3": {
+   "tokens_per_step": 1.783313686967911,
+   "acceptance": 0.26177199233146287,
+   "speedup": 1.4707644676284366
+  },
+  "pad 4": {
+   "tokens_per_step": 1.843138316593118,
+   "acceptance": 0.2116052318668252,
+   "speedup": 1.4412960927093812
+  },
+  "pad 5": {
+   "tokens_per_step": 1.8816473189607519,
+   "acceptance": 0.1772416360595436,
+   "speedup": 1.399540218618387
+  },
+  "pad 6": {
+   "tokens_per_step": 1.9065755572980845,
+   "acceptance": 0.15208475253106574,
+   "speedup": 1.3525196698437503
+  },
+  "rows": 5607171,
+  "epochs": 6,
+  "validation_loss": 0.3031258720820885,
+  "weights": 66305,
+  "gain_pad3": 0.054532715893970796,
+  "gain_95": [
+   0.04945165450242284,
+   0.05948658443511934
+  ],
+  "best_rule": "pad 3"
+ },
+ "own + gpt-3.5 code + chat": {
+  "first_guess_right": 0.4994415049970605,
+  "pad 1": {
+   "tokens_per_step": 1.454096784531567,
+   "acceptance": 0.45409678453156715,
+   "speedup": 1.3532272458633308
+  },
+  "pad 2": {
+   "tokens_per_step": 1.6708484729451045,
+   "acceptance": 0.3358612551930972,
+   "speedup": 1.4594015032112109
+  },
+  "pad 3": {
+   "tokens_per_step": 1.7899539776462854,
+   "acceptance": 0.26398910225425143,
+   "speedup": 1.4760619587324624
+  },
+  "pad 4": {
+   "tokens_per_step": 1.8513491459036013,
+   "acceptance": 0.2136873510797359,
+   "speedup": 1.4474999018525183
+  },
+  "pad 5": {
+   "tokens_per_step": 1.8903980223870234,
+   "acceptance": 0.17900238431600285,
+   "speedup": 1.405872963038596
+  },
+  "pad 6": {
+   "tokens_per_step": 1.9154331063207068,
+   "acceptance": 0.1535705180862816,
+   "speedup": 1.358643822628024
+  },
+  "rows": 10935937,
+  "epochs": 10,
+  "validation_loss": 0.2982919268898903,
+  "weights": 66305,
+  "gain_pad3": 0.05983020699799657,
+  "gain_95": [
+   0.05471558907856666,
+   0.06456470426272976
+  ],
+  "best_rule": "pad 3"
+ },
+ "gpt-3.5 code + chat": {
+  "first_guess_right": 0.49666372721928276,
+  "pad 1": {
+   "tokens_per_step": 1.4513508326758642,
+   "acceptance": 0.4513508326758641,
+   "speedup": 1.3507442756942416
+  },
+  "pad 2": {
+   "tokens_per_step": 1.6666013712047012,
+   "acceptance": 0.3337296965982225,
+   "speedup": 1.4558174670461521
+  },
+  "pad 3": {
+   "tokens_per_step": 1.7820042934185036,
+   "acceptance": 0.26133858267716537,
+   "speedup": 1.4696875670809848
+  },
+  "pad 4": {
+   "tokens_per_step": 1.8434165628554406,
+   "acceptance": 0.21169401432863416,
+   "speedup": 1.4414929826800182
+  },
+  "pad 5": {
+   "tokens_per_step": 1.8819154524592883,
+   "acceptance": 0.17729779003068166,
+   "speedup": 1.3997532031947613
+  },
+  "pad 6": {
+   "tokens_per_step": 1.9059218815623689,
+   "acceptance": 0.15197489865991537,
+   "speedup": 1.3520940773035504
+  },
+  "gain_pad3": 0.053455815346519,
+  "gain_95": [
+   0.04862801889151536,
+   0.05806459948514009
+  ],
+  "best_rule": "pad 3"
+ },
+ "gpt-3.5 code + chat, then own": {
+  "first_guess_right": 0.5028218694885361,
+  "pad 1": {
+   "tokens_per_step": 1.4579673507862376,
+   "acceptance": 0.4579673507862376,
+   "speedup": 1.356726672973271
+  },
+  "pad 2": {
+   "tokens_per_step": 1.67687493840544,
+   "acceptance": 0.33886326072476997,
+   "speedup": 1.4645382528930768
+  },
+  "pad 3": {
+   "tokens_per_step": 1.7986046880367854,
+   "acceptance": 0.26689511428268625,
+   "speedup": 1.4829059256429251
+  },
+  "pad 4": {
+   "tokens_per_step": 1.8609470691163605,
+   "acceptance": 0.21609047115820101,
+   "speedup": 1.454765711677003
+  },
+  "pad 5": {
+   "tokens_per_step": 1.901122842299313,
+   "acceptance": 0.1811759420452631,
+   "speedup": 1.4135914500147322
+  },
+  "pad 6": {
+   "tokens_per_step": 1.927123442808607,
+   "acceptance": 0.15554964421094633,
+   "speedup": 1.366677347870104
+  },
+  "rows": 759802,
+  "epochs": 19,
+  "validation_loss": 0.28932639087509215,
+  "weights": 66305,
+  "gain_pad3": 0.06667417390845931,
+  "gain_95": [
+   0.06100195555777099,
+   0.0721296435153389
+  ],
+  "best_rule": "pad 3"
+ },
+ "wider (512-256-128): gpt-3.5 code + chat, then own": {
+  "first_guess_right": 0.5033215755437978,
+  "pad 1": {
+   "tokens_per_step": 1.4585262345679013,
+   "acceptance": 0.45852623456790126,
+   "speedup": 1.3572319226117924
+  },
+  "pad 2": {
+   "tokens_per_step": 1.678158368474267,
+   "acceptance": 0.3395187476079361,
+   "speedup": 1.4655948849444158
+  },
+  "pad 3": {
+   "tokens_per_step": 1.80056090591597,
+   "acceptance": 0.26754971572069003,
+   "speedup": 1.4844968199497144
+  },
+  "pad 4": {
+   "tokens_per_step": 1.8628164773504858,
+   "acceptance": 0.21656807985874948,
+   "speedup": 1.456185324648257
+  },
+  "pad 5": {
+   "tokens_per_step": 1.9022781271837876,
+   "acceptance": 0.18140384399235698,
+   "speedup": 1.4144418264086602
+  },
+  "pad 6": {
+   "tokens_per_step": 1.9291909972220647,
+   "acceptance": 0.15589554332783245,
+   "speedup": 1.3681005107008364
+  },
+  "rows": 759802,
+  "epochs": 8,
+  "validation_loss": 0.28772832824648786,
+  "weights": 230913,
+  "gain_pad3": 0.06826506821524858,
+  "gain_95": [
+   0.06254623177907304,
+   0.07363088448721156
+  ],
+  "best_rule": "pad 3"
+ }
+}

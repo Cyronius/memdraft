@@ -18,9 +18,9 @@
 #   setsid nohup ./run_prior_live.sh > data/code/prior.log 2>&1 < /dev/null &
 #   cancel: pkill -f '[r]un_prior_live.sh'; pkill -f '[l]ive_bench.py.*prior-'
 set -u
-cd "$(dirname "$0")/.."
-PY=${PY:-/mnt/fedora/home/cyrus/code/model-experiments/target/manifold-audit/env/bin/python}
-S=$HOME/.cache/model-experiments/memdraft
+cd "$(dirname "$0")"
+PY=${PY:-python3}
+S=${MEMDRAFT_CACHE:-$HOME/.cache/model-experiments/memdraft}
 NEW=$PWD/data/code/9b-code-pod-c3
 STAMP=$(date +%Y%m%d-%H%M)
 OUT=results/prior-9b-vk-$STAMP

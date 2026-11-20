@@ -121,12 +121,12 @@ def first_guess(static, calib, test, inreq, K, where=None):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    C = '~/.cache/model-experiments/memdraft'
+    C = gen_code.CACHE
     ap.add_argument('--rows', required=True, help="gen_code.py's output")
     ap.add_argument('--more-rows', nargs='+', default=[], metavar='FILE',
                     help="more of gen_code.py's output, for prompts past --pool (run_gen_more.sh, run_gen_pod.py): all of it is own table text")
     ap.add_argument('--dataset', default=f'{C}/code-prompts-src/data-oss_instruct-decontaminated.jsonl')
-    ap.add_argument('--tokenizer', default='models/manifold-audit/Qwen3.5-9B/tokenizer.json')
+    ap.add_argument('--tokenizer', default=f'{C}/models/Qwen3.5-9B/tokenizer.json')
     ap.add_argument('--cache', default='data/cache')
     ap.add_argument('--out')
     ap.add_argument('--K', type=int, default=6)

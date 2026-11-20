@@ -2,7 +2,13 @@
 
 **Status, 2026-11-10: restarted.** The first attempt (a continuation cache in front of DFlash2) failed; its write-up is the second half of this file. The restart keeps the name and changes the question, the drafter and how it is measured. The drafter is built and runs in llama.cpp. What the target would accept is measured offline. **Tokens per second, the endpoint, has only pilot numbers so far: on Qwen3.5-9B, two-token drafts gave 1.24× on the GPU and 1.18× on CPU, and on CPU they beat llama.cpp's lookup drafters (0.99×). On coding prompts on CPU, a table with code in its text gave 1.37×. On 2026-11-12, with 39M tokens of the 9B's own code in the table and a reranker over the proposals, coding prompts ran 1.93× faster than plain decoding on the GPU (pilot, 12 prompts) and 1.51× on CPU. The clean run is still to do.**
 
-**Layout.** Run every script from the repo root. `data/` is not in git: a symlink to the tables and generated rows (`~/code/model-experiments/target/memdraft`). The code study and the pod generation scripts also read the model-experiments checkout (the heal shards and the pod launcher); set `MODEL_EXPERIMENTS` if it is not at `~/code/model-experiments`. Scripts use `$PY` for the Python environment (default: the old Fedora disk's env). Result folders and write-ups below were written when this lived in model-experiments, so older text may say `memdraft/` or `target/memdraft/`.
+**Layout.** Run every script from the repo root. Python dependencies are in `requirements.txt`; the scripts use `$PY` for the interpreter (default `python3`). Large inputs and outputs live outside git:
+
+- `data/` (gitignored): the tables and generated rows the scripts write and read. Create it, or symlink it to wherever you keep them.
+- `$MEMDRAFT_CACHE` (default `~/.cache/model-experiments/memdraft`): the patched llama.cpp builds, the GGUFs, Qwen3.5-9B's Hugging Face files (`models/Qwen3.5-9B/`, for the tokenizer and embeddings) and the OSS-Instruct prompt file (`code-prompts-src/`).
+- `$MODEL_EXPERIMENTS` (default `~/code/model-experiments`): a separate, unpublished checkout. Only two things need it: the heal shards behind the offline chat study, and the RunPod launcher `run_gen_pod.py` imports. Everything on code, the drafter, the plugin and the live benchmarks runs without it.
+
+The live scripts wrap runs in `arbiter run …` (earlier, `dibs`), a local tool that makes jobs take turns on the GPU. Drop that prefix on another machine. Result folders and write-ups below were written when this project lived inside model-experiments, so older text and logs may say `memdraft/` or `target/memdraft/`; today those are the repo root and `data/`.
 
 **Question.** Does a drafter that runs no model make decoding faster in tokens per second than plain decoding, and than llama.cpp's own free drafters, on small and mid-size models?
 
@@ -212,7 +218,7 @@ Neither the table's text nor the offline study's held-out text has any code. `ge
 
 Each doubling of own code still added about 0.02× at the end.
 
-**The reranker** (`rerank-scratch/rerank7.py`) scores each distinct proposed token with an MLP (577-512-256-128-1) over what the lookups propose, token kinds and frequencies, and 64-wide projections of the target's embeddings, starting from the earlier stand-in reranker. More training data helped it little: fine-tuned on this machine's 4,800 answers 1.666×, with a quarter of the pod's answers too 1.666×, with all of them (a fifth of their positions, 17.7M rows) **1.676×**. Over the whole push, the table gave +0.096× and the reranker's extra data +0.021×.
+**The reranker** (`research/reranker/rerank7.py`) scores each distinct proposed token with an MLP (577-512-256-128-1) over what the lookups propose, token kinds and frequencies, and 64-wide projections of the target's embeddings, starting from the earlier stand-in reranker. More training data helped it little: fine-tuned on this machine's 4,800 answers 1.666×, with a quarter of the pod's answers too 1.666×, with all of them (a fifth of their positions, 17.7M rows) **1.676×**. Over the whole push, the table gave +0.096× and the reranker's extra data +0.021×.
 
 **In llama.cpp.** `export_reranker.py` writes the table in a version 2 format (exact confidences and the count cells the reranker reads; contexts seen at least 3 times: 14.8M entries, 256 MiB) and the reranker (124 MiB, embeddings already projected). `--spec-table-reranker FILE` turns it on. On the 68,040 test positions the C++ drafter picks the same token as the numpy reranker at 99.975% of them. A draft call with the reranker takes about 60 µs (AVX2 chosen at load time; 3 µs without the reranker). Cutting rare contexts costs the reranker 0.026× offline (1.676× to 1.650×).
 
@@ -279,21 +285,27 @@ Each doubling of own code still added about 0.02× at the end.
 | `code_study.py` | The offline study on that code: tables from the shipped text, the target's own code and another model's code. `--export` writes one of them for the drafter. |
 | `run_code_live.sh` | The table drafter on coding prompts against plain decoding and the lookup drafters, on CPU |
 | `run_gen_more.sh` | The target answers more coding prompts on this machine's CPU |
-| `run_gen_pod.py`, `gen_pod_worker.py`, `gen_pod_helper.py`, `gen_pod_requirements.txt` | The same on one rented RunPod GPU, under a dollar cap (budget file `runpod_budget_gen_*.json`); `collect_pod_rows.py` joins its rows |
+| `run_gen_pod.py`, `gen_pod_worker.py`, `gen_pod_helper.py`, `gen_pod_requirements.txt` | The same on one rented RunPod GPU, under a dollar cap (needs the model-experiments pod launcher); `collect_pod_rows.py` joins its rows |
 | `export_reranker.py` | Writes the code table (version 2) and the reranker for the drafter, and checks the C++ reranker against numpy |
 | `run_rerank_live.sh` | The new table and the reranker live on coding prompts, CPU or GPU |
 | `test_ngram_study.py` | Checks the fast paths against slow reference versions |
+| `ple_features.py`, `ple_experiment.py`, `ple_reranker.h`, `collect_ple_rows.py`, `test_ple_experiment.py` | The Qwen3.8 shared-ngram experiment (below) |
+| `plugin/`, `llama-plugin-hook.patch` | The drafter as a plugin for stock llama.cpp, with example plugins and equivalence tests |
+| `research/reranker/` | The scripts that trained and scored the reranker (`rerank.py` to `rerank8.py`, in the order they were written), their drivers and small results. `rerank7.py` trained the shipped one. |
+| `research/qwen38-head-selection/` | Head calibration and GGUF surgery for the Qwen3.8 experiment |
 | `results/` | Study and timing results |
+| `requirements.txt` | Python dependencies |
 
-Scratch, outside git: the patched llama.cpp and the test GGUFs are in `~/.cache/model-experiments/memdraft/`; tables are in `data/` (`9b-all-c3.mdt` is the 64 MiB table used live). The 9B's code answers (`rows-9b.jsonl`) and the code tables are in `data/code/` (`9b-code-800-c3.mdt` is the 128 MiB table with all the code); the OSS-Instruct file is in `~/.cache/model-experiments/memdraft/code-prompts-src/`.
+Scratch, outside git: the patched llama.cpp and the test GGUFs are in `$MEMDRAFT_CACHE`; tables are in `data/` (`9b-all-c3.mdt` is the 64 MiB table used live). The 9B's code answers (`rows-9b.jsonl`) and the code tables are in `data/code/` (`9b-code-800-c3.mdt` is the 128 MiB table with all the code); the OSS-Instruct file (`ise-uiuc/Magicoder-OSS-Instruct-75K`, `data-oss_instruct-decontaminated.jsonl`) is in `$MEMDRAFT_CACHE/code-prompts-src/`. `make_prompts.py` built the prompt sets partly from files on the author's machine (a Rust crate in `~/.cargo`, llama.cpp), so treat the committed `prompts/*.jsonl` as canonical.
 
 ```bash
-S=manifold-compression/results/heal-shards-pod-20261105
+S=$MODEL_EXPERIMENTS/manifold-compression/results/heal-shards-pod-20261105
 SH="$S/mc-shard-ec420510e5b4/shards/shard_000 $S/mc-shard-d65446e1cd6b/shards/shard_001 $S/mc-shard-1135ab4d74a4/shards/shard_002"
-PY=target/manifold-audit/env/bin/python
+PY=${PY:-python3}
+MEMDRAFT_CACHE=${MEMDRAFT_CACHE:-$HOME/.cache/model-experiments/memdraft}
 $PY ngram_study.py --shards $SH --cache data/cache --out results/study.json
 $PY build_table.py --shards $SH --cache data/cache --out data/9b-all-c3 --all-shards --min-count 3
-python3 patch_llama.py ~/.cache/model-experiments/memdraft/llama.cpp   # then build with /usr/bin/gcc, not ~/.local/bin/cc
+python3 patch_llama.py $MEMDRAFT_CACHE/llama.cpp   # then build llama.cpp as usual
 llama-server -m MODEL.gguf --spec-type ngram-table --spec-table-file data/9b-all-c3.mdt --spec-table-tau 0.3
 
 # code: the 9B answers 800 prompts (hours on CPU), then the study and a table with code in it
@@ -338,7 +350,7 @@ the table drafter itself also includes short request-local lookup. Offline
 `prompt_lookup` means this short lookup, not the separate long-match drafter.
 
 For better head selection, apply
-`qwen38-flash-next-ngram/patch_head_ablation.py` to that research build and use
+`research/qwen38-head-selection/patch_head_ablation.py` to that research build and use
 `calibrate_heads.py` on the full source Q4_K_XL. It measures full/original-pair
 controls, 16 leave-one-head-out ablations and pairs among the best heads per order.
 This is a heuristic shortlist; it does not exhaust all 64 pairs or establish the
@@ -351,7 +363,7 @@ Example commands after acquiring and calibrating the Q4_K_XL source (replace
 `A,B` with the selected global head IDs, and `TARGET_ID` with an immutable build ID):
 
 ```sh
-python qwen38-flash-next-ngram/surgery_qwen38.py SOURCE.gguf PRUNED.gguf --ple-heads A,B
+python research/qwen38-head-selection/surgery_qwen38.py SOURCE.gguf PRUNED.gguf --ple-heads A,B
 # Collect with speculation disabled, from a server started with --alias TARGET_ID.
 python collect_ple_rows.py --server http://127.0.0.1:8455 \
   --target-id TARGET_ID --prompts TRAIN_PROMPTS.jsonl --out ROWS.jsonl
@@ -366,8 +378,8 @@ llama-server -m PRUNED.gguf --spec-type ngram-simple,ngram-table \
   --spec-table-pad --spec-table-n-max 3
 ```
 
-`PYTHON` needs numpy, torch and the pinned gguf-py package. Local validation uses
-`target/manifold-rocm/env/bin/python`. The native replay tool can be built with
+`PYTHON` needs numpy, torch and gguf (`requirements.txt`; validated with numpy 2.5,
+torch 2.14 and gguf 0.19). The native replay tool can be built with
 `-DMEMDRAFT_PLE`, the ggml include path and ggml-base linked; its
 `--ple-reranker FILE.mdp` option runs the same scorer as the server adapter.
 
@@ -394,6 +406,8 @@ A retained-continuation cache for speculative decoding, in front of DFlash2.
 **Answer: no.** On new requests the cache barely changed accepted tokens per proposal and lowered acceptance. The one timed comparison was 4% slower on new prompts. On Qwen3.6-35B-A3B, MemDraft in front of DFlash2 produced fewer tokens per target step than DFlash2 alone. Gains appeared only on exact repeats. No controlled latency result was ever obtained for any setting. The project ran 2026-10-25 to 2026-11-07 in `pair-cache-spec/`. It was retired on 2026-11-08 and its code, results and caches were deleted. This write-up is what's left.
 
 ### What was built
+
+None of this code survives: the files named below were deleted with `pair-cache-spec/`.
 
 - `pair_cache.h`: a C++17 RAM table with 128-byte slots, 4- or 8-token keys, 1–16-token continuations and 8-way buckets. Sizes run from 512 KiB (4,096 entries) to 1 GiB (8.4 M entries).
 - Three retention policies: `utility` (accepted-token credit, aged; the default), `frequency` and `lru`. Request or global scope, and an optional snapshot file.
@@ -474,7 +488,7 @@ Over 400 prompts × 2 targets, a Bonsai2-tuned ternary DFlash2 drafter (35% smal
   - On Qwen3.8, 18 of 432 cache completions diverged from the DFlash2 reference. A probe reproduced one divergence with DFlash2 alone at another draft cap and with plain decoding. The top-2 logprobs at the split were −1.106 and −1.184.
   - On Qwen3.6, only 50 of 200 DFlash2 outputs, 65 MTP and 69 lookup outputs matched plain greedy decoding.
   - Compare speculative settings by task quality, not by identical text.
-- **DFlash2 out-drafts MTP on Qwen3.6-35B-A3B on general prompts:** 4.69 tokens/step against 3.25. This matters for npu-kernel-coder, which uses Qwen3.6 with MTP; see the note below.
+- **DFlash2 out-drafts MTP on Qwen3.6-35B-A3B on general prompts:** 4.69 tokens/step against 3.25.
 - **A tiny model's speedup means nothing.** stories15M went from 879 to 2,431 tok/s on repeated prompts.
 - **Hook speculative-decoding commits at the token commit.** The first adapter learned tokens only at the next draft call, so each request's final bonus token was lost (178 of 181 seen; 181/181 after the fix).
 - **Measurement on a shared machine:**
@@ -485,6 +499,6 @@ Over 400 prompts × 2 targets, a Bonsai2-tuned ternary DFlash2 drafter (35% smal
   - Timing stages queued behind other dibs holders never ran.
   - Plan timing as a single `dibs run --measure` job from the start.
 
-### Note for npu-kernel-coder
+## License
 
-The coder model (Qwen3.6-35B-A3B) runs with its MTP head: 96% acceptance and 92.5 tok/s on the shape-port pilot (`npu-kernel-coder/eval/results.md`). On MemDraft's general prompts, DFlash2 gave more tokens per step than MTP. So the Qwen3.6 DFlash2 Q8_0 drafter was kept, at `/home/cyrus/models/qwen3.6-35b-a3b-mtp/`, for a head-to-head on the coder workload.
+MIT; see `LICENSE`.

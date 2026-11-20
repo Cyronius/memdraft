@@ -140,7 +140,7 @@ class PLETests(unittest.TestCase):
                         self.assertEqual(native[key], result['arms'][arm]['depth_3'][key], (arm, key, native))
 
     def test_explicit_head_surgery_layout(self):
-        spec = importlib.util.spec_from_file_location('surgery', Path(os.environ.get('MODEL_EXPERIMENTS', '~/code/model-experiments')).expanduser() / 'qwen38-flash-next-ngram/surgery_qwen38.py')
+        spec = importlib.util.spec_from_file_location('surgery', Path(__file__).parent / 'research/qwen38-head-selection/surgery_qwen38.py')
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         class Field:

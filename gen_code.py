@@ -46,6 +46,9 @@ from pathlib import Path
 import gpu_alone
 from live_bench import Watch, log
 
+# Where the llama.cpp builds, GGUFs, tokenizer and prompt dataset live (outside git).
+CACHE = os.environ.get('MEMDRAFT_CACHE', os.path.expanduser('~/.cache/model-experiments/memdraft'))
+
 SEED, MAX_CHARS = 20261110, 4000     # the prompt order; code_study.py holds prompts out by it
 
 def call(where, path, body=None, timeout=1200):
@@ -150,7 +153,7 @@ def main():
         at = argv.index('--')
         common, argv = argv[at + 1:], argv[:at]
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    S = '~/.cache/model-experiments/memdraft'
+    S = CACHE
     ap.add_argument('--server', default=f'{S}/llama.cpp/build-cpu/bin/llama-server')
     ap.add_argument('--model', default=f'{S}/models/Qwen3.5-9B-Q4_K_M.gguf')
     ap.add_argument('--dataset', default=f'{S}/code-prompts-src/data-oss_instruct-decontaminated.jsonl')

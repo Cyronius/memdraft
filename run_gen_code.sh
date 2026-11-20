@@ -6,11 +6,12 @@
 #   setsid nohup ./run_gen_code.sh 800 > data/code/gen.log 2>&1 < /dev/null &
 #   cancel: pkill -f '[g]en_code.py'     (rows already written stay; starting again continues)
 set -u
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")"
+PY=${PY:-python3}
 COUNT=${1:?how many prompts}
 mkdir -p data/code
 arbiter run --cpu 8 port-8455 --label "MemDraft: the 9B writes code for the code study (8 CPU threads, low priority)" --eta "${ETA:-7h}" -- \
-  nice -n 10 target/manifold-audit/env/bin/python gen_code.py --count "$COUNT" --parallel 16 \
+  nice -n 10 $PY gen_code.py --count "$COUNT" --parallel 16 \
   --out data/code/rows-9b.jsonl -- -ngl 0 -t 8
 rc=$?
 echo "$(date +%T) exit $rc"

@@ -16,7 +16,7 @@ answers). Writes, for a minimum count M (contexts seen fewer times are left out 
 its drafts to equal the numpy reranker's at nearly every position (float sums in another order
 can tip a near-tie), then counts steps with both.
 
-Run from the repo root with target/manifold-audit/env/bin/python under a memory limit
+Run from the repo root with python3 under a memory limit
 (systemd-run --user --scope -p MemoryMax=30G; peak about 20 GB):
     export_reranker.py --pod-rows data/code/rows-9b-pod.jsonl --out data/code/9b-code-pod-c3 --check
 """

@@ -11,15 +11,15 @@
 #   setsid nohup ./run_code_live.sh > data/code/live-cpu.log 2>&1 < /dev/null &
 #   cancel: pkill -f '[r]un_code_live.sh'; pkill -f '[l]ive_bench.py.*code-9b'
 set -u
-cd "$(dirname "$0")/.."
-PY=target/manifold-audit/env/bin/python
-S=$HOME/.cache/model-experiments/memdraft
+cd "$(dirname "$0")"
+PY=${PY:-python3}
+S=${MEMDRAFT_CACHE:-$HOME/.cache/model-experiments/memdraft}
 SHIPPED=$PWD/data/9b-all-c3.mdt
 CODE=${CODE_TABLE:-$PWD/data/code/9b-code-c3.mdt}
 OUT=results/code-9b-cpu-$(date +%Y%m%d-%H%M)
 PAD2="--spec-type ngram-table --spec-table-n-max 2 --spec-table-pad --spec-table-file"
 
-GEN='^target/manifold-audit/env/bin/python gen_code.py'
+GEN='^[^ ]*python[0-9.]* gen_code.py'
 COUNT=$(pgrep -af "$GEN" | sed -n 's/.* --count \([0-9]*\).*/\1/p' | head -1)
 if [ -n "$COUNT" ]; then
   echo "$(date +%T) stopping gen_code.py (--count $COUNT) for the timing"

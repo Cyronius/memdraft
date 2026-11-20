@@ -1,0 +1,21 @@
+08:25:09 model.language_model.embed_tokens.weight: 512 components hold 22% of the variance
+08:26:08 lm_head.weight: 512 components hold 22% of the variance
+08:26:51 table 38,123,232 tokens. own: 607 answers, 327,043 positions, 852,018 rows (92,216 of them validation)
+08:26:52 most confident (the drafter now)                           first guess 0.471  pad 3 1.416x  gain +0.000 (+0.000 to +0.000)  best pad 3 1.416x
+08:27:36    trained own code, all (546 answers): 759,802 rows, 26 epochs, own-validation loss 0.2928, 66,305 weights
+08:27:38 own code, all (546 answers)                                first guess 0.501  pad 3 1.481x  gain +0.065 (+0.059 to +0.071)  best pad 3 1.481x
+08:28:09 gpt: table 36,260,080 tokens; 7424 solutions, 1,863,152 positions, 4,847,369 rows
+08:28:36 chat: table 31,742,534 tokens; 1695 answers, 2,105,798 positions, 5,328,766 rows
+08:29:01    trained embeddings (pca): own code: 759,802 rows, 8 epochs, own-validation loss 0.2956, 180,993 weights
+08:29:05 embeddings (pca): own code                                 first guess 0.501  pad 3 1.480x  gain +0.064 (+0.059 to +0.069)  best pad 3 1.480x
+08:36:02    trained embeddings (pca): gpt-3.5 code + chat (before fine-tuning): 10,176,135 rows, 6 epochs, own-validation loss 0.2926, 460,289 weights
+08:36:09 embeddings (pca): gpt-3.5 code + chat                      first guess 0.504  pad 3 1.485x  gain +0.069 (+0.064 to +0.074)  best pad 3 1.485x
+08:36:47    trained embeddings (pca): gpt-3.5 code + chat, then own: 759,802 rows, 6 epochs, own-validation loss 0.2719, 460,289 weights
+08:36:53 embeddings (pca): gpt-3.5 code + chat, then own            first guess 0.511  pad 3 1.501x  gain +0.085 (+0.079 to +0.090)  best pad 3 1.501x
+08:38:27    trained embeddings (p512): own code: 759,802 rows, 8 epochs, own-validation loss 0.2889, 246,529 weights
+08:38:34 embeddings (p512): own code                                first guess 0.504  pad 3 1.486x  gain +0.070 (+0.064 to +0.075)  best pad 3 1.486x
+08:59:23    trained embeddings (p512): gpt-3.5 code + chat (before fine-tuning): 10,176,135 rows, 6 epochs, own-validation loss 0.2849, 525,825 weights
+08:59:38 embeddings (p512): gpt-3.5 code + chat                     first guess 0.506  pad 3 1.489x  gain +0.073 (+0.068 to +0.078)  best pad 3 1.489x
+09:01:02    trained embeddings (p512): gpt-3.5 code + chat, then own: 759,802 rows, 6 epochs, own-validation loss 0.2632, 525,825 weights
+09:01:11 embeddings (p512): gpt-3.5 code + chat, then own           first guess 0.515  pad 3 1.508x  gain +0.092 (+0.086 to +0.097)  best pad 3 1.508x
+exit 0

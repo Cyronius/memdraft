@@ -10,9 +10,9 @@
 #   setsid nohup ./run_pilot.sh > data/pilot.log 2>&1 < /dev/null &
 #   cancel: pkill -f run_pilot.sh; pkill -f 'live_bench.py.*pilot'
 set -u
-cd "$(dirname "$0")/.."
-PY=target/manifold-audit/env/bin/python
-S=$HOME/.cache/model-experiments/memdraft
+cd "$(dirname "$0")"
+PY=${PY:-python3}
+S=${MEMDRAFT_CACHE:-$HOME/.cache/model-experiments/memdraft}
 T=$PWD/data/9b-all-c3.mdt
 OUT=results/pilot-9b-vk-$(date +%Y%m%d-%H%M)
 TABLE="--spec-type ngram-table --spec-table-file $T"

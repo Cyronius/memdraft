@@ -6,10 +6,10 @@
 #   ./run_measure.sh 9b vk        # Qwen3.5-9B on the GPU (Vulkan)
 #   ./run_measure.sh 2b cpu       # Qwen3.5-2B on 8 CPU threads
 set -eu
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")"
 MODEL=${1:?9b or 2b}; BACKEND=${2:?vk or cpu}
-PY=target/manifold-audit/env/bin/python
-S=$HOME/.cache/model-experiments/memdraft
+PY=${PY:-python3}
+S=${MEMDRAFT_CACHE:-$HOME/.cache/model-experiments/memdraft}
 T=$PWD/data/9b-all-c3.mdt
 case $MODEL in 9b) GGUF=$S/models/Qwen3.5-9B-Q4_K_M.gguf;; 2b) GGUF=$S/models/Qwen3.5-2B-Q4_K_M.gguf;; *) echo "unknown model $MODEL"; exit 2;; esac
 case $BACKEND in

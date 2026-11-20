@@ -1,0 +1,10 @@
+# Python dependencies for the studies, exporters, tests and research scripts.
+# The live benchmark drivers (live_bench.py, gen_code.py, gpu_alone.py) use only the standard library.
+# Versions are the ones the results were produced with; nearby versions should work.
+numpy>=2.2            # tested with 2.5.4
+torch>=2.6            # tested with 2.14.1 (any CPU, CUDA or ROCm build); rerankers and PLE experiment
+tokenizers>=0.21      # tested with 0.22.2; Qwen3.5-9B's tokenizer.json
+safetensors>=0.5      # tested with 0.8.0; research/reranker/rerank.py reads the 9B's embeddings
+gguf>=0.17            # PyPI build of llama.cpp's gguf-py; tested with 0.19.0 from the pinned checkout
+pyarrow>=18           # tested with 26.0.0; humaneval.py reads the HumanEval parquet
+pytest>=8             # test_ngram_study.py; test_ple_experiment.py also runs under unittest

@@ -13,9 +13,9 @@
 #   setsid nohup ./run_mtp_live.sh [results/prior-9b-vk-STAMP] > data/code/mtp.log 2>&1 < /dev/null &
 #   cancel: pkill -f '[r]un_mtp_live.sh'; pkill -f '[l]ive_bench.py.*mtp-9b'
 set -u
-cd "$(dirname "$0")/.."
-PY=${PY:-/mnt/fedora/home/cyrus/code/model-experiments/target/manifold-audit/env/bin/python}
-S=$HOME/.cache/model-experiments/memdraft
+cd "$(dirname "$0")"
+PY=${PY:-python3}
+S=${MEMDRAFT_CACHE:-$HOME/.cache/model-experiments/memdraft}
 NEW=$PWD/data/code/9b-code-pod-c3
 HEAD=$S/mtp-head/Qwen3.5-9B-q8_0.gguf
 STAMP=$(date +%Y%m%d-%H%M)

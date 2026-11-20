@@ -12,10 +12,10 @@
 #   setsid nohup ./run_rerank_live.sh cpu > data/code/live-rerank.log 2>&1 < /dev/null &
 #   cancel: pkill -f '[r]un_rerank_live.sh'; pkill -f '[l]ive_bench.py.*rerank-9b'
 set -u
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")"
 BACKEND=${1:?cpu or vk}
-PY=target/manifold-audit/env/bin/python
-S=$HOME/.cache/model-experiments/memdraft
+PY=${PY:-python3}
+S=${MEMDRAFT_CACHE:-$HOME/.cache/model-experiments/memdraft}
 OLD=$PWD/data/code/9b-code-800-c3.mdt
 NEW=$PWD/${NEW:-data/code/9b-code-pod-c3}
 OUT=results/rerank-9b-$BACKEND-$(date +%Y%m%d-%H%M)

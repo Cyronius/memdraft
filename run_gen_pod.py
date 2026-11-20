@@ -3,16 +3,17 @@ CPU run does not reach: the prompts from place FIRST of gen_code.py's order to t
 home as they are written, to data/code/pod/<job>/rows/rows-<from>-<to>.jsonl.
 
 Default only packages the bundle and prints its path; --quote asks the price. --execute rents the
-pod. On 2026-11-11 the user said 'Do it' to renting RunPod time for this under a $15 cap
-(runpod_budget_gen_20261111.json). One 48 GB GPU at most 0.60 USD/h, deleted on completion,
+pod, under a $15 cap recorded in a budget ledger (--ledger; the launcher's format, not included
+here). One 48 GB GPU at most 0.60 USD/h, deleted on completion,
 failure or the deadline by this launcher and by an independent watchdog; gen_pod_worker.py, the
 worker, also deletes its own pod 15 minutes after the deadline if both have died.
 
-The pod lifecycle is manifold-compression/run_slim_pod.py's, with this job's values. Nothing the
+The pod lifecycle is manifold-compression/run_slim_pod.py's (in the separate model-experiments
+checkout, not part of this repo; set MODEL_EXPERIMENTS), with this job's values. Nothing the
 provider sees names this project: the pod is called gen-<random>, and the client has a plain name.
 
     setsid nohup arbiter run runpod-memdraft network --label "MemDraft: a rented GPU writes the 9B's code answers" --eta 24h -- \\
-        target/manifold-audit/env/bin/python run_gen_pod.py --ledger runpod_budget_gen_20261111.json --execute \\
+        python3 run_gen_pod.py --ledger LEDGER.json --execute \\
         >> data/code/pod/launch.log 2>&1 < /dev/null &
     stop early (deletes the pod; rows copied so far stay):
         pkill -f '^[^ ]*python run_gen_pod.py .*--execute'
@@ -40,7 +41,7 @@ FIRST = 6200          # run_gen_more.sh answers places 2000 to 6199 on this mach
 CAP = 15.0
 LOOP = 160000         # more steps than gen_code.pick needs to hand out every prompt
 CODE = ['gen_code.py', 'gpu_alone.py', 'live_bench.py', 'gen_pod_worker.py', 'gen_pod_requirements.txt']
-CACHE = Path.home() / '.cache/model-experiments/memdraft'
+CACHE = Path(gen_code.CACHE)
 # The files this machine generates with, by the hashes Hugging Face lists for them.
 MODEL = {'repo': 'unsloth/Qwen3.5-9B-GGUF', 'revision': '3885219b6810b007914f3a7950a8d1b469d598a5',
          'file': 'Qwen3.5-9B-Q4_K_M.gguf', 'sha256': '03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8',
@@ -138,7 +139,7 @@ def stop(signum, frame):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__.split('\n\n')[0])
-    parser.add_argument('--ledger', help='the budget file, in memdraft/')
+    parser.add_argument('--ledger', help='the budget ledger, relative to the repo root')
     parser.add_argument('--execute', action='store_true')
     parser.add_argument('--quote', action='store_true')
     parser.add_argument('--watchdog', type=Path)
