@@ -43,6 +43,21 @@ An optional reranker picks among the proposals. It is a small MLP over the propo
 
 It works best behind llama.cpp's `ngram-simple` drafter. `ngram-simple` also needs no draft model, and no table either: when the last 12 tokens appeared earlier in the same request, it drafts up to 48 tokens that followed that earlier match. It catches long copies, such as an answer that repeats code from the prompt. When it finds no match, MemDraft drafts. Optionally, the model's own multi-token prediction (MTP) head drafts the first token and MemDraft continues from it. The MTP head is a small extra layer that some models ship with (Qwen3.5 does) to predict tokens past the next one.
 
+## Why a lookup drafter
+
+A drafter helps only when it is cheap next to the target. The speedup is about the tokens accepted per step divided by the cost of a step, so a drafter that guesses well but runs slowly gives back its gain. On the coding prompts with Qwen3.5-9B, with step cost relative to one plain decoding step:
+
+| Drafter (3 tokens) | Tokens per step | Step cost | Speedup |
+|---|---:|---:|---:|
+| Qwen3.5-2B as a separate draft model | 2.77 | 2.36× | 1.17× |
+| The 9B's MTP head (`draft-mtp`) | 3.08 | 1.59× | 1.94× |
+| `ngram-simple`, then MemDraft | 2.19 | 1.18× | 1.85× |
+
+The 2B draft model gets more tokens per step than MemDraft, but it is the slowest setup. A MemDraft draft call takes 3 to 60 µs, against about 26 ms for one plain step of the 9B. Most of MemDraft's 1.18× step cost is the target checking 4 tokens instead of 1.
+
+- **Smaller targets.** A smaller target takes less time per step, so a drafter that runs a model takes a larger share of each step. MemDraft's cost stays in microseconds at any target size. This follows from the cost model; MemDraft has only been measured with the 9B.
+- **No VRAM.** The table and reranker load into system RAM (380 MiB for the Qwen3.5-9B drafter) and run on the CPU. A draft model needs VRAM for its weights and its own KV cache, and in the results the MTP head also ran on the GPU. The target still checks MemDraft's guesses on the GPU.
+
 ## Results
 
 These numbers are for Qwen3.5-9B Q4_K_M on an AMD Radeon 8060S through Vulkan, with greedy decoding and no other process on the GPU, using the [Qwen3.5-9B drafter](#the-qwen35-9b-drafter). The coding prompts below are held-out OSS-Instruct prompts: no table holds answers to them, and the reranker never saw them.
@@ -169,5 +184,5 @@ Large files live outside git. `data/` holds tables and generated rows. `$MEMDRAF
 
 ## License
 
-- **Code:** MIT; see [LICENSE](https://github.com/Cyronius/memdraft/blob/main/LICENSE).
+- **Code:** MIT or Apache 2.0, at your option; see [LICENSE-MIT](https://github.com/Cyronius/memdraft/blob/main/LICENSE-MIT) and [LICENSE-APACHE](https://github.com/Cyronius/memdraft/blob/main/LICENSE-APACHE).
 - **Drafter files on Hugging Face:** Apache 2.0, the license of the Qwen3.5-9B weights they derive from.
