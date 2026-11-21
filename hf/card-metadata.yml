@@ -1,0 +1,13 @@
+---
+license: apache-2.0
+library_name: llama.cpp
+pipeline_tag: text-generation
+base_model:
+- Qwen/Qwen3.5-9B
+tags:
+- speculative-decoding
+- llama.cpp
+- drafter
+- code
+---
+

@@ -2,7 +2,7 @@
 
 MemDraft is a speculative-decoding method for llama.cpp that doesn't need a separate draft model. It proposes the next tokens from a lookup table, and the target model checks the guesses as in any speculative decoding. A draft step costs microseconds, so even guesses that are right only some of the time make decoding faster.
 
-The code builds as a plugin, `libmemdraft.so`, loaded by llama.cpp's `--spec-type plugin`. That option comes from a small patch to llama.cpp in this repo.
+The code is on GitHub at **[Cyronius/memdraft](https://github.com/Cyronius/memdraft)**. It builds as a plugin, `libmemdraft.so`, loaded by llama.cpp's `--spec-type plugin`. That option comes from a small patch to llama.cpp in the GitHub repo.
 
 MemDraft needs a drafter made for your model: a lookup table (`.mdt`) and, optionally, a reranker (`.mdr`). MemDraft does not build them while serving. They are built once, offline: the target model first answers many prompts, then scripts count those answers into a table and train the reranker. The drafter behind the results below took about 40M generated tokens, most of them from 14 hours on one rented A40.
 
@@ -10,11 +10,27 @@ MemDraft needs a drafter made for your model: a lookup table (`.mdt`) and, optio
 
 Ready-made drafters are on Hugging Face at **[Cyronius/memdraft](https://huggingface.co/Cyronius/memdraft)**, one folder per target model. For any other model, [build one](#building-a-table).
 
-| Target model | Domain | Files | Vocabulary hash |
-|---|---|---|---|
-| Qwen3.5-9B | Code | [`qwen3.5-9b/`](https://huggingface.co/Cyronius/memdraft/tree/main/qwen3.5-9b): table 256 MiB, reranker 124 MiB | `c52114e74bc3a20f` |
+| Target model | Domain | Folder | Table | Reranker | Vocabulary hash |
+|---|---|---|---:|---:|---|
+| [Qwen3.5-9B](https://huggingface.co/Qwen/Qwen3.5-9B) | Code | [`qwen3.5-9b/`](https://huggingface.co/Cyronius/memdraft/tree/main/qwen3.5-9b) | 256 MiB | 124 MiB | `c52114e74bc3a20f` |
 
-The Qwen3.5-9B table also loads with the other models that share its tokenizer (the Qwen3.5, 3.6 and 3.8 family), but it has only been measured with the 9B. The reranker was trained against the 9B.
+| File | SHA-256 |
+|---|---|
+| `qwen3.5-9b/code.mdt` | `5d835a951a03e86f3cda826738e14f3ea1d38b06487f567a5afe80af7eebf3db` |
+| `qwen3.5-9b/code.mdr` | `6458dcf9b905fb0b28338b19abb99a6ce42b73681063f83858860fd234c84fd7` |
+
+### The Qwen3.5-9B drafter
+
+The table counts 77.5M tokens of text, keeping contexts seen at least 3 times (14.8M entries):
+
+- **Code the 9B wrote:** answers to about 74,000 prompts from [Magicoder-OSS-Instruct-75K](https://huggingface.co/datasets/ise-uiuc/Magicoder-OSS-Instruct-75K), at temperature 0 with thinking off.
+- **That dataset's own gpt-3.5 solutions**, except for the held-out prompts.
+- **Chat and math text the 9B wrote:** answers to prompts from GSM8K, MATH, OpenThoughts and UltraChat.
+
+The reranker was fine-tuned on positions from the 9B's code. It includes 64-wide projections of the 9B's token embeddings.
+
+- **Compatibility.** The table works with any model that uses the same tokenizer: the Qwen3.5, 3.6 and 3.8 family, 248,070 tokens. `vocab_hash` makes the plugin refuse any other tokenizer. The table has only been measured with the 9B. The reranker was trained against the 9B; it loads with other models in the family, but it has not been measured there.
+- **Offline, on held-out answers.** With the 9B's measured GPU step costs and 3-token drafts: 2.01 tokens per step and a predicted 1.65× with the reranker, 1.86 tokens per step and 1.53× without it.
 
 ## How it works
 
@@ -29,7 +45,7 @@ It works best behind llama.cpp's `ngram-simple` drafter. `ngram-simple` also nee
 
 ## Results
 
-These numbers are for Qwen3.5-9B Q4_K_M on an AMD Radeon 8060S through Vulkan, with greedy decoding and no other process on the GPU. The table and reranker were built from the 9B's own answers to OSS-Instruct coding prompts. The coding prompts below are held-out prompts from the same dataset: no table holds their answers and the reranker never saw them.
+These numbers are for Qwen3.5-9B Q4_K_M on an AMD Radeon 8060S through Vulkan, with greedy decoding and no other process on the GPU, using the [Qwen3.5-9B drafter](#the-qwen35-9b-drafter). The coding prompts below are held-out OSS-Instruct prompts: no table holds answers to them, and the reranker never saw them.
 
 - **Coding prompts:** 12 OSS-Instruct prompts, 2 rounds.
 - **HumanEval:** problems 0–11.
@@ -51,26 +67,29 @@ Two other drafters were also tested and did worse than every setup above:
 - **`ngram-mod`**, the lookup drafter that llama.cpp's `--spec-default` turns on: 1.08× on coding prompts (41.0 tok/s), 1.78× on HumanEval (67.8 tok/s, from a run on 2026-11-19).
 - **Qwen3.5-2B as a separate draft model**, 3 tokens: 1.17× on coding prompts (44.6 tok/s). On HumanEval only 2 problems completed, at 1.36× (51.7 tok/s).
 
+What the results show:
+
 - **On the coding prompts, nearly all the gain is MemDraft's**: 1.81× alone, 1.85× behind `ngram-simple`. On HumanEval, `ngram-simple` adds the long copies, taking MemDraft from 2.39× to 3.29×. HumanEval answers often restate code from the prompt, so the coding prompts are the more typical case.
 - **The MTP head alone beats MemDraft alone on the coding prompts** (1.94× against 1.81×). It accepts more tokens per step, but each step costs more because the head is a real model. Putting the head first and MemDraft after it is fastest.
 - With both chained MemDraft setups, every prompt in every round ran faster than plain decoding.
 - **Verification is lossless, but llama.cpp's batched decoding is not bit-exact.** The output text matched plain decoding on 11 of 12 HumanEval problems and on 8 of 24 coding-prompt runs. Where it differs, it splits at a near-tie between two tokens; plain decoding also changes this way when only the batch size changes.
 - **Answer quality held up on HumanEval.** Over all 164 problems, pass@1 was 83.5% against 84.8% for plain decoding: two problems flipped. That run was MemDraft alone (2.29× over the 164 problems), with the same table and reranker, in the earlier patched build of llama.cpp.
 - **The setup is narrow so far.** It has been measured on one model, on code, on one GPU. On a mix of chat, math and editing prompts, an earlier table built from the 9B's chat and math text gave 1.24× overall, but only 1.09× on chat.
-- Raw results are in [`bench/results/`](bench/results/); the rows marked ¹ are in [`research/results/prior-9b-vk-20261117-1614/`](research/results/prior-9b-vk-20261117-1614/). How MemDraft got here, including what failed, is in [docs/history.md](docs/history.md).
-
+- Raw results are in [`bench/results/`](https://github.com/Cyronius/memdraft/tree/main/bench/results); the rows marked ¹ are in [`research/results/prior-9b-vk-20261117-1614/`](https://github.com/Cyronius/memdraft/tree/main/research/results/prior-9b-vk-20261117-1614). How MemDraft got here, including what failed, is in [`docs/history.md`](https://github.com/Cyronius/memdraft/blob/main/docs/history.md).
 
 ## Quick start
 
 You need:
 
 - llama.cpp at commit `edec462`
+- the [MemDraft code](https://github.com/Cyronius/memdraft)
 - a drafter for your model: a table (`.mdt`) and, optionally, a reranker (`.mdr`). See [Drafters](#drafters).
 
 The commands below use the Qwen3.5-9B drafter from the results.
 
 ```bash
-# 0. Download the drafter
+# 0. Get MemDraft and download the drafter
+git clone https://github.com/Cyronius/memdraft
 hf download Cyronius/memdraft --include 'qwen3.5-9b/*' --local-dir drafters
 
 # 1. Patch and build llama.cpp
@@ -115,21 +134,22 @@ A table is counted from text the target model wrote itself. Its own output is wo
 
 1. **Generate.** `tools/gen_code.py` has a llama-server answer OSS-Instruct coding prompts (`ise-uiuc/Magicoder-OSS-Instruct-75K`) and stores the answers as token IDs. The table in the results used about 74,000 answers (39.5M tokens): 5,000 answered on a CPU and 69,000 on one rented A40 in 14 hours.
 2. **Count and calibrate.** `tools/code_study.py --export` counts the table, calibrates its confidences on held-out answers and writes a `.mdt` file. `tools/build_table.py` does the same for general text. `--check` on either replays the C++ drafter against the Python one.
-3. **Reranker (optional, about +5% tokens per step).** The reranker is trained with `research/reranker/rerank7.py`. `tools/export_reranker.py` then writes the final pair of files: the table in its version 2 format and the reranker. It also checks that the C++ reranker picks the same token as the Python one (it did at 99.975% of positions). Training is still research code; see [research/](research/).
+3. **Reranker (optional, about +5% tokens per step).** The reranker is trained with `research/reranker/rerank7.py`. `tools/export_reranker.py` then writes the final pair of files: the table in its version 2 format and the reranker. It also checks that the C++ reranker picks the same token as the Python one (it did at 99.975% of positions). Training is still research code; see [`research/`](https://github.com/Cyronius/memdraft/tree/main/research).
 
 The published Qwen3.5-9B table also contains 9B chat and math text from another project; that text itself is not published. Without it, `code_study.py --skip-shards` builds a code-only table.
 
-To add a drafter for another model:
+This README is also the Hugging Face model card. To add a drafter for another model:
 
 1. Upload its `.mdt` and `.mdr` to a new folder in the Hugging Face repo.
-2. In the model card there, add a row to the table and add the model under `base_model` in the metadata.
-3. Add a row to [Drafters](#drafters) here.
+2. Add a row to [Drafters](#drafters), with the SHA-256 of both files.
+3. Add the model under `base_model` in `hf/card-metadata.yml`.
+4. Publish the card: `bash hf/publish-card.sh`.
 
 ## Benchmarking
 
 `bench/run_plugin_live.sh` produced the results table. It runs plain decoding and each drafter setup on the same prompts, in turns of at most 9 minutes, only while no other process is on the GPU. `tools/show_wide.py` then summarizes the turns with confidence intervals.
 
-The script wraps each turn in `arbiter run …`, a local scheduler for shared GPUs; remove that prefix on another machine. The prompt sets are in [`bench/prompts/`](bench/prompts/).
+The script wraps each turn in `arbiter run …`, a local scheduler for shared GPUs; remove that prefix on another machine. The prompt sets are in [`bench/prompts/`](https://github.com/Cyronius/memdraft/tree/main/bench/prompts).
 
 ## Repository layout
 
@@ -140,6 +160,7 @@ The script wraps each turn in `arbiter run …`, a local scheduler for shared GP
 | `patches/llama-plugin-hook.patch` | Adds `--spec-type plugin` to llama.cpp `edec462` |
 | `tools/` | Generating training text, building and checking tables, the benchmark client |
 | `bench/` | The benchmark script, prompt sets and results |
+| `hf/` | The Hugging Face card metadata and the script that publishes this README as the card |
 | `tests/` | `python -m pytest tests` |
 | `docs/history.md` | How the project got here, including the failed first attempt |
 | `research/` | Experiments that did not ship, or that led to the shipped setup, with their raw results |
@@ -148,4 +169,5 @@ Large files live outside git. `data/` holds tables and generated rows. `$MEMDRAF
 
 ## License
 
-MIT; see [LICENSE](LICENSE).
+- **Code:** MIT; see [LICENSE](https://github.com/Cyronius/memdraft/blob/main/LICENSE).
+- **Drafter files on Hugging Face:** Apache 2.0, the license of the Qwen3.5-9B weights they derive from.
