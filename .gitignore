@@ -4,3 +4,4 @@ data
 plugin/examples/test_plugin_equiv
 plugin/examples/test_plugin_replay
 .pytest_cache/
+.claude/plans/

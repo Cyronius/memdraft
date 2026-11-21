@@ -17,7 +17,9 @@
 # Turns as in run_accept_live.sh.
 #
 # Overrides: PARTS (default "he-00:1 oss:1 oss:2"), PLUGIN_ARMS and PATCHED_ARMS (arm names; empty skips
-# that build), ATTEMPTS (turns per part and build, default 2).
+# that build), ATTEMPTS (turns per part and build, default 2), MODEL, TAG and HEAD (another target model,
+# its short name in result folders, its MTP head GGUF). DRAFTER: table and reranker path without the extension.
+# bench/run_qwen_family.sh runs this once per Qwen3.5 size.
 #
 #   setsid nohup ./run_plugin_live.sh > data/code/plugin.log 2>&1 < /dev/null &
 #   cancel: pkill -f '[r]un_plugin_live.sh'; pkill -f '[l]ive_bench.py.*plugin-9b'
@@ -25,21 +27,31 @@ set -u
 cd "$(dirname "$0")/.."
 PY=${PY:-python3}
 S=${MEMDRAFT_CACHE:-$HOME/.cache/model-experiments/memdraft}
-NEW=$PWD/data/code/9b-code-pod-c3
+NEW=${DRAFTER:-$PWD/data/code/9b-code-pod-c3}
+MODEL=${MODEL:-$S/models/Qwen3.5-9B-Q4_K_M.gguf}
+TAG=${TAG:-9b}
+VOCAB=c52114e74bc3a20f
+if [ "$($PY plugin/vocab_hash.py "$MODEL")" != $VOCAB ]; then
+  echo "$MODEL does not have the table's tokenizer ($VOCAB)" >&2; exit 1
+fi
 STAMP=$(date +%Y%m%d-%H%M)
-OUT=bench/results/plugin-9b-vk-$STAMP
+OUT=bench/results/plugin-$TAG-vk-$STAMP
 WORK=data/code/plugin-$STAMP
 mkdir -p "$OUT" "$WORK"
 T="--spec-table-pad --spec-table-file $NEW.mdt --spec-table-reranker $NEW.mdr"
 E=$PWD/plugin/examples
-P="--spec-plugin $PWD/plugin/libmemdraft.so --spec-plugin-args table=$NEW.mdt,reranker=$NEW.mdr,pad=1,vocab_hash=c52114e74bc3a20f"
-HEAD=$S/mtp-head/Qwen3.5-9B-q4_k_m-out-q4k.gguf
+P="--spec-plugin $PWD/plugin/libmemdraft.so --spec-plugin-args table=$NEW.mdt,reranker=$NEW.mdr,pad=1,vocab_hash=$VOCAB"
+PNR="--spec-plugin $PWD/plugin/libmemdraft.so --spec-plugin-args table=$NEW.mdt,pad=1,vocab_hash=$VOCAB"
+HEAD=${HEAD-$S/mtp-head/Qwen3.5-9B-q4_k_m-out-q4k.gguf}
 D2=$S/models/Qwen3.5-2B-Q4_K_M.gguf
 H4="--spec-draft-model $HEAD --spec-draft-p-min 0"
 declare -A ARM=(
   [copy+table-3]="--spec-type ngram-simple,ngram-table --spec-table-n-max 3 $T"
   [copy+head4+table-4]="--spec-type ngram-simple,draft-mtp,ngram-table $H4 --spec-table-head-first --spec-table-n-max 4 $T"
+  [simple]="--spec-type ngram-simple"
+  [plugin-3]="--spec-type plugin --spec-plugin-n-max 3 $P"
   [copy+plugin-3]="--spec-type ngram-simple,plugin --spec-plugin-n-max 3 $P"
+  [copy+plugin-3-norr]="--spec-type ngram-simple,plugin --spec-plugin-n-max 3 $PNR"
   [copy+head4+plugin-4]="--spec-type ngram-simple,draft-mtp,plugin $H4 --spec-plugin-prefix 1 --spec-plugin-n-max 4 $P"
   [mtp-builtin-3]="--spec-type draft-mtp $H4 --spec-draft-n-max 3"
   [mtp-plugin-3]="--spec-type plugin --spec-plugin $E/libmtp.so --spec-plugin-n-max 3 --spec-plugin-args model=$HEAD"
@@ -81,9 +93,9 @@ gpu_ours() {
 }
 bench() {   # server, prompts, tokens, result name, arms...
   local server=$1 prompts=$2 tokens=$3 name=$4; shift 4
-  arbiter run gpu port-8455 --label "MemDraft: drafter plugins against built-in drafters, $name (9B, at most 9 min, stops if the GPU gets company)" --eta 10m -- \
+  arbiter run gpu port-8455 --label "MemDraft: drafter plugins against built-in drafters, $name ($TAG, at most 9 min, stops if the GPU gets company)" --eta 10m -- \
     $PY tools/live_bench.py --gpu-guard --guard-checks 2 --guard-gap 5 --retries 1 --time-limit "${LIMIT:-540}" --arm-seconds 75 \
-    --server "$server" --model "$S/models/Qwen3.5-9B-Q4_K_M.gguf" \
+    --server "$server" --model "$MODEL" \
     --prompts "$prompts" --max-tokens "$tokens" --out "$name" -- -ngl 99 -c 8192 "$@"
 }
 complete() {   # result file, arms...: the arms not complete in it
