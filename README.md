@@ -1,6 +1,6 @@
 # MemDraft
 
-MemDraft is a speculative-decoding drafter for llama.cpp that runs no model. It guesses the next tokens by looking them up, and the target model checks the guesses as in any speculative decoding. A draft step costs microseconds, so even guesses that are right only some of the time make decoding faster.
+MemDraft is a speculative-decoding method for llama.cpp that doesn't need a separate draft model. It proposes the next tokens from a lookup table, and the target model checks the guesses as in any speculative decoding. A draft step costs microseconds, so even guesses that are right only some of the time make decoding faster.
 
 The code builds as a plugin, `libmemdraft.so`, loaded by llama.cpp's `--spec-type plugin`. That option comes from a small patch to llama.cpp in this repo.
 
@@ -25,7 +25,7 @@ At each step MemDraft proposes tokens from two lookups:
 
 An optional reranker picks among the proposals. It is a small MLP over the proposals and the target's token embeddings, trained offline alongside the table and stored in a `.mdr` file. MemDraft always drafts the same number of tokens (`pad=1`), so llama.cpp's compute graph keeps its shape and is never rebuilt. A draft call takes about 60 µs with the reranker and 3 µs without it.
 
-It works best behind llama.cpp's `ngram-simple` drafter. `ngram-simple` also runs no model and needs no table: when the last 12 tokens appeared earlier in the same request, it drafts up to 48 tokens that followed that earlier match. It catches long copies, such as an answer that repeats code from the prompt. When it finds no match, MemDraft drafts. Optionally, the model's own multi-token prediction (MTP) head drafts the first token and MemDraft continues from it. The MTP head is a small extra layer that some models ship with (Qwen3.5 does) to predict tokens past the next one.
+It works best behind llama.cpp's `ngram-simple` drafter. `ngram-simple` also needs no draft model, and no table either: when the last 12 tokens appeared earlier in the same request, it drafts up to 48 tokens that followed that earlier match. It catches long copies, such as an answer that repeats code from the prompt. When it finds no match, MemDraft drafts. Optionally, the model's own multi-token prediction (MTP) head drafts the first token and MemDraft continues from it. The MTP head is a small extra layer that some models ship with (Qwen3.5 does) to predict tokens past the next one.
 
 ## Results
 

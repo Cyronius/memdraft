@@ -29,7 +29,7 @@ MemDraft started as one idea and became another. This page tells the story in or
 
 ## 2. The restart: a table built ahead of time (Nov 8–10)
 
-**New question.** Can a drafter that runs no model at all beat plain decoding in tokens per second, standing alone?
+**New question.** Can a drafter with no draft model at all beat plain decoding in tokens per second, standing alone?
 
 **Why it might.** A decode step with `n` draft tokens costs about `1 + β·n` plain steps, where β is the cost of one more token in the batch. On the 9B through Vulkan, β is about 0.065. When drafting is free, a guess is worth sending whenever its chance of being right is above about β. A guess right only one time in five still pays.
 
