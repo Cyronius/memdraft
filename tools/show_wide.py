@@ -8,6 +8,7 @@ fresh plain server), so slow and fast turns weigh on both. Per set and arm:
   r1, r2    the same per round
   median    of per-request speeds; faster: on how many requests it beat plain
   tok/step  tokens per decode step; step: what one of its steps costs in plain steps
+  accept    draft tokens accepted / draft tokens proposed, over every drafter in the arm
   same      requests whose text equals plain decoding's
 Requests cut short by another process on the GPU are left out.
 
@@ -47,7 +48,7 @@ def main(folder):
             continue
         print(f'\n{name}  ({"/".join(domains)})')
         print(f'{"arm":14s} {"tok/s":>6s} {"plain":>6s} {"speed":>6s} {"95% interval":>13s} {"r1":>6s} {"r2":>6s} '
-              f'{"median":>6s} {"faster":>7s} {"tok/step":>8s} {"step":>5s} {"same":>6s}')
+              f'{"median":>6s} {"faster":>7s} {"tok/step":>8s} {"step":>5s} {"accept":>6s} {"same":>6s}')
         for arm in arms:
             mine = [p for p in pairs[arm] if p[0]['domain'] in domains]
             if not mine:
@@ -66,12 +67,14 @@ def main(folder):
             t, ms = sum(a['tokens'] for a, _, _ in mine), sum(a['ms'] for a, _, _ in mine)
             bt, bms = sum(b['tokens'] for _, b, _ in mine), sum(b['ms'] for _, b, _ in mine)
             steps = t - sum(a['accepted'] for a, _, _ in mine)
+            drafted = sum(a.get('drafted', 0) for a, _, _ in mine)
+            accept = f"{sum(a['accepted'] for a, _, _ in mine) / drafted:6.1%}" if drafted else f'{"-":>6s}'
             step_cost = (ms / steps) / (bms / bt)
             rounds = [speed([p for p in mine if p[2] == r]) if any(p[2] == r for p in mine) else float('nan') for r in (1, 2)]
             same = sum(a['text'] == b['text'] for a, b, _ in mine)
             print(f'{arm:14s} {1000 * t / ms:6.1f} {1000 * bt / bms:6.1f} {speed(mine):6.3f} '
                   f'{boot[50]:6.3f}-{boot[1949]:.3f} {rounds[0]:6.3f} {rounds[1]:6.3f} {statistics.median(per):6.3f} '
-                  f'{sum(x > 1 for x in per):3d}/{len(per):<3d} {t / steps:8.2f} {step_cost:5.2f} {same:3d}/{len(mine):<3d}')
+                  f'{sum(x > 1 for x in per):3d}/{len(per):<3d} {t / steps:8.2f} {step_cost:5.2f} {accept} {same:3d}/{len(mine):<3d}')
 
 
 if __name__ == '__main__':
