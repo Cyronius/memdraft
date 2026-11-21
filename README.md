@@ -4,7 +4,17 @@ MemDraft is a speculative-decoding drafter for llama.cpp that runs no model. It 
 
 The code builds as a plugin, `libmemdraft.so`, loaded by llama.cpp's `--spec-type plugin`. That option comes from a small patch to llama.cpp in this repo.
 
-MemDraft needs a lookup table made for your model. The table is not in this repo, and MemDraft does not build it while serving. You build it once, offline: the target model first answers many prompts, then a script counts those answers into a `.mdt` file. The table behind the results below took about 40M generated tokens, most of them from 14 hours on one rented A40. See [Building a table](#building-a-table).
+MemDraft needs a drafter made for your model: a lookup table (`.mdt`) and, optionally, a reranker (`.mdr`). MemDraft does not build them while serving. They are built once, offline: the target model first answers many prompts, then scripts count those answers into a table and train the reranker. The drafter behind the results below took about 40M generated tokens, most of them from 14 hours on one rented A40.
+
+## Drafters
+
+Ready-made drafters are on Hugging Face at **[Cyronius/memdraft](https://huggingface.co/Cyronius/memdraft)**, one folder per target model. For any other model, [build one](#building-a-table).
+
+| Target model | Domain | Files | Vocabulary hash |
+|---|---|---|---|
+| Qwen3.5-9B | Code | [`qwen3.5-9b/`](https://huggingface.co/Cyronius/memdraft/tree/main/qwen3.5-9b): table 256 MiB, reranker 124 MiB | `c52114e74bc3a20f` |
+
+The Qwen3.5-9B table also loads with the other models that share its tokenizer (the Qwen3.5, 3.6 and 3.8 family), but it has only been measured with the 9B. The reranker was trained against the 9B.
 
 ## How it works
 
@@ -55,12 +65,14 @@ Two other drafters were also tested and did worse than every setup above:
 You need:
 
 - llama.cpp at commit `edec462`
-- a table (`.mdt`) for your model's tokenizer, which you build yourself
-- optionally, a reranker (`.mdr`) for the same tokenizer
+- a drafter for your model: a table (`.mdt`) and, optionally, a reranker (`.mdr`). See [Drafters](#drafters).
 
-The table and reranker used in the results are not published. They were built for the Qwen3.5/3.6/3.8 tokenizer. See [Building a table](#building-a-table).
+The commands below use the Qwen3.5-9B drafter from the results.
 
 ```bash
+# 0. Download the drafter
+hf download Cyronius/memdraft --include 'qwen3.5-9b/*' --local-dir drafters
+
 # 1. Patch and build llama.cpp
 git clone https://github.com/ggml-org/llama.cpp && cd llama.cpp && git checkout edec462
 git apply /path/to/memdraft/patches/llama-plugin-hook.patch
@@ -73,7 +85,7 @@ cmake -B build -DGGML_VULKAN=ON && cmake --build build -j      # or the backend 
 llama-server -m Qwen3.5-9B-Q4_K_M.gguf -ngl 99 \
   --spec-type ngram-simple,plugin --spec-plugin-n-max 3 \
   --spec-plugin /path/to/memdraft/plugin/libmemdraft.so \
-  --spec-plugin-args table=TABLE.mdt,reranker=TABLE.mdr,pad=1,vocab_hash=c52114e74bc3a20f
+  --spec-plugin-args table=drafters/qwen3.5-9b/code.mdt,reranker=drafters/qwen3.5-9b/code.mdr,pad=1,vocab_hash=c52114e74bc3a20f
 ```
 
 To put the MTP head in front as well, add it as a draft model and let it draft the first token:
@@ -105,7 +117,13 @@ A table is counted from text the target model wrote itself. Its own output is wo
 2. **Count and calibrate.** `tools/code_study.py --export` counts the table, calibrates its confidences on held-out answers and writes a `.mdt` file. `tools/build_table.py` does the same for general text. `--check` on either replays the C++ drafter against the Python one.
 3. **Reranker (optional, about +5% tokens per step).** The reranker is trained with `research/reranker/rerank7.py`. `tools/export_reranker.py` then writes the final pair of files: the table in its version 2 format and the reranker. It also checks that the C++ reranker picks the same token as the Python one (it did at 99.975% of positions). Training is still research code; see [research/](research/).
 
-The table used in the results also contains 9B chat and math text from another project, which is not published. Without it, `code_study.py --skip-shards` builds a code-only table.
+The published Qwen3.5-9B table also contains 9B chat and math text from another project; that text itself is not published. Without it, `code_study.py --skip-shards` builds a code-only table.
+
+To add a drafter for another model:
+
+1. Upload its `.mdt` and `.mdr` to a new folder in the Hugging Face repo.
+2. In the model card there, add a row to the table and add the model under `base_model` in the metadata.
+3. Add a row to [Drafters](#drafters) here.
 
 ## Benchmarking
 

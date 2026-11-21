@@ -131,4 +131,3 @@ Qwen3.8-Flash-Next keeps learned embeddings for hashed n-grams. The idea was to 
 - Other models. The table should work for any model with the Qwen3.5 tokenizer (the 27B, 35B-A3B and 2B), but this has not been measured.
 - Chat. The table in the results is built for code, and chat was the weakest domain in the general study.
 - Where the own-code curve flattens, using prompts beyond OSS-Instruct.
-- Publishing the table and reranker files.
