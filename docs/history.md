@@ -37,7 +37,7 @@ MemDraft started as one idea and became another. Speeds are given as generated t
 
 **Offline study** (`tools/ngram_study.py`; results in `research/results/study-9b-*.json`). This used 35M tokens the 9B wrote for math and chat prompts, with a held-out test set:
 
-- With β = 0.10 and the 9B's plain GPU step of 30.8 ms (32.5 tok/s), the predicted speed was 44.8 tok/s (1.38×) using both lookups. Neither lookup alone did as well, because the table covers chat and the request covers math.
+- Using both lookups beat either one alone, because the table covers chat and the request covers math.
 - The model's plain output is enough to build the table; no extra model pass is needed.
 - Contexts seen fewer than three times can be dropped: 64 MiB loses almost nothing against 512 MiB.
 - A table carries poorly outside the kind of text it was counted from.
@@ -64,7 +64,7 @@ The first table had no code in it. Coding prompts turned out to suit lookup draf
 
 On CPU, against 8.50 tok/s plain, a table with code in it gave 11.62 tok/s (1.37×), and the general table 10.32 tok/s (1.21×).
 
-**Scaling up.** The 9B then answered every remaining OSS-Instruct prompt: 4,200 on the local CPU and 69,000 on one rented A40 (37M tokens in 14 hours, $8.71). Offline, each doubling of own code in the table still added about 0.8 tok/s (0.02×) at 38 tok/s plain, even at 39M tokens. The end of that curve has not been reached.
+**Scaling up.** The 9B then answered every remaining OSS-Instruct prompt: 4,200 on the local CPU and 69,000 on one rented A40 (37M tokens in 14 hours, $8.71). Offline, each doubling of own code in the table was still helping at 39M tokens; the end of that curve has not been reached.
 
 **A reranker.** Instead of taking the most confident proposal, a small MLP scores each proposed token using the lookups' statistics and the target's token embeddings. It added about 6% tokens per step offline. It was trained in [`research/reranker/`](../research/reranker/), and its C++ version matches the Python one on 99.975% of positions.
 

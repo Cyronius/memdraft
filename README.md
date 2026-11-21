@@ -30,7 +30,6 @@ The table counts 77.5M tokens of text, keeping contexts seen at least 3 times (1
 The reranker was fine-tuned on positions from the 9B's code. It includes 64-wide projections of the 9B's token embeddings.
 
 - **Compatibility.** The table works with any model that uses the same tokenizer: the Qwen3.5, 3.6 and 3.8 family, 248,070 tokens. `vocab_hash` makes the plugin refuse any other tokenizer. The table has only been measured with the 9B. The reranker was trained against the 9B; it loads with other models in the family, but it has not been measured there.
-- **Offline, on held-out answers.** Drafting 3 tokens: 2.01 tokens per step with the reranker and 1.86 without it. At plain decoding's 38.0 tok/s and the 9B's measured GPU step costs, that predicts 62.7 tok/s (1.65×) and 58.2 tok/s (1.53×).
 
 ## How it works
 
