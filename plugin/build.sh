@@ -7,5 +7,5 @@ HERE=$(cd "$(dirname "$0")" && pwd)
 LLAMA=${1:?usage: build.sh LLAMA_CPP_DIR [OUT]}
 OUT=${2:-$HERE/libmemdraft.so}
 ${CXX:-g++} -O2 -std=c++17 -shared -fPIC -fvisibility=hidden -Wall -Wextra \
-  -I "$HERE/.." -I "$LLAMA/common" "$HERE/memdraft_plugin.cpp" -o "$OUT"
+  -I "$HERE/../src" -I "$LLAMA/common" "$HERE/memdraft_plugin.cpp" -o "$OUT"
 echo "built $OUT"

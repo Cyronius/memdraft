@@ -19,7 +19,7 @@ for N in "$@"; do
   until [ "$(cat $JOB/rows/rows-*.jsonl 2>/dev/null | wc -l)" -ge "$((N + 200))" ] || [ -e "$JOB/job-lifecycle.json" ]; do
     sleep 120
   done
-  $PY collect_pod_rows.py "$JOB" --out "$O/curve-$N.rows.jsonl"
+  $PY research/code-generation/collect_pod_rows.py "$JOB" --out "$O/curve-$N.rows.jsonl"
   if [ "$(wc -l < "$O/curve-$N.rows.jsonl")" -lt "$N" ]; then
     echo "$(date '+%F %T') the pod ended with fewer than $N answers: stopping"
     rm -f "$O/curve-$N.rows.jsonl"

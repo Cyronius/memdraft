@@ -18,7 +18,7 @@ until grep -q "Deletion confirmed" data/code/pod/launch.log 2>/dev/null || [ -e 
 done
 sleep 60                                   # the launcher's last copy of the rows
 echo "$(date '+%F %T') the pod job has ended"
-$PY collect_pod_rows.py "$JOB" --out "$ROWS" || exit 1
+$PY research/code-generation/collect_pod_rows.py "$JOB" --out "$ROWS" || exit 1
 echo "$(date '+%F %T') training"
 POD_ROWS="$ROWS" OMP_NUM_THREADS=8 \
   dibs run cpu --label "MemDraft: reranker on the pod's code answers (8 CPU threads, low priority)" --eta 3h -- \

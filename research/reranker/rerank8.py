@@ -37,7 +37,7 @@ import torch
 
 SP = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SP)
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'tools'))
 import code_study as cs   # noqa: E402
 import gen_code           # noqa: E402
 import ngram_study as ns  # noqa: E402
