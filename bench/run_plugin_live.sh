@@ -31,7 +31,7 @@ NEW=${DRAFTER:-$PWD/data/code/9b-code-pod-c3}
 MODEL=${MODEL:-$S/models/Qwen3.5-9B-Q4_K_M.gguf}
 TAG=${TAG:-9b}
 VOCAB=c52114e74bc3a20f
-if [ "$($PY plugin/vocab_hash.py "$MODEL")" != $VOCAB ]; then
+if [ "$($PY plugin/vocab_hash.py "$MODEL" "$S/llama.cpp-plugin/gguf-py")" != $VOCAB ]; then
   echo "$MODEL does not have the table's tokenizer ($VOCAB)" >&2; exit 1
 fi
 STAMP=$(date +%Y%m%d-%H%M)
