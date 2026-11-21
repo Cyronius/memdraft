@@ -2,49 +2,63 @@
 
 MemDraft is a speculative-decoding drafter for llama.cpp that runs no model. It guesses the next tokens by looking them up, and the target model checks the guesses as in any speculative decoding. A draft step costs microseconds, so even guesses that are right only some of the time make decoding faster.
 
-It ships as a plugin, `libmemdraft.so`, loaded by llama.cpp's `--spec-type plugin`. That option comes from a small patch to llama.cpp in this repo.
+The code builds as a plugin, `libmemdraft.so`, loaded by llama.cpp's `--spec-type plugin`. That option comes from a small patch to llama.cpp in this repo.
 
-## Results
-
-These numbers are for Qwen3.5-9B Q4_K_M on an AMD Radeon 8060S through Vulkan, with greedy decoding, the table and reranker built from the 9B's own code, and no other process on the GPU (2026-11-18). "Speed" is tokens per second against plain decoding on the same prompts.
-
-| Setup | Coding prompts (12 OSS-Instruct prompts, 2 rounds) | HumanEval (12 problems) |
-|---|---:|---:|
-| Plain decoding | 38.0 tok/s | 38.2 tok/s |
-| **MemDraft, behind `ngram-simple`** | **1.85×** | **3.29×** |
-| **MemDraft, behind `ngram-simple` and the model's MTP head** | **2.14×** | **3.57×** |
-| llama.cpp `draft-mtp` (the MTP head alone, 3 tokens) | 1.94× | 2.30× |
-| llama.cpp `ngram-mod` | 1.08× | 1.78×¹ |
-| Qwen3.5-2B as a draft model, 3 tokens | 1.17× | 1.36×² |
-
-¹ From a separate run on the same machine. ² Only 2 problems completed.
-
-- With both MemDraft setups, every prompt in every round ran faster than plain decoding.
-- HumanEval answers restate code from the prompt, which suits lookup drafting. The coding prompts are the more typical case.
-- **Verification is lossless, but llama.cpp's batched decoding is not bit-exact.** The output text matched plain decoding on 11 of 12 HumanEval problems and on 8 of 24 coding-prompt runs. Where it differs, it splits at a near-tie between two tokens; plain decoding also changes this way when only the batch size changes.
-- **Answer quality held up on HumanEval.** Over all 164 problems, pass@1 was 83.5% against 84.8% for plain decoding: two problems flipped. That run used the same table and reranker without `ngram-simple`, in the earlier patched build of llama.cpp.
-- **The setup is narrow so far.** It has been measured on one model, on code, on one GPU. On a mix of chat, math and editing prompts, an earlier table built from the 9B's chat and math text gave 1.24× overall, but only 1.09× on chat.
-- Raw results are in [`bench/results/`](bench/results/). How MemDraft got here, including what failed, is in [docs/history.md](docs/history.md).
+MemDraft needs a lookup table made for your model. The table is not in this repo, and MemDraft does not build it while serving. You build it once, offline: the target model first answers many prompts, then a script counts those answers into a `.mdt` file. The table behind the results below took about 40M generated tokens, most of them from 14 hours on one rented A40. See [Building a table](#building-a-table).
 
 ## How it works
 
 At each step MemDraft proposes tokens from two lookups:
 
-1. **A table built ahead of time** from text the target model wrote. For each of the last 1 to 6 tokens of context, it stores the token the model most often wrote next and how often that guess was right on held-out text.
-2. **The current request.** The same kind of lookup over the prompt and the tokens generated so far.
+1. **The table.** For each of the last 1 to 6 tokens of context, it stores the token the model most often wrote next and how often that guess was right on held-out text. MemDraft loads it at startup and only reads it.
+2. **The current request.** The same kind of lookup over the prompt and the tokens generated so far, built up as the request runs.
 
-A small reranker (an MLP over the proposals and the target's token embeddings) picks among the proposals. MemDraft always drafts the same number of tokens (`pad=1`), so llama.cpp's compute graph keeps its shape and is never rebuilt. A draft call takes about 60 µs with the reranker and 3 µs without it.
+An optional reranker picks among the proposals. It is a small MLP over the proposals and the target's token embeddings, trained offline alongside the table and stored in a `.mdr` file. MemDraft always drafts the same number of tokens (`pad=1`), so llama.cpp's compute graph keeps its shape and is never rebuilt. A draft call takes about 60 µs with the reranker and 3 µs without it.
 
-It works best in a chain of drafters. llama.cpp's `ngram-simple` drafts first when the last 12 tokens appeared earlier in the request, so long copies come from there. Optionally, the model's own MTP head drafts the first token. MemDraft fills in everywhere else.
+It works best behind llama.cpp's `ngram-simple` drafter. `ngram-simple` also runs no model and needs no table: when the last 12 tokens appeared earlier in the same request, it drafts up to 48 tokens that followed that earlier match. It catches long copies, such as an answer that repeats code from the prompt. When it finds no match, MemDraft drafts. Optionally, the model's own multi-token prediction (MTP) head drafts the first token and MemDraft continues from it. The MTP head is a small extra layer that some models ship with (Qwen3.5 does) to predict tokens past the next one.
+
+## Results
+
+These numbers are for Qwen3.5-9B Q4_K_M on an AMD Radeon 8060S through Vulkan, with greedy decoding and no other process on the GPU. The table and reranker were built from the 9B's own answers to OSS-Instruct coding prompts. The coding prompts below are held-out prompts from the same dataset: no table holds their answers and the reranker never saw them.
+
+- **Coding prompts:** 12 OSS-Instruct prompts, 2 rounds.
+- **HumanEval:** problems 0–11.
+- **Tok/s:** generated tokens per second. **Speedup:** tok/s divided by plain decoding's tok/s on the same prompts.
+
+| Setup | Coding tok/s | Coding speedup | HumanEval tok/s | HumanEval speedup |
+|---|---:|---:|---:|---:|
+| Plain decoding | 38.0 | 1.00× | 38.2 | 1.00× |
+| **MemDraft alone**¹ | 68.7 | **1.81×** | 91.1 | **2.39×** |
+| `ngram-simple` alone¹ | 43.1 | 1.14× | 74.3 | 1.95× |
+| **`ngram-simple`, then MemDraft** | 70.5 | **1.85×** | 125.5 | **3.29×** |
+| The MTP head alone (`draft-mtp`, 3 tokens) | 73.9 | 1.94× | 88.0 | 2.30× |
+| **`ngram-simple`, then the MTP head, then MemDraft** | 81.6 | **2.14×** | 136.3 | **3.57×** |
+
+Rows without a mark are from 2026-11-18. ¹ From 2026-11-17, in the earlier patched build of llama.cpp, with one round of the coding prompts and HumanEval problems 0–35. The patched build and the plugin ran at the same speed (1.84× and 1.85× for `ngram-simple`, then MemDraft).
+
+Two other drafters were also tested and did worse than every setup above:
+
+- **`ngram-mod`**, the lookup drafter that llama.cpp's `--spec-default` turns on: 1.08× on coding prompts (41.0 tok/s), 1.78× on HumanEval (67.8 tok/s, from a run on 2026-11-19).
+- **Qwen3.5-2B as a separate draft model**, 3 tokens: 1.17× on coding prompts (44.6 tok/s). On HumanEval only 2 problems completed, at 1.36× (51.7 tok/s).
+
+- **On the coding prompts, nearly all the gain is MemDraft's**: 1.81× alone, 1.85× behind `ngram-simple`. On HumanEval, `ngram-simple` adds the long copies, taking MemDraft from 2.39× to 3.29×. HumanEval answers often restate code from the prompt, so the coding prompts are the more typical case.
+- **The MTP head alone beats MemDraft alone on the coding prompts** (1.94× against 1.81×). It accepts more tokens per step, but each step costs more because the head is a real model. Putting the head first and MemDraft after it is fastest.
+- With both chained MemDraft setups, every prompt in every round ran faster than plain decoding.
+- **Verification is lossless, but llama.cpp's batched decoding is not bit-exact.** The output text matched plain decoding on 11 of 12 HumanEval problems and on 8 of 24 coding-prompt runs. Where it differs, it splits at a near-tie between two tokens; plain decoding also changes this way when only the batch size changes.
+- **Answer quality held up on HumanEval.** Over all 164 problems, pass@1 was 83.5% against 84.8% for plain decoding: two problems flipped. That run was MemDraft alone (2.29× over the 164 problems), with the same table and reranker, in the earlier patched build of llama.cpp.
+- **The setup is narrow so far.** It has been measured on one model, on code, on one GPU. On a mix of chat, math and editing prompts, an earlier table built from the 9B's chat and math text gave 1.24× overall, but only 1.09× on chat.
+- Raw results are in [`bench/results/`](bench/results/); the rows marked ¹ are in [`research/results/prior-9b-vk-20261117-1614/`](research/results/prior-9b-vk-20261117-1614/). How MemDraft got here, including what failed, is in [docs/history.md](docs/history.md).
+
 
 ## Quick start
 
 You need:
 
 - llama.cpp at commit `edec462`
-- a table (`.mdt`) and a reranker (`.mdr`) for your model's tokenizer
+- a table (`.mdt`) for your model's tokenizer, which you build yourself
+- optionally, a reranker (`.mdr`) for the same tokenizer
 
-The files used above were built for the Qwen3.5/3.6/3.8 tokenizer; they are not published yet. See [Building a table](#building-a-table).
+The table and reranker used in the results are not published. They were built for the Qwen3.5/3.6/3.8 tokenizer. See [Building a table](#building-a-table).
 
 ```bash
 # 1. Patch and build llama.cpp
@@ -87,11 +101,11 @@ To make the head, export it from the Hugging Face weights with `convert_hf_to_gg
 
 A table is counted from text the target model wrote itself. Its own output is worth far more per token than anyone else's. For code, the steps are:
 
-1. **Generate.** `tools/gen_code.py` has a llama-server answer OSS-Instruct coding prompts (`ise-uiuc/Magicoder-OSS-Instruct-75K`) and stores the answers as token IDs. The shipped table used about 74,000 answers (39.5M tokens): 5,000 answered on a CPU and 69,000 on one rented A40 in 14 hours.
+1. **Generate.** `tools/gen_code.py` has a llama-server answer OSS-Instruct coding prompts (`ise-uiuc/Magicoder-OSS-Instruct-75K`) and stores the answers as token IDs. The table in the results used about 74,000 answers (39.5M tokens): 5,000 answered on a CPU and 69,000 on one rented A40 in 14 hours.
 2. **Count and calibrate.** `tools/code_study.py --export` counts the table, calibrates its confidences on held-out answers and writes a `.mdt` file. `tools/build_table.py` does the same for general text. `--check` on either replays the C++ drafter against the Python one.
 3. **Reranker (optional, about +5% tokens per step).** The reranker is trained with `research/reranker/rerank7.py`. `tools/export_reranker.py` then writes the final pair of files: the table in its version 2 format and the reranker. It also checks that the C++ reranker picks the same token as the Python one (it did at 99.975% of positions). Training is still research code; see [research/](research/).
 
-The shipped files also contain 9B chat and math text from another project, which is not published. Without it, `code_study.py --skip-shards` builds a code-only table.
+The table used in the results also contains 9B chat and math text from another project, which is not published. Without it, `code_study.py --skip-shards` builds a code-only table.
 
 ## Benchmarking
 
