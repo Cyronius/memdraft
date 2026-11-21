@@ -30,7 +30,7 @@ The table counts 77.5M tokens of text, keeping contexts seen at least 3 times (1
 The reranker was fine-tuned on positions from the 9B's code. It includes 64-wide projections of the 9B's token embeddings.
 
 - **Compatibility.** The table works with any model that uses the same tokenizer: the Qwen3.5, 3.6 and 3.8 family, 248,070 tokens. `vocab_hash` makes the plugin refuse any other tokenizer. The table has only been measured with the 9B. The reranker was trained against the 9B; it loads with other models in the family, but it has not been measured there.
-- **Offline, on held-out answers.** With the 9B's measured GPU step costs and 3-token drafts: 2.01 tokens per step and a predicted 1.65× with the reranker, 1.86 tokens per step and 1.53× without it.
+- **Offline, on held-out answers.** Drafting 3 tokens: 2.01 tokens per step with the reranker and 1.86 without it. At plain decoding's 38.0 tok/s and the 9B's measured GPU step costs, that predicts 62.7 tok/s (1.65×) and 58.2 tok/s (1.53×).
 
 ## How it works
 
@@ -49,32 +49,32 @@ These numbers are for Qwen3.5-9B Q4_K_M on an AMD Radeon 8060S through Vulkan, w
 
 - **Coding prompts:** 12 OSS-Instruct prompts, 2 rounds.
 - **HumanEval:** problems 0–11.
-- **Tok/s:** generated tokens per second. **Speedup:** tok/s divided by plain decoding's tok/s on the same prompts.
+- Each figure is generated tokens per second, with the speedup over plain decoding on the same prompts in parentheses.
 
-| Setup | Coding tok/s | Coding speedup | HumanEval tok/s | HumanEval speedup |
-|---|---:|---:|---:|---:|
-| Plain decoding | 38.0 | 1.00× | 38.2 | 1.00× |
-| **MemDraft alone**¹ | 68.7 | **1.81×** | 91.1 | **2.39×** |
-| `ngram-simple` alone¹ | 43.1 | 1.14× | 74.3 | 1.95× |
-| **`ngram-simple`, then MemDraft** | 70.5 | **1.85×** | 125.5 | **3.29×** |
-| The MTP head alone (`draft-mtp`, 3 tokens) | 73.9 | 1.94× | 88.0 | 2.30× |
-| **`ngram-simple`, then the MTP head, then MemDraft** | 81.6 | **2.14×** | 136.3 | **3.57×** |
+| Setup | Coding prompts | HumanEval |
+|---|---:|---:|
+| Plain decoding | 38.0 tok/s (1.00×) | 38.2 tok/s (1.00×) |
+| **MemDraft alone**¹ | **68.7 tok/s (1.81×)** | **91.1 tok/s (2.39×)** |
+| `ngram-simple` alone¹ | 43.1 tok/s (1.14×) | 74.3 tok/s (1.95×) |
+| **`ngram-simple`, then MemDraft** | **70.5 tok/s (1.85×)** | **125.5 tok/s (3.29×)** |
+| The MTP head alone (`draft-mtp`, 3 tokens) | 73.9 tok/s (1.94×) | 88.0 tok/s (2.30×) |
+| **`ngram-simple`, then the MTP head, then MemDraft** | **81.6 tok/s (2.14×)** | **136.3 tok/s (3.57×)** |
 
-Rows without a mark are from 2026-11-18. ¹ From 2026-11-17, in the earlier patched build of llama.cpp, with one round of the coding prompts and HumanEval problems 0–35. The patched build and the plugin ran at the same speed (1.84× and 1.85× for `ngram-simple`, then MemDraft).
+Rows without a mark are from 2026-11-18. ¹ From 2026-11-17, in the earlier patched build of llama.cpp, with one round of the coding prompts and HumanEval problems 0–35. The patched build and the plugin ran at the same speed for `ngram-simple`, then MemDraft: 70.1 tok/s (1.84×) and 70.5 tok/s (1.85×).
 
 Two other drafters were also tested and did worse than every setup above:
 
-- **`ngram-mod`**, the lookup drafter that llama.cpp's `--spec-default` turns on: 1.08× on coding prompts (41.0 tok/s), 1.78× on HumanEval (67.8 tok/s, from a run on 2026-11-19).
-- **Qwen3.5-2B as a separate draft model**, 3 tokens: 1.17× on coding prompts (44.6 tok/s). On HumanEval only 2 problems completed, at 1.36× (51.7 tok/s).
+- **`ngram-mod`**, the lookup drafter that llama.cpp's `--spec-default` turns on: 41.0 tok/s (1.08×) on coding prompts, and 67.8 tok/s (1.78×) on HumanEval in a run on 2026-11-19.
+- **Qwen3.5-2B as a separate draft model**, 3 tokens: 44.6 tok/s (1.17×) on coding prompts. On HumanEval only 2 problems completed, at 51.7 tok/s (1.36×).
 
 What the results show:
 
-- **On the coding prompts, nearly all the gain is MemDraft's**: 1.81× alone, 1.85× behind `ngram-simple`. On HumanEval, `ngram-simple` adds the long copies, taking MemDraft from 2.39× to 3.29×. HumanEval answers often restate code from the prompt, so the coding prompts are the more typical case.
-- **The MTP head alone beats MemDraft alone on the coding prompts** (1.94× against 1.81×). It accepts more tokens per step, but each step costs more because the head is a real model. Putting the head first and MemDraft after it is fastest.
+- **On the coding prompts, nearly all the gain is MemDraft's**: 68.7 tok/s (1.81×) alone, 70.5 tok/s (1.85×) behind `ngram-simple`. On HumanEval, `ngram-simple` adds the long copies, taking MemDraft from 91.1 tok/s (2.39×) to 125.5 tok/s (3.29×). HumanEval answers often restate code from the prompt, so the coding prompts are the more typical case.
+- **The MTP head alone beats MemDraft alone on the coding prompts** (73.9 tok/s (1.94×) against 68.7 tok/s (1.81×)). It accepts more tokens per step, but each step costs more because the head is a real model. Putting the head first and MemDraft after it is fastest.
 - With both chained MemDraft setups, every prompt in every round ran faster than plain decoding.
 - **Verification is lossless, but llama.cpp's batched decoding is not bit-exact.** The output text matched plain decoding on 11 of 12 HumanEval problems and on 8 of 24 coding-prompt runs. Where it differs, it splits at a near-tie between two tokens; plain decoding also changes this way when only the batch size changes.
-- **Answer quality held up on HumanEval.** Over all 164 problems, pass@1 was 83.5% against 84.8% for plain decoding: two problems flipped. That run was MemDraft alone (2.29× over the 164 problems), with the same table and reranker, in the earlier patched build of llama.cpp.
-- **The setup is narrow so far.** It has been measured on one model, on code, on one GPU. On a mix of chat, math and editing prompts, an earlier table built from the 9B's chat and math text gave 1.24× overall, but only 1.09× on chat.
+- **Answer quality held up on HumanEval.** Over all 164 problems, pass@1 was 83.5% against 84.8% for plain decoding: two problems flipped. That run was MemDraft alone (87.4 tok/s (2.29×) over the 164 problems, against 38.1 tok/s plain), with the same table and reranker, in the earlier patched build of llama.cpp.
+- **The setup is narrow so far.** It has been measured on one model, on code, on one GPU. On a mix of chat, math and editing prompts, an earlier table built from the 9B's chat and math text gave 40.2 tok/s (1.24×) overall against 32.4 tok/s plain, but only 35.3 tok/s (1.09×) on chat.
 - Raw results are in [`bench/results/`](https://github.com/Cyronius/memdraft/tree/main/bench/results); the rows marked ¹ are in [`research/results/prior-9b-vk-20261117-1614/`](https://github.com/Cyronius/memdraft/tree/main/research/results/prior-9b-vk-20261117-1614). How MemDraft got here, including what failed, is in [`docs/history.md`](https://github.com/Cyronius/memdraft/blob/main/docs/history.md).
 
 ## Quick start
