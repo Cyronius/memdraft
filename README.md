@@ -47,11 +47,11 @@ It works best behind llama.cpp's `ngram-simple` drafter. `ngram-simple` also nee
 
 A drafter helps only when it is cheap next to the target. The speedup is about the tokens accepted per step divided by the cost of a step, so a drafter that guesses well but runs slowly gives back its gain. On the coding prompts with Qwen3.5-9B, with step cost relative to one plain decoding step:
 
-| Drafter (3 tokens) | Tokens per step | Step cost | Speedup |
+| Drafter (3 tokens) | Tokens per step | Step cost | Speed |
 |---|---:|---:|---:|
-| Qwen3.5-2B as a separate draft model | 2.77 | 2.36× | 1.17× |
-| The 9B's MTP head (`draft-mtp`) | 3.08 | 1.59× | 1.94× |
-| `ngram-simple`, then MemDraft | 2.19 | 1.18× | 1.85× |
+| Qwen3.5-2B as a separate draft model | 2.77 | 2.36× | 44.6 tok/s (1.17×) |
+| The 9B's MTP head (`draft-mtp`) | 3.08 | 1.59× | 73.9 tok/s (1.94×) |
+| `ngram-simple`, then MemDraft | 2.19 | 1.18× | 70.5 tok/s (1.85×) |
 
 The 2B draft model gets more tokens per step than MemDraft, but it is the slowest setup. A MemDraft draft call takes 3 to 60 µs, against about 26 ms for one plain step of the 9B. Most of MemDraft's 1.18× step cost is the target checking 4 tokens instead of 1.
 
