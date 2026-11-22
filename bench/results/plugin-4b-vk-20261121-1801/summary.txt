@@ -1,0 +1,9 @@
+bench/results/plugin-4b-vk-20261121-1801: 1 turn files, load average at turn starts 5.3 to 5.3
+
+humaneval  (humaneval)
+arm             tok/s  plain  speed  95% interval     r1     r2 median  faster tok/step  step accept   same
+none             65.5   65.5  1.000  1.000-1.000  1.000    nan  1.000   0/12      1.00  1.00      -  12/12 
+simple          125.4   65.5  1.914  1.684-2.223  1.914    nan  2.022  12/12      2.20  1.15  76.1%  10/12 
+plugin-3        146.6   65.5  2.238  2.155-2.365  2.238    nan  2.289  12/12      2.79  1.25  60.7%  11/12 
+copy+plugin-3   199.0   65.5  3.037  2.754-3.437  3.037    nan  3.152  12/12      4.32  1.42  56.5%  11/12 
+copy+plugin-3-norr  189.1   65.5  2.886  2.620-3.274  2.886    nan  3.020  12/12      4.06  1.41  53.7%  10/12 

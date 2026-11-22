@@ -1,0 +1,17 @@
+bench/results/plugin-2b-vk-20261121-1746: 3 turn files, load average at turn starts 0.1 to 2.7
+
+oss  (python/other-languages)
+arm             tok/s  plain  speed  95% interval     r1     r2 median  faster tok/step  step accept   same
+none            135.6  135.6  1.000  1.000-1.000  1.000  1.000  1.000   0/24      1.00  1.00      -  24/24 
+simple          152.4  135.6  1.123  1.037-1.235  1.127  1.120  1.019  16/24      1.17  1.04  42.9%  20/24 
+plugin-3        246.4  135.6  1.817  1.719-1.925  1.823  1.811  1.827  24/24      2.18  1.20  40.3%   8/24 
+copy+plugin-3   247.8  135.6  1.827  1.713-1.962  1.831  1.824  1.784  24/24      2.33  1.27  37.2%   6/24 
+copy+plugin-3-norr  226.6  135.6  1.671  1.545-1.825  1.678  1.663  1.583  24/24      2.09  1.25  30.8%  12/24 
+
+humaneval  (humaneval)
+arm             tok/s  plain  speed  95% interval     r1     r2 median  faster tok/step  step accept   same
+none            136.5  136.5  1.000  1.000-1.000  1.000    nan  1.000   0/12      1.00  1.00      -  12/12 
+simple          206.5  136.5  1.513  1.361-1.755  1.513    nan  1.563  12/12      1.72  1.13  53.8%   9/12 
+plugin-3        303.2  136.5  2.222  2.106-2.366  2.222    nan  2.299  12/12      2.69  1.21  57.1%   9/12 
+copy+plugin-3   352.2  136.5  2.581  2.358-2.912  2.581    nan  2.663  12/12      3.74  1.45  49.9%   9/12 
+copy+plugin-3-norr  335.5  136.5  2.458  2.221-2.815  2.458    nan  2.593  12/12      3.55  1.44  47.1%   9/12 

@@ -4,9 +4,6 @@ To do on the machine that ran the measurements (it has `data/`, `$MEMDRAFT_CACHE
 
 ## Needs a GPU run
 
-1. **Put the whole results table on one run.** "MemDraft alone" and "`ngram-simple` alone" come from `research/results/prior-9b-vk-20261117-1614/` (patched build, one round of coding prompts, HumanEval 0–35). The other rows come from `bench/results/plugin-9b-vk-20261118-2046/` (plugin build, two rounds, HumanEval 0–11), but the column header says 0–11 for all rows.
-   - Add arms to `bench/run_plugin_live.sh`: `plugin-3` (`--spec-type plugin --spec-plugin-n-max 3 $P`) and `simple` (`--spec-type ngram-simple`).
-   - Rerun with the current arms. Then replace the table and drop footnote ¹.
 2. **Settle MTP head alone against MemDraft alone on coding prompts.** 73.9 tok/s (1.94×, 95% interval 1.82–2.08) against 68.7 tok/s (1.81×, 1.66–1.96): the intervals overlap. Run a paired comparison over the same prompts, or more prompts (`code-v2.jsonl` has 160 held-out ones). Until then, soften the README bullet that says the head "beats" MemDraft.
 
 ## Doc-only
