@@ -17,7 +17,8 @@ One drafter, built from Qwen3.5-9B's own text, used unchanged on four Qwen3.5 si
 | Qwen3.5-4B | 65 tok/s | 110 tok/s (1.69×) | 199 tok/s (3.04×) |
 | Qwen3.5-9B | 38 tok/s | 70 tok/s (1.84×) | 113 tok/s (2.96×) |
 
-- **Setup:** `ngram-simple`, then MemDraft with the reranker, drafting 3 tokens. Q4_K_M models on an AMD Radeon 8060S through Vulkan, greedy decoding, 2026-11-21.
+- **Setup:** `ngram-simple`, then MemDraft with the reranker, drafting 3 tokens. Q4_K_M models through llama.cpp's Vulkan backend, greedy decoding, 2026-11-21.
+- **Hardware:** an AMD Strix Halo mini PC (Ryzen AI Max+ 395, Radeon 8060S integrated GPU, 128 GB of memory shared by CPU and GPU) on Linux.
 - **Prompts:** 12 held-out OSS-Instruct coding prompts (2 rounds) and HumanEval problems 0–11. No table holds answers to them. The speedup is over plain decoding on the same prompts; plain decoding runs within about 1% of the same speed on both sets.
 - **Output:** the target model checks every drafted token, so the text is the target's own. See [Quality](#quality).
 - **Limits:** Qwen3.5 only, code only, one GPU. The 27B and 35B-A3B are not measured yet. On chat, an earlier table gave only 1.09×.

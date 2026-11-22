@@ -4,10 +4,17 @@ library_name: llama.cpp
 pipeline_tag: text-generation
 base_model:
 - Qwen/Qwen3.5-9B
+base_model_relation: adapter
 tags:
 - speculative-decoding
-- llama.cpp
+- draft-model
 - drafter
+- llama.cpp
 - code
+- qwen3.5
+- qwen3.5-0.8b
+- qwen3.5-2b
+- qwen3.5-4b
+- qwen3.5-9b
 ---
 
