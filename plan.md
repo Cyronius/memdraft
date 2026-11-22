@@ -10,7 +10,6 @@ To do on the machine that ran the measurements (it has `data/`, `$MEMDRAFT_CACHE
 
 3. **Show what a smaller table buys.** If `research/results/code-study*.json` has speedup or tokens-per-step against table size, add one line or a small table ("N M tokens → T tok/s (X×)"). This tells a reader whether 40M tokens / 14 A40-hours is really needed.
 4. **Show the 95% intervals.** `summary.txt` has them. Put them inside the parentheses, such as `70.5 tok/s (1.85×, 1.69–2.05)`, or in a column.
-5. **Fix the Results layout.** The "two other drafters" list runs straight into the findings list with no lead-in. Add a lead-in, and move the "setup is narrow so far" caveat to the top of Results or into the intro.
 6. **State the platform.** The plugin is a `.so` built by `plugin/build.sh`. Say Linux only (or whatever was tested).
 7. **`pad` default.** The default is 0, but the docs say "use 1". Change the default to 1, or say why it stays 0.
 8. **Quick start `vocab_hash`.** `c52114e74bc3a20f` is the Qwen3.5 tokenizer hash. Say so, or use a placeholder with the `vocab_hash.py` command next to it.
